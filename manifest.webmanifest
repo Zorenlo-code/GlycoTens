@@ -1,0 +1,63 @@
+{
+  "name": "GlycoTens – Suivi glycémie et tension",
+  "short_name": "GlycoTens",
+  "description": "Encodez vos glycémies, votre tension et votre pouls, visualisez leur évolution et partagez un rapport PDF avec votre médecin.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#B9E6D7",
+  "theme_color": "#7FCFD0",
+  "categories": [
+    "health",
+    "medical",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ajouter une glycémie",
+      "short_name": "Glycémie",
+      "url": "./index.html?add=glu",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Ajouter une tension",
+      "short_name": "Tension",
+      "url": "./index.html?add=bp",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

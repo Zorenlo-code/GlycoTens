@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>GlycoTens</title>
+<meta name="description" content="Suivi de la glycémie et de la tension pour le diabète de type 2, avec rappels et rapport PDF pour votre médecin.">
+<meta name="theme-color" content="#7FCFD0">
+<!--PWA:START-->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GlycoTens">
+<!--PWA:END-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232A7A76'/%3E%3Cpath d='M32 10s14 15 14 26a14 14 0 0 1-28 0c0-11 14-26 14-26z' fill='white'/%3E%3C/svg%3E">
+<script src="vendor/jspdf.umd.min.js" defer></script>
+<style>
+@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/atkinson-hyperlegible-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/atkinson-hyperlegible-latin-700-normal.woff2) format('woff2')}
+/* ============ Jetons de design (verre dépoli menthe et aqua) ============ */
+:root{
+  color-scheme: light;
+  --bg:#B9E6D7;
+  --bg-grad:linear-gradient(135deg,#BFECD7 0%,#A9DED8 46%,#93C5D7 100%);
+  --deco-dark:#5E90B3; --deco-light:rgba(255,255,255,.55); --deco-sphere:radial-gradient(circle at 35% 35%,rgba(255,255,255,.9),rgba(255,255,255,.25));
+  --bar:rgba(185,230,215,.55);
+  --glass:rgba(255,255,255,.40); --glass-strong:rgba(255,255,255,.66); --white:rgba(255,255,255,.88); --surface-solid:#FFFFFF; --field:rgba(255,255,255,.94);
+  --glass-border:rgba(255,255,255,.7);
+  --ink:#16303B; --ink-2:#47636E; --line:rgba(22,48,59,.12); --line-strong:rgba(22,48,59,.30);
+  --primary:#247E8A; --primary-ink:#FFFFFF; --primary-soft:rgba(36,126,138,.16); --primary-press:#1B6670;
+  --btn-ink:#0F3A44; --teal-1:#5FBAC4; --teal-2:#8DD4D5; --teal-ink:#06303A;
+  --tile:linear-gradient(145deg,#62BEC8,#3E9DA9);
+  --shadow:0 18px 40px rgba(46,110,132,.18);
+  --shadow-sm:0 6px 16px rgba(46,110,132,.14);
+  --m-ok:#1E9A6A; --m-high:#E8A010; --m-vhigh:#D9480F; --m-low:#C2185B;
+  --t-ok:#0B6944; --t-high:#7F4B00; --t-vhigh:#9C2A0B; --t-low:#9D1049;
+  --b-ok:#DDF3E8; --b-high:#FFF0D0; --b-vhigh:#FDE6DF; --b-low:#FCE4EE;
+  --band-light:rgba(30,154,106,.12); --band-dark:rgba(30,154,106,.24);
+  --area-top:rgba(36,126,138,.30); --area-bot:rgba(36,126,138,0);
+  --chart-line:#7FA3AD; --chart-muted:#5F8089;
+  --danger:#B42318; --toast-link:#9FE3DD;
+  --font:'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#0D2A2F; --bg-grad:linear-gradient(135deg,#0E2D31 0%,#0F3438 46%,#122F40 100%);
+    --deco-dark:#1F5576; --deco-light:rgba(255,255,255,.08); --deco-sphere:radial-gradient(circle at 35% 35%,rgba(255,255,255,.16),rgba(255,255,255,.03));
+    --bar:rgba(13,42,47,.62);
+    --glass:rgba(255,255,255,.07); --glass-strong:rgba(255,255,255,.12); --white:rgba(28,66,72,.82); --surface-solid:#1B434A; --field:rgba(8,30,34,.72);
+    --glass-border:rgba(255,255,255,.14);
+    --btn-ink:#0B2F38; --ink:#E4F3F2; --ink-2:#A6C2C3; --line:rgba(255,255,255,.12); --line-strong:rgba(255,255,255,.32);
+    --primary:#52C3CC; --primary-ink:#042328; --primary-soft:rgba(82,195,204,.2); --primary-press:#76D3DA;
+    --teal-1:#4DB4BE; --teal-2:#79CCD0; --teal-ink:#032329;
+    --tile:linear-gradient(145deg,#4BB5BF,#2E8E9A);
+    --shadow:0 18px 40px rgba(0,0,0,.4); --shadow-sm:0 6px 16px rgba(0,0,0,.28);
+    --m-ok:#3DD598; --m-high:#FFC145; --m-vhigh:#FF7A4D; --m-low:#FF5C9A;
+    --t-ok:#7BE6B6; --t-high:#FFD27A; --t-vhigh:#FFA583; --t-low:#FF9BC0;
+    --b-ok:#12392B; --b-high:#3F3112; --b-vhigh:#4A2216; --b-low:#4A1530;
+    --band-light:rgba(61,213,152,.10); --band-dark:rgba(61,213,152,.20);
+    --area-top:rgba(82,195,204,.34); --area-bot:rgba(82,195,204,0);
+    --chart-line:#5F8A91; --chart-muted:#8FB4BA;
+    --danger:#FF8A80; --toast-link:#0E5F5B;
+  }
+}
+:root[data-theme="dark"]{
+    color-scheme: dark;
+    --bg:#0D2A2F; --bg-grad:linear-gradient(135deg,#0E2D31 0%,#0F3438 46%,#122F40 100%);
+    --deco-dark:#1F5576; --deco-light:rgba(255,255,255,.08); --deco-sphere:radial-gradient(circle at 35% 35%,rgba(255,255,255,.16),rgba(255,255,255,.03));
+    --bar:rgba(13,42,47,.62);
+    --glass:rgba(255,255,255,.07); --glass-strong:rgba(255,255,255,.12); --white:rgba(28,66,72,.82); --surface-solid:#1B434A; --field:rgba(8,30,34,.72);
+    --glass-border:rgba(255,255,255,.14);
+    --btn-ink:#0B2F38; --ink:#E4F3F2; --ink-2:#A6C2C3; --line:rgba(255,255,255,.12); --line-strong:rgba(255,255,255,.32);
+    --primary:#52C3CC; --primary-ink:#042328; --primary-soft:rgba(82,195,204,.2); --primary-press:#76D3DA;
+    --teal-1:#4DB4BE; --teal-2:#79CCD0; --teal-ink:#032329;
+    --tile:linear-gradient(145deg,#4BB5BF,#2E8E9A);
+    --shadow:0 18px 40px rgba(0,0,0,.4); --shadow-sm:0 6px 16px rgba(0,0,0,.28);
+    --m-ok:#3DD598; --m-high:#FFC145; --m-vhigh:#FF7A4D; --m-low:#FF5C9A;
+    --t-ok:#7BE6B6; --t-high:#FFD27A; --t-vhigh:#FFA583; --t-low:#FF9BC0;
+    --b-ok:#12392B; --b-high:#3F3112; --b-vhigh:#4A2216; --b-low:#4A1530;
+    --band-light:rgba(61,213,152,.10); --band-dark:rgba(61,213,152,.20);
+    --area-top:rgba(82,195,204,.34); --area-bot:rgba(82,195,204,0);
+    --chart-line:#5F8A91; --chart-muted:#8FB4BA;
+    --danger:#FF8A80; --toast-link:#0E5F5B;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+
+/* ============ Base ============ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;overflow-x:clip}
+body{background-color:var(--bg);background-image:var(--bg-grad);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.45;min-height:100%;
+  -webkit-tap-highlight-color:transparent;font-variant-numeric:tabular-nums;position:relative}
+body.no-scroll{overflow:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+h1,h2,h3,p,ul{margin:0}
+ul{padding:0;list-style:none}
+small{font-size:.8em}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px;border-radius:12px}
+.muted{color:var(--ink-2)}
+svg.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* Cercles décoratifs (derrière le verre) */
+.deco{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.deco i{position:absolute;border-radius:50%;display:block}
+.deco .d1{left:-100px;top:34%;width:230px;height:230px;background:var(--deco-dark);opacity:.9}
+.deco .d2{right:-80px;bottom:16%;width:200px;height:200px;background:var(--deco-dark);opacity:.9}
+.deco .d3{left:50%;top:-80px;width:180px;height:180px;margin-left:-40px;background:var(--deco-sphere)}
+.deco .d4{right:-40px;top:20%;width:120px;height:120px;background:var(--deco-light)}
+.deco .d5{left:18px;top:14px;width:48px;height:48px;background:var(--deco-light)}
+.deco .d6{right:40px;bottom:5%;width:64px;height:64px;background:var(--deco-light)}
+
+/* ============ Surfaces ============ */
+.glass-panel,.glass{background:var(--glass);border:1px solid var(--glass-border);box-shadow:var(--shadow);
+  -webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15)}
+.white-card,.panel,.stat,.empty,.banner,.card,.item,.slot,.row,.mini-card{background:var(--white);border:1px solid var(--glass-border);box-shadow:var(--shadow-sm);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass-panel,.glass,.white-card,.panel,.stat,.empty,.banner,.card,.item,.slot,.row,.mini-card,.tabbar-in,.sheet-foot,.bsheet{background:var(--surface-solid)}
+}
+
+/* ============ Statuts ============ */
+.s-ok{--sm:var(--m-ok);--st:var(--t-ok);--sb:var(--b-ok)}
+.s-high{--sm:var(--m-high);--st:var(--t-high);--sb:var(--b-high)}
+.s-vhigh{--sm:var(--m-vhigh);--st:var(--t-vhigh);--sb:var(--b-vhigh)}
+.s-low{--sm:var(--m-low);--st:var(--t-low);--sb:var(--b-low)}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:4px 14px 4px 11px;border-radius:999px;background:var(--sb);color:var(--st);font-weight:700;font-size:16px}
+.chip svg{width:13px;height:13px;flex:none}
+.mark{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:13px;background:var(--sb);color:var(--sm);flex:none}
+.mark svg{width:17px;height:17px}
+
+/* ============ Structure ============ */
+#app{max-width:620px;margin:0 auto;min-height:100vh;position:relative;z-index:1}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:31;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:84px;padding:12px 20px;background:var(--bar);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.profile{display:flex;align-items:center;gap:14px;min-width:0}
+.avatar{width:56px;height:56px;border-radius:50%;background:var(--surface-solid);color:var(--primary);display:grid;place-items:center;font-weight:700;font-size:19px;flex:none;
+  border:3px solid rgba(255,255,255,.8);box-shadow:var(--shadow-sm)}
+.avatar svg{width:26px;height:26px}
+.profile-txt{display:flex;flex-direction:column;min-width:0}
+.p-name{font-size:20px;font-weight:700;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-sub{font-size:15px;color:var(--ink-2)}
+.top-title{flex:1;text-align:center;font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.round-btn{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.85);box-shadow:var(--shadow-sm);color:var(--btn-ink)}
+.round-btn:active{background:#fff}
+.round-btn.sm{width:42px;height:42px}
+.round-btn svg.ic{width:22px;height:22px}
+.icon-btn{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:var(--ink)}
+.icon-btn:active{background:var(--line)}
+.icon-btn.small{width:40px;height:40px}
+#view{padding:8px 20px calc(142px + env(safe-area-inset-bottom,0px))}
+#view>*+*{margin-top:20px}
+h2{font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.lead{color:var(--ink-2);margin-top:8px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.section-head h2{min-width:0}
+.section-head .muted{font-size:15px}
+.link-btn{color:var(--primary);font-weight:700;font-size:15px;white-space:nowrap;min-height:44px;padding:0 6px;display:inline-flex;align-items:center;gap:6px}
+.pad{padding:18px;border-radius:24px}
+.pad>*+*{margin-top:14px}
+
+/* Icône carrée (comme sur la maquette) */
+.tile-ic,.slot-ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:var(--tile);color:#fff;flex:none;box-shadow:0 4px 10px rgba(46,110,132,.2)}
+.tile-ic svg.ic,.slot-ic svg.ic{width:23px;height:23px}
+.slot-ic svg:not(.ic){width:17px;height:17px}
+
+/* ============ Barre d’onglets (verre) ============ */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:0 16px calc(12px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.tabbar-in{pointer-events:auto;max-width:540px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 80px 1fr 1fr;align-items:center;padding:8px 10px;
+  background:var(--glass-strong);border:1px solid var(--glass-border);border-radius:32px;box-shadow:var(--shadow);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;color:var(--ink-2);border-radius:20px;font-size:12.5px;font-weight:700;transition:transform .2s}
+.tab svg.ic{width:26px;height:26px;position:relative;z-index:1}
+.tab .tab-label{display:none;line-height:1;position:relative;z-index:1}
+.tab[aria-current="page"]{color:var(--primary);transform:translateY(-12px)}
+.tab[aria-current="page"] .tab-label{display:block}
+.tab[aria-current="page"]::before{content:"";position:absolute;top:-4px;left:50%;margin-left:-29px;width:58px;height:58px;border-radius:50%;background:var(--surface-solid);box-shadow:var(--shadow);z-index:0}
+.tab-add{justify-self:center;width:62px;height:62px;margin-top:-30px;border-radius:50%;background:var(--tile);color:#fff;
+  display:grid;place-items:center;box-shadow:0 12px 24px rgba(36,126,138,.4);border:5px solid rgba(255,255,255,.9)}
+.tab-add:active{filter:brightness(.92)}
+.tab-add svg{width:30px;height:30px;stroke-width:2.5}
+
+/* ============ Boutons ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 24px;border-radius:18px;font-weight:700;font-size:18px;width:100%;
+  background:var(--field);color:var(--ink);border:1.5px solid var(--line-strong)}
+.btn:active{background:var(--line)}
+.btn-primary{background:var(--primary);color:var(--primary-ink);border-color:var(--primary);box-shadow:0 10px 20px rgba(36,126,138,.30)}
+.btn-primary:active{background:var(--primary-press)}
+.btn-danger{color:var(--danger);border-color:var(--danger);background:transparent}
+.btn-danger-solid{background:var(--danger);color:var(--surface-solid);border-color:var(--danger)}
+.btn-quiet{border-color:transparent;background:transparent;color:var(--primary)}
+.btn.small{min-height:44px;font-size:16px;padding:0 18px;width:auto;border-radius:14px}
+.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.btn-row{display:grid;gap:12px}
+.btn-row.two{grid-template-columns:1fr 1fr}
+.pill-btn{display:inline-flex;align-items:center;min-height:38px;padding:0 16px;border-radius:999px;background:var(--primary);color:var(--primary-ink);font-weight:700;font-size:15px}
+
+/* ============ Accueil ============ */
+.hero-card{border-radius:36px;padding:22px 18px 20px;text-align:center}
+.bignum{display:flex;align-items:baseline;justify-content:center;gap:10px}
+.bignum .n{font-size:clamp(60px,19vw,80px);line-height:1;font-weight:700;letter-spacing:-.04em}
+.bignum .u{font-size:20px;font-weight:700;color:var(--ink-2)}
+.hero-cap{margin-top:8px;font-size:17px;color:var(--ink-2)}
+.hero-chip{margin:14px 0 20px;display:flex;justify-content:center}
+.hero-msg{margin-top:14px;font-size:16px;color:var(--ink-2);text-align:left}
+.hero-card .gauge{text-align:left}
+.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.mini-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:18px;min-width:0}
+.mini-card .k{font-size:14px;color:var(--ink-2);line-height:1.2}
+.mini-card .v{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.2;white-space:nowrap}
+.mini-card .v small{font-size:13px;font-weight:400;color:var(--ink-2);margin-left:3px}
+.mini-card>div{min-width:0}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.trio .mini-card{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 12px}
+.chart-panel{border-radius:36px;padding:16px 12px 14px}
+.chart-panel .section-head{padding:0 8px}
+#chartBox,#homeBox{width:100%}
+#chart,#homeChart{display:block;touch-action:manipulation}
+
+/* Jauge */
+.gauge{padding:0 6px}
+.g-track{position:relative;height:12px;border-radius:6px;overflow:visible;background:var(--line)}
+.g-seg{position:absolute;top:0;bottom:0;background:var(--sm)}
+.g-seg:first-child{border-radius:6px 0 0 6px}
+.g-seg:last-of-type{border-radius:0 6px 6px 0}
+.g-seg+.g-seg{border-left:3px solid var(--surface-solid)}
+.g-dot{position:absolute;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--ink);border:4px solid var(--surface-solid);box-shadow:0 0 0 1.5px var(--ink)}
+.g-ticks{position:relative;height:22px;margin-top:8px;font-size:14px;color:var(--ink-2)}
+.g-tick{position:absolute;top:0;transform:translateX(-50%)}
+
+/* ============ Cartes liste (planning, tension, historique) ============ */
+.plan>*+*{margin-top:0}
+.slots,.list{display:grid;gap:12px}
+.slot,.row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;width:100%;text-align:left;min-height:76px;padding:12px 14px;border-radius:20px}
+.slot:active,.row:active{background:#fff}
+.slot.due{outline:2.5px solid var(--primary);outline-offset:-2px}
+.slot.done .slot-ic{background:var(--sb);color:var(--sm);box-shadow:none}
+.slot-main,.row-main{display:flex;flex-direction:column;min-width:0}
+.slot-title{font-weight:700;font-size:17px;line-height:1.25}
+.slot-sub{font-size:15px;color:var(--ink-2)}
+.slot.done .slot-sub{color:var(--st);font-weight:700}
+.slot.due .slot-sub{color:var(--primary);font-weight:700}
+.slot-side{font-size:15px;font-weight:700;display:flex;align-items:center;color:var(--ink-2)}
+.slot-side svg.ic{width:20px;height:20px}
+.row .slot-ic{width:44px;height:44px}
+.row-val{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.row-val small{font-size:14px;font-weight:400;color:var(--ink-2);margin-left:4px;letter-spacing:0}
+.row-sub{font-size:15px;color:var(--ink-2)}
+.row-side{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.row-time{font-weight:700;font-size:16px}
+.row-status{font-size:14px;color:var(--st);font-weight:700}
+.row-note{grid-column:2 / 4;font-size:15px;color:var(--ink-2);font-style:italic;overflow-wrap:anywhere}
+.note-card{border-radius:22px;padding:16px}
+.note-card p{margin-bottom:12px;color:var(--ink-2)}
+.day-head{position:sticky;top:calc(84px + env(safe-area-inset-top,0px));z-index:5;background:var(--bar);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:10px 10px 8px;margin:0 -8px 8px;font-weight:700;font-size:17px;border-radius:16px}
+.day-group+.day-group{margin-top:12px}
+
+/* ============ Statistiques ============ */
+.tir{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line);gap:2px}
+.tir-seg{background:var(--sm);min-width:0}
+.tir-legend{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 14px;margin-top:12px;font-size:14px}
+.tir-legend li{display:flex;align-items:center;gap:8px;min-width:0}
+.tir-legend .dot{width:12px;height:12px;border-radius:4px;background:var(--sm);flex:none}
+.tir-legend b{margin-left:auto;white-space:nowrap}
+.panel{border-radius:28px;padding:18px}
+.panel>*+*{margin-top:14px}
+
+/* Anneau avec curseur */
+.ring-plate{position:relative;width:min(100%,250px);aspect-ratio:1;margin:0 auto;border-radius:50%;background:var(--glass-strong);border:1px solid var(--glass-border);box-shadow:var(--shadow);
+  display:grid;place-items:center;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.ring-plate svg{width:84%;height:84%}
+.rg-bg{fill:none;stroke:rgba(255,255,255,.85);stroke-width:26}
+.rg-fg{fill:none;stroke:url(#rg);stroke-width:26;stroke-linecap:round}
+.rg-knob{fill:#fff;stroke:var(--primary);stroke-width:6}
+.ring-in{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring-in b{font-size:40px;letter-spacing:-.03em;line-height:1.1}
+.ring-in span{font-size:15px;color:var(--ink-2)}
+.ring-section{padding:6px 0}
+
+/* ============ Contrôles ============ */
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:5px;gap:4px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.seg button{min-height:46px;border-radius:15px;font-weight:700;color:var(--ink-2);font-size:17px}
+.seg button[aria-selected="true"],.seg button[aria-pressed="true"]{background:var(--surface-solid);color:var(--ink);box-shadow:var(--shadow-sm)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px;padding:4px 20px 8px;scrollbar-width:none}
+.chips.scroll::-webkit-scrollbar{display:none}
+.chip-btn{min-height:46px;padding:0 18px;border-radius:16px;border:1.5px solid var(--glass-border);background:var(--white);font-weight:700;font-size:16px;white-space:nowrap;flex:none;box-shadow:var(--shadow-sm)}
+.chip-btn.on,.chip-btn[aria-checked="true"],.chip-btn[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.field{display:block}
+.field-label{display:block;font-weight:700;margin-bottom:8px;font-size:16px}
+.field-hint{font-size:14px;color:var(--ink-2);margin-top:6px}
+.input{width:100%;min-height:54px;padding:0 18px;border-radius:16px;border:1.5px solid var(--line-strong);background:var(--field);font-size:18px}
+.input:focus{outline:3px solid var(--primary-soft);border-color:var(--primary)}
+.fields{display:grid;gap:16px}
+.fields.two{grid-template-columns:1fr 1fr}
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:60px;cursor:pointer}
+.switch-row+.switch-row{border-top:1px solid var(--line)}
+.sw,.sw-vis{appearance:none;-webkit-appearance:none;width:56px;height:32px;border-radius:16px;background:rgba(22,48,59,.18);position:relative;flex:none;cursor:pointer;margin:0;transition:background .15s;display:block}
+.sw::after,.sw-vis::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.sw:checked,.mrow[aria-checked="true"] .sw-vis{background:var(--teal-1);background:linear-gradient(90deg,#5FBAC4,#3E9DA9)}
+.sw:checked::after,.mrow[aria-checked="true"] .sw-vis::after{transform:translateX(24px)}
+
+/* Curseurs (réglages) */
+.slider+.slider{margin-top:20px}
+.slider-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:4px;font-size:16px}
+.slider-top b{font-size:17px}
+.range{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent;margin:0;--p:50%}
+.range::-webkit-slider-runnable-track{height:10px;border-radius:5px;background:linear-gradient(90deg,#5FBAC4 var(--p),rgba(255,255,255,.9) var(--p))}
+.range::-moz-range-track{height:10px;border-radius:5px;background:linear-gradient(90deg,#5FBAC4 var(--p),rgba(255,255,255,.9) var(--p))}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-9px;border-radius:50%;background:#fff;border:8px solid #4DB0BA;box-shadow:0 3px 8px rgba(46,110,132,.35)}
+.range::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#fff;border:8px solid #4DB0BA;box-shadow:0 3px 8px rgba(46,110,132,.35)}
+
+/* ============ Graphique ============ */
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:10px 8px 0;font-size:14px;color:var(--ink-2)}
+.legend li{display:flex;align-items:center;gap:7px}
+.legend .sw-band{width:18px;height:12px;border-radius:3px}
+.legend .sw-line{width:18px;height:4px;border-radius:2px;background:var(--primary)}
+.legend svg{width:13px;height:13px}
+.detail{margin:12px 8px 0;padding:12px 16px;border-radius:18px;background:var(--glass-strong);border:1px solid var(--glass-border);min-height:62px;font-size:16px}
+.detail.s-ok,.detail.s-high,.detail.s-vhigh,.detail.s-low{border-color:transparent;background:var(--sb)}
+.detail strong{font-size:20px}
+.detail .d-sub{color:var(--ink-2);font-size:15px}
+.insights li{display:flex;gap:12px;align-items:flex-start;padding:12px 0}
+.insights li+li{border-top:1px solid var(--line)}
+.insights .ic-wrap{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--sb);color:var(--st)}
+.insights .ic-wrap svg{width:16px;height:16px;stroke-width:2.6}
+.insights .info{--sb:var(--line);--st:var(--ink-2)}
+.moment-table{width:100%;border-collapse:collapse;font-size:16px}
+.moment-table th{font-weight:400;color:var(--ink-2);font-size:14px;text-align:right;padding:0 0 8px}
+.moment-table th:first-child,.moment-table td:first-child{text-align:left}
+.moment-table td{padding:11px 0;text-align:right;border-top:1px solid var(--line)}
+.moment-table td:first-child{font-weight:700}
+.moment-table td:not(:first-child){white-space:nowrap}
+.moment-table td:last-child,.moment-table th:last-child{padding-left:16px}
+.mini{display:inline-block;width:56px;height:8px;border-radius:4px;background:var(--line);vertical-align:middle;margin-left:8px;overflow:hidden}
+.mini i{display:block;height:100%;background:var(--m-ok)}
+
+/* ============ Bandeau résultat ============ */
+.banner{border-radius:26px;padding:16px 8px 16px 18px;border:1.5px solid var(--sm);background:var(--sb)}
+.banner-top{display:flex;align-items:center;gap:12px}
+.banner-top strong{flex:1;font-size:18px}
+.banner-ic{width:22px;height:22px;color:var(--sm);flex:none}
+.banner-ic svg{width:22px;height:22px}
+.banner p{margin:6px 40px 0 34px;font-size:16px}
+.banner .label{font-weight:700;color:var(--st)}
+
+/* ============ État vide ============ */
+.empty{text-align:center;padding:34px 22px;border-radius:32px}
+.empty .empty-ic{width:72px;height:72px;border-radius:20px;background:var(--tile);color:#fff;display:grid;place-items:center;margin:0 auto 16px;box-shadow:var(--shadow-sm)}
+.empty .empty-ic svg{width:30px;height:30px}
+.empty h2{margin-bottom:8px}
+.empty p{color:var(--ink-2);margin-bottom:20px}
+.empty .btn-row{max-width:340px;margin:0 auto}
+
+/* ============ Carte teal (saisie, rapport) ============ */
+.entry-card{position:relative;overflow:hidden;border-radius:26px;padding:20px 20px 18px;color:var(--teal-ink);
+  background:linear-gradient(135deg,var(--teal-1) 0%,var(--teal-2) 100%);border:1px solid rgba(255,255,255,.55);box-shadow:var(--shadow)}
+.entry-card::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.20) 38% 50%,transparent 50% 55%,rgba(255,255,255,.13) 55% 62%,transparent 62%)}
+.entry-card>*{position:relative}
+.ec-top{font-size:16px;font-weight:700;opacity:.85}
+.ec-main{display:flex;align-items:baseline;justify-content:center;gap:12px;padding:14px 0 6px}
+.ec-foot{display:flex;justify-content:space-between;gap:12px;margin-top:14px}
+.ec-foot b{display:block;font-size:19px;line-height:1.2}
+.ec-foot span{font-size:14px;opacity:.85}
+.ec-right{text-align:right}
+.entry-card .err{color:#7A1010;background:rgba(255,255,255,.75);display:inline-block;padding:4px 12px;border-radius:12px;margin-top:6px}
+.big-input{width:100%;max-width:240px;border:0;background:transparent;text-align:center;font-size:72px;line-height:1.1;font-weight:700;letter-spacing:-.03em;padding:0;outline:none;color:var(--teal-ink)}
+.big-input::placeholder{color:rgba(6,48,58,.32)}
+.big-unit{font-size:20px;font-weight:700;opacity:.85}
+.bp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+.bp-field .input{min-height:70px;text-align:center;font-size:32px;font-weight:700;padding:0 4px;border-radius:16px;background:rgba(255,255,255,.62);border-color:rgba(255,255,255,.7);color:var(--teal-ink)}
+.bp-field .field-label{font-size:15px;margin-bottom:6px}
+.bp-field .field-hint{text-align:center;margin-top:4px;color:var(--teal-ink);opacity:.8}
+.rc-num{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-top:8px}
+.rc-sub{font-size:16px;opacity:.85}
+
+/* ============ Feuilles ============ */
+.sheet{position:fixed;inset:0;z-index:60;background-color:var(--bg);background-image:var(--bg-grad);display:flex;flex-direction:column;animation:sheetIn .22s ease-out;overflow:hidden}
+.sheet::before,.sheet::after{content:"";position:absolute;border-radius:50%;background:var(--deco-dark);opacity:.9;pointer-events:none}
+.sheet::before{left:-110px;top:38%;width:230px;height:230px}
+.sheet::after{right:-90px;bottom:22%;width:190px;height:190px}
+.sheet>*{position:relative;z-index:1}
+@keyframes sheetIn{from{transform:translateY(28px);opacity:0}to{transform:none;opacity:1}}
+.sheet-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:84px;flex:none;padding:12px 20px 0;padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.bar-spacer{width:48px;flex:none}
+.sheet-body{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:8px 20px 0;width:100%;max-width:620px;margin:0 auto}
+.sheet-body>*+*{margin-top:20px}
+.sheet-body>.bsheet:last-child{margin-bottom:0}
+.sheet-foot{flex:none;padding:12px 20px calc(14px + env(safe-area-inset-bottom,0px));background:var(--glass-strong);border-top:1px solid var(--glass-border);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.sheet-foot-in{max-width:620px;margin:0 auto;display:grid;gap:12px}
+.sheet-foot-in.two{grid-template-columns:1fr 1.4fr}
+/* Feuille basse avec poignée */
+.bsheet{margin:28px -20px 0;padding:12px 20px 26px;background:var(--white);border-radius:36px 36px 0 0;box-shadow:0 -12px 30px rgba(46,110,132,.14);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.bsheet>*+*{margin-top:16px}
+.grab{width:68px;height:6px;border-radius:3px;background:var(--tile);margin:4px auto 10px}
+.mrows{display:block}
+.mrow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 16px;width:100%;text-align:left;padding:14px 0;min-height:76px}
+.mrow+.mrow{border-top:1px solid var(--line)}
+.mrow .m-t{font-weight:700;font-size:18px;line-height:1.25}
+.mrow .m-d{font-size:15px;color:var(--ink-2);grid-column:1}
+.mrow .sw-vis{grid-column:2;grid-row:1 / 3}
+.err{color:var(--danger);font-weight:700;font-size:16px;margin-top:10px}
+.err[hidden]{display:none}
+.preview{min-height:120px}
+.preview-empty{color:var(--ink-2);text-align:center;padding:26px 12px 0}
+.preview-box{display:grid;gap:14px}
+.preview-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.preview-msg{font-size:16px;color:var(--ink-2)}
+.item{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:12px 14px;border-radius:20px}
+.item b{display:block;font-size:17px;line-height:1.25}
+.item>div{min-width:0}
+.when-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.set-group>*+*{margin-top:16px}
+.set-title{font-size:20px;margin-bottom:4px}
+.about{font-size:15px;color:var(--ink-2)}
+.about p+p{margin-top:8px}
+.notice{padding:12px 16px;border-radius:16px;background:var(--b-high);color:var(--t-high);font-size:15px;font-weight:700}
+.nav-row{display:flex;align-items:center;gap:14px;width:100%;text-align:left;min-height:76px;padding:12px 16px 12px 14px;border-radius:22px;font-weight:700}
+.nav-row span.grow{flex:1;display:flex;flex-direction:column;font-size:17px}
+.nav-row small{font-weight:400;color:var(--ink-2);font-size:14px}
+.sched-row{display:flex;align-items:center;gap:14px;min-height:80px;padding:12px 0}
+.sched-row+.sched-row{border-top:1px solid var(--line)}
+.sched-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.sched-main .input{min-height:46px;font-size:17px;max-width:150px}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.days .chip-btn{min-width:0;padding:0;justify-content:center;text-align:center;border-radius:14px}
+.callout{padding:18px;border-radius:24px}
+.callout h3{font-size:17px;margin-bottom:4px}
+.callout p{font-size:15px;color:var(--ink-2)}
+.callout .btn,.callout .switch-row{margin-top:12px}
+
+/* ============ Toast ============ */
+#toast{position:fixed;left:50%;bottom:calc(114px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);z-index:80;background:var(--ink);color:var(--surface-solid);
+  padding:12px 20px;border-radius:18px;font-weight:700;font-size:16px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+  display:flex;gap:16px;align-items:center;max-width:calc(100% - 32px);box-shadow:var(--shadow)}
+#toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#toast button{color:var(--toast-link);font-weight:700;text-decoration:underline;min-height:36px;padding:0 4px}
+
+.install-card{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;padding:12px 10px 12px 14px;border-radius:22px}
+.install-card .ic-text{display:flex;flex-direction:column;min-width:0}
+.install-card .ic-text b{font-size:16px;line-height:1.25}
+.install-card .ic-text span{font-size:14px;color:var(--ink-2);line-height:1.3}
+@media (prefers-reduced-motion: reduce){
+  .sheet{animation:none}
+  #toast,.sw,.sw::after,.sw-vis,.sw-vis::after,.tab{transition:none}
+}
+@media (min-width:700px){#view{padding-left:28px;padding-right:28px}}
+@media print{.tabbar,.topbar,#toast,.deco{display:none}}
+</style>
+</head>
+<body>
+<div class="deco" aria-hidden="true"><i class="d1"></i><i class="d2"></i><i class="d3"></i><i class="d4"></i><i class="d5"></i><i class="d6"></i></div>
+<div id="app">
+  <header class="topbar" id="topbar"></header>
+  <main id="view" tabindex="-1" aria-live="polite"></main>
+  <nav class="tabbar" aria-label="Navigation principale"><div class="tabbar-in" id="tabbar"></div></nav>
+</div>
+<div id="sheetRoot"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="importFile" accept=".xlsx,.json,application/json" hidden>
+
+<script>
+(() => {
+'use strict';
+
+/* =====================================================================
+   Constantes et utilitaires
+   ===================================================================== */
+const MGDL = 18.016;
+const DAY = 86400000;
+const STORE_KEY = 'glycosuivi.v1';
+const APP_VERSION = '2.0.0';
+const XLSX_SRC = 'vendor/xlsx.full.min.js';
+const $ = (s, r = document) => r.querySelector(s);
+const pad = n => String(n).padStart(2, '0');
+
+const MOMENTS = [
+  { id: 'fasting', label: 'Matin, à jeun', title: 'Matin', sub: 'à jeun', short: 'À jeun', icon: 'sunrise' },
+  { id: 'lunch', label: 'Midi, avant repas', title: 'Midi', sub: 'avant repas', short: 'Midi', icon: 'sun' },
+  { id: 'dinner', label: 'Soir, avant repas', title: 'Soir', sub: 'avant repas', short: 'Soir', icon: 'sunset' },
+  { id: 'bedtime', label: 'Soir, au coucher', title: 'Soir', sub: 'au coucher', short: 'Coucher', icon: 'moon' }
+];
+const BP_MOMENTS = [
+  { id: 'morning', label: 'Matin', title: 'Matin', sub: '', short: 'Matin', icon: 'sun' },
+  { id: 'evening', label: 'Soir', title: 'Soir', sub: '', short: 'Soir', icon: 'moon' }
+];
+const momentLabel = id => (MOMENTS.concat(BP_MOMENTS).find(m => m.id === id) || { label: '–' }).label;
+const PERIODS = [{ d: 1, l: '1 jour' }, { d: 7, l: '7 jours' }, { d: 14, l: '14 jours' }, { d: 30, l: '30 jours' }, { d: 90, l: '90 jours' }, { d: 0, l: 'Tout' }];
+const STATUS_LABEL = {
+  glu: { low: 'Basse', ok: 'Dans la cible', high: 'Élevée', vhigh: 'Très élevée' },
+  bp: { low: 'Sous la cible', ok: 'Dans la cible', high: 'Un peu élevée', vhigh: 'Élevée' },
+  pulse: { low: 'Sous la plage', ok: 'Dans la plage', high: 'Au-dessus de la plage', vhigh: 'Élevé' }
+};
+const STATUSES = ['low', 'ok', 'high', 'vhigh'];
+const DAYS_FR = [{ d: 1, l: 'Lu' }, { d: 2, l: 'Ma' }, { d: 3, l: 'Me' }, { d: 4, l: 'Je' }, { d: 5, l: 'Ve' }, { d: 6, l: 'Sa' }, { d: 0, l: 'Di' }];
+
+const svg = p => '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + p + '</svg>';
+const ICON = {
+  home: svg('<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'),
+  chart: svg('<path d="M3 3v18h18"/><path d="m7 15 4-5 3 3 5-7"/>'),
+  plus: svg('<path d="M12 5v14M5 12h14"/>'),
+  list: svg('<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'),
+  file: svg('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>'),
+  refresh: svg('<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>'),
+  sliders: svg('<path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h12M21 18h0"/><circle cx="15" cy="6" r="2.2"/><circle cx="9" cy="12" r="2.2"/><circle cx="18" cy="18" r="2.2"/>'),
+  drop: svg('<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>'),
+  heart: svg('<path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 0 0-7.1 7.1L12 21l8.8-8.3a5 5 0 0 0 0-7.1z"/>'),
+  trash: svg('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'),
+  x: svg('<path d="M6 6l12 12M18 6 6 18"/>'),
+  check: svg('<path d="m5 12.5 4.5 4.5L19 7.5"/>'),
+  download: svg('<path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>'),
+  mail: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'),
+  alert: svg('<path d="M12 4 2.5 20h19z"/><path d="M12 10v4M12 17h.01"/>'),
+  info: svg('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),
+  sunrise: svg('<path d="M12 3v3M5.6 7.6l1.7 1.7M18.4 7.6l-1.7 1.7M3 15h18M7 15a5 5 0 0 1 10 0M8 19h8"/>'),
+  sun: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  sunset: svg('<path d="M12 3v6M9 6.5l3 3 3-3M3 16h18M7 16a5 5 0 0 1 10 0M8 20h8"/>'),
+  moon: svg('<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'),
+  bell: svg('<path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/>'),
+  calendar: svg('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
+  chevron: svg('<path d="m9 5 7 7-7 7"/>'),
+  menu: svg('<path d="M4 7h16M4 12h16M4 17h10"/>'),
+  back: svg('<path d="m15 5-7 7 7 7"/>'),
+  target: svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12h.01"/>'),
+  arrowDL: svg('<path d="M17 7 7 17M7 8v9h9"/>'),
+  arrowUR: svg('<path d="M7 17 17 7M8 7h9v9"/>')
+};
+const SHAPES = {
+  ok: '<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="currentColor"/></svg>',
+  high: '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1 11.6 11H.4z" fill="currentColor"/></svg>',
+  vhigh: '<svg viewBox="0 0 12 12" aria-hidden="true"><path fill-rule="evenodd" fill="currentColor" d="M6 .8 11.6 11H.4zM5.4 4.6h1.2v3H5.4zM5.4 8.4h1.2v1.2H5.4z"/></svg>',
+  low: '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11.2 .4 1h11.2z" fill="currentColor"/></svg>'
+};
+
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+const fmtNum = (n, d = 0) => Number(n).toLocaleString('fr-BE', { minimumFractionDigits: d, maximumFractionDigits: d });
+const parseNum = s => parseFloat(String(s).replace(',', '.'));
+const capital = s => s.charAt(0).toUpperCase() + s.slice(1);
+const plural = (n, a, b) => n > 1 ? b : a;
+
+/* Dates */
+const dtDay = new Intl.DateTimeFormat('fr-BE', { weekday: 'long', day: 'numeric', month: 'long' });
+const dtTime = new Intl.DateTimeFormat('fr-BE', { hour: '2-digit', minute: '2-digit' });
+const dtShort = new Intl.DateTimeFormat('fr-BE', { day: 'numeric', month: 'short' });
+const dtFull = new Intl.DateTimeFormat('fr-BE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const startOfDay = t => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
+const dateKey = t => { const d = new Date(t); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const parseDateKey = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]).getTime() : null; };
+function dayLabel(t) {
+  const diff = Math.round((startOfDay(Date.now()) - startOfDay(t)) / DAY);
+  if (diff === 0) return 'Aujourd’hui';
+  if (diff === 1) return 'Hier';
+  return capital(dtDay.format(t));
+}
+function relTime(t) {
+  const m = Math.round((Date.now() - t) / 60000);
+  if (m < 1) return 'à l’instant';
+  if (m < 60) return 'il y a ' + m + ' min';
+  const h = Math.floor(m / 60);
+  if (h < 24) return 'il y a ' + h + ' h';
+  const d = Math.floor(h / 24);
+  return d === 1 ? 'hier' : 'il y a ' + d + ' jours';
+}
+const fmtDT = t => dayLabel(t) + ', ' + dtTime.format(t);
+const fmtBirth = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; };
+const hm = s => { const m = /^(\d{1,2}):(\d{2})$/.exec(s || ''); return m ? [+m[1], +m[2]] : [0, 0]; };
+
+/* =====================================================================
+   Données et stockage local
+   ===================================================================== */
+const SETTINGS_V = 3;
+const DEFAULT_SETTINGS = { v: SETTINGS_V, unit: 'mgdl', low: 70, fastMax: 120, bedMax: 120, vhigh: 250, sysMin: 120, sysMax: 130, diaMin: 70, diaMax: 80, pulseMin: 60, pulseMax: 80 };
+const DEFAULT_PROFILE = { name: '', birth: '', doctor: '', email: '' };
+const DEFAULT_REPORT = { days: 30, includeBp: true, includeNotes: true };
+const DEFAULT_SCHEDULE = {
+  days: [0, 1, 2, 3, 4, 5, 6], notify: false, fired: {},
+  slots: { fasting: { on: true, time: '06:00' }, lunch: { on: true, time: '12:00' }, dinner: { on: true, time: '18:30' }, bedtime: { on: true, time: '22:00' } }
+};
+let storageOK = true;
+
+function glucoseMomentFor(m, t) {
+  if (MOMENTS.some(x => x.id === m)) return m;
+  const h = new Date(t).getHours();
+  return h < 5 ? 'bedtime' : h < 10 ? 'fasting' : h < 15 ? 'lunch' : h < 21 ? 'dinner' : 'bedtime';
+}
+const bpMomentFor = (m, t) => (m === 'morning' || m === 'evening') ? m : (new Date(t).getHours() < 14 ? 'morning' : 'evening');
+function migrateSettings(raw) {
+  const st = Object.assign({}, DEFAULT_SETTINGS, raw || {});
+  if (raw && raw.v !== SETTINGS_V) {
+    if (raw.fastMax === 130) st.fastMax = 120;   // anciennes cibles par défaut
+    if (raw.bedMax === 150) st.bedMax = 120;
+    if (raw.sysT) st.sysMax = raw.sysT;
+    if (raw.diaT) st.diaMax = raw.diaT;
+  }
+  st.v = SETTINGS_V;
+  delete st.sysT; delete st.diaT; delete st.postMax;
+  return st;
+}
+function normalizeData(r) {
+  r = r || {};
+  const sched = r.schedule || {};
+  const slots = {}; MOMENTS.forEach(m => { slots[m.id] = Object.assign({}, DEFAULT_SCHEDULE.slots[m.id], (sched.slots || {})[m.id] || {}); });
+  return {
+    readings: (Array.isArray(r.readings) ? r.readings : []).map(x => Object.assign({}, x, { m: glucoseMomentFor(x.m, x.t) })),
+    bps: (Array.isArray(r.bps) ? r.bps : []).map(x => Object.assign({}, x, { m: bpMomentFor(x.m, x.t) })),
+    settings: migrateSettings(r.settings),
+    profile: Object.assign({}, DEFAULT_PROFILE, r.profile || {}),
+    report: Object.assign({}, DEFAULT_REPORT, r.report || {}),
+    schedule: { days: Array.isArray(sched.days) && sched.days.length ? sched.days : DEFAULT_SCHEDULE.days.slice(), notify: !!sched.notify, fired: sched.fired && typeof sched.fired === 'object' ? sched.fired : {}, slots }
+  };
+}
+function loadData() {
+  let raw = null;
+  try { raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) { raw = null; }
+  try { localStorage.setItem(STORE_KEY + '.t', '1'); localStorage.removeItem(STORE_KEY + '.t'); } catch (e) { storageOK = false; }
+  return normalizeData(raw);
+}
+let data = loadData();
+function persist() { try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch (e) { storageOK = false; } }
+
+const ui = { tab: 'home', chart: 'glu', days: 30, moment: 'all', hist: 'all', sheet: null, banner: null, selected: null, draft: null,
+  undo: null, toastTimer: null, confirmErase: false, lastFocus: null, hits: [] };
+
+/* Unités */
+const isMmol = () => data.settings.unit === 'mmol';
+const unitLabel = () => isMmol() ? 'mmol/L' : 'mg/dL';
+const toDisp = v => isMmol() ? v / MGDL : v;
+const fromDisp = d => isMmol() ? d * MGDL : d;
+const fmtGlu = (v, withUnit) => (isMmol() ? fmtNum(v / MGDL, 1) : fmtNum(Math.round(v), 0)) + (withUnit ? ' ' + unitLabel() : '');
+const fmtRaw = v => isMmol() ? (v / MGDL).toFixed(1).replace('.', ',') : String(Math.round(v));
+const GLU_MIN = 20, GLU_MAX = 600;
+
+/* =====================================================================
+   Statuts (cibles) et messages
+   ===================================================================== */
+const gMax = (m, s = data.settings) => m === 'bedtime' ? s.bedMax : s.fastMax;
+const gluStatus = (r, s = data.settings) => r.v < s.low ? 'low' : r.v > s.vhigh ? 'vhigh' : r.v > gMax(r.m, s) ? 'high' : 'ok';
+const bpStatus = (r, s = data.settings) =>
+  (r.s < 90 || r.d < 60) ? 'low' :
+  (r.s >= s.sysMax + 10 || r.d >= s.diaMax + 10) ? 'vhigh' :
+  (r.s > s.sysMax || r.d > s.diaMax) ? 'high' :
+  (r.s < s.sysMin || r.d < s.diaMin) ? 'low' : 'ok';
+const pulseStatus = (p, s = data.settings) => p < s.pulseMin ? 'low' : p >= 100 ? 'vhigh' : p > s.pulseMax ? 'high' : 'ok';
+
+function gluMsg(st, r) {
+  const s = data.settings, u = unitLabel(), mx = gMax(r.m), mom = '«\u00A0' + momentLabel(r.m) + '\u00A0»';
+  if (st === 'low') return 'Valeur basse (sous ' + fmtGlu(s.low) + ' ' + u + '). Si vous avez des symptômes (sueurs, tremblements, faim soudaine), prenez 15 g de sucre rapide et recontrôlez dans 15 minutes.';
+  if (st === 'ok') return 'Dans la cible pour ' + mom + ' (' + fmtGlu(s.low) + ' à ' + fmtGlu(mx) + ' ' + u + ').';
+  if (st === 'high') return 'Au-dessus de la cible pour ' + mom + ' (maximum ' + fmtGlu(mx) + ' ' + u + '). À noter pour votre prochain rendez-vous.';
+  return 'Valeur très élevée (au-dessus de ' + fmtGlu(s.vhigh) + ' ' + u + '). Contactez votre médecin si elle persiste ou si vous vous sentez mal. En cas de malaise important, appelez le 112.';
+}
+function bpMsg(st, r) {
+  const s = data.settings, rg = s.sysMin + ' à ' + s.sysMax + ' / ' + s.diaMin + ' à ' + s.diaMax + ' mmHg';
+  if (st === 'low') return (r && (r.s < 90 || r.d < 60))
+    ? 'Tension basse (sous 90/60). Si vous avez des vertiges, asseyez-vous ou allongez-vous et parlez-en à votre médecin.'
+    : 'Légèrement sous la cible (' + rg + '). À mentionner à votre médecin si cela se répète.';
+  if (st === 'ok') return 'Dans la cible (' + rg + ').';
+  if (st === 'high') return 'Légèrement au-dessus de la cible (' + rg + '). À surveiller et à mentionner à votre médecin.';
+  return 'Tension élevée (à partir de ' + (s.sysMax + 10) + '/' + (s.diaMax + 10) + '). Refaites une mesure après 5 minutes de repos. Si elle reste élevée, contactez votre médecin. En cas de douleur dans la poitrine, d’essoufflement ou de maux de tête intenses, appelez le 112.';
+}
+function pulseMsg(p) {
+  const s = data.settings, st = pulseStatus(p), rg = s.pulseMin + ' à ' + s.pulseMax + ' bpm';
+  if (st === 'ok') return 'Pouls dans la plage (' + rg + ').';
+  if (st === 'low') return 'Pouls sous la plage (' + rg + '). À mentionner à votre médecin, surtout en cas de malaise.';
+  if (st === 'high') return 'Pouls au-dessus de la plage (' + rg + '). À noter, surtout après un effort.';
+  return 'Pouls élevé (100 bpm ou plus). Refaites une mesure au repos et contactez votre médecin si cela persiste.';
+}
+const chipHTML = (st, label) => '<span class="chip s-' + st + '">' + SHAPES[st] + '<span>' + esc(label) + '</span></span>';
+
+/* =====================================================================
+   Statistiques et analyse
+   ===================================================================== */
+function inWin(list, days) {
+  const lim = days ? Date.now() - days * DAY : 0;
+  return list.filter(r => r.t >= lim).sort((a, b) => a.t - b.t);
+}
+function gluStats(list) {
+  const n = list.length; if (!n) return null;
+  const vals = list.map(r => r.v), mean = avg(vals);
+  const sd = Math.sqrt(avg(vals.map(v => (v - mean) ** 2)));
+  const cnt = { low: 0, ok: 0, high: 0, vhigh: 0 };
+  list.forEach(r => cnt[gluStatus(r)]++);
+  const pct = {}; STATUSES.forEach(k => pct[k] = cnt[k] / n * 100);
+  return { n, mean, min: Math.min.apply(null, vals), max: Math.max.apply(null, vals), sd, cv: mean ? sd / mean * 100 : 0, cnt, pct };
+}
+function bpStats(list) {
+  const n = list.length; if (!n) return null;
+  const cnt = { low: 0, ok: 0, high: 0, vhigh: 0 };
+  list.forEach(r => cnt[bpStatus(r)]++);
+  const pulses = list.filter(r => r.p).map(r => r.p);
+  const pct = {}; STATUSES.forEach(k => pct[k] = cnt[k] / n * 100);
+  return { n, s: avg(list.map(r => r.s)), d: avg(list.map(r => r.d)), p: pulses.length ? avg(pulses) : null, cnt, pct };
+}
+function pulseStats(list) {
+  const l = list.filter(r => r.p), n = l.length; if (!n) return null;
+  const vals = l.map(r => r.p), cnt = { low: 0, ok: 0, high: 0, vhigh: 0 };
+  l.forEach(r => cnt[pulseStatus(r.p)]++);
+  const pct = {}; STATUSES.forEach(k => pct[k] = cnt[k] / n * 100);
+  return { n, mean: avg(vals), min: Math.min.apply(null, vals), max: Math.max.apply(null, vals), cnt, pct };
+}
+const byMoment = list => MOMENTS.map(m => ({ m, st: gluStats(list.filter(r => r.m === m.id)) })).filter(x => x.st);
+
+function gluInsights(list) {
+  const out = [], st = gluStats(list), s = data.settings, u = unitLabel();
+  if (!st) return out;
+  if (st.n < 5) out.push({ k: 'info', t: 'Ajoutez encore quelques mesures pour obtenir une analyse plus fiable.' });
+  const f = list.filter(r => r.m === 'fasting');
+  if (f.length >= 3) {
+    const m = avg(f.map(r => r.v));
+    out.push({ k: m <= s.fastMax ? 'ok' : 'warn', t: 'Glycémie à jeun moyenne : ' + fmtGlu(m) + ' ' + u + ' (cible : ' + fmtGlu(s.low) + ' à ' + fmtGlu(s.fastMax) + ').' });
+  }
+  if (st.cnt.low) out.push({ k: 'warn', t: st.cnt.low + ' ' + plural(st.cnt.low, 'valeur basse', 'valeurs basses') + ' (sous ' + fmtGlu(s.low) + ' ' + u + '). À signaler à votre médecin.' });
+  if (st.cnt.vhigh) out.push({ k: 'warn', t: st.cnt.vhigh + ' ' + plural(st.cnt.vhigh, 'valeur très élevée', 'valeurs très élevées') + ' (au-dessus de ' + fmtGlu(s.vhigh) + ' ' + u + ').' });
+  const worst = byMoment(list).filter(x => x.st.n >= 3).map(x => ({ m: x.m, out: 100 - x.st.pct.ok })).sort((a, b) => b.out - a.out)[0];
+  if (worst && worst.out >= 30) out.push({ k: 'warn', t: 'Les mesures «\u00A0' + worst.m.label + '\u00A0» sont les plus souvent hors cible (' + Math.round(worst.out) + ' %).' });
+  if (list.length >= 8) {
+    const h = Math.floor(list.length / 2), diff = avg(list.slice(h).map(r => r.v)) - avg(list.slice(0, h).map(r => r.v));
+    if (Math.abs(diff) >= 10) out.push({ k: diff < 0 ? 'ok' : 'warn', t: 'Tendance : moyenne en ' + (diff < 0 ? 'baisse' : 'hausse') + ' de ' + fmtGlu(Math.abs(diff)) + ' ' + u + ' entre la première et la seconde moitié de la période.' });
+    else out.push({ k: 'info', t: 'Tendance stable entre la première et la seconde moitié de la période.' });
+  }
+  if (st.cv > 36) out.push({ k: 'warn', t: 'Variabilité importante (' + Math.round(st.cv) + ' %). On vise généralement moins de 36 %.' });
+  if (st.pct.ok >= 70) out.push({ k: 'ok', t: Math.round(st.pct.ok) + ' % des mesures sont dans la cible.' });
+  return out.slice(0, 5);
+}
+function bpInsights(list) {
+  const out = [], st = bpStats(list), s = data.settings;
+  if (!st) return out;
+  if (st.n < 5) out.push({ k: 'info', t: 'Ajoutez encore quelques mesures pour obtenir une analyse plus fiable.' });
+  const inT = st.s >= s.sysMin && st.s <= s.sysMax && st.d >= s.diaMin && st.d <= s.diaMax;
+  out.push({ k: inT ? 'ok' : 'warn', t: 'Moyenne : ' + Math.round(st.s) + '/' + Math.round(st.d) + ' mmHg (cible : ' + s.sysMin + ' à ' + s.sysMax + ' / ' + s.diaMin + ' à ' + s.diaMax + ').' });
+  out.push({ k: st.pct.ok >= 60 ? 'ok' : 'warn', t: Math.round(st.pct.ok) + ' % des mesures sont dans la cible.' });
+  if (st.cnt.vhigh) out.push({ k: 'warn', t: st.cnt.vhigh + ' ' + plural(st.cnt.vhigh, 'mesure', 'mesures') + ' à ' + (s.sysMax + 10) + '/' + (s.diaMax + 10) + ' mmHg ou plus.' });
+  if (st.cnt.high) out.push({ k: 'warn', t: st.cnt.high + ' ' + plural(st.cnt.high, 'mesure légèrement', 'mesures légèrement') + ' au-dessus de la cible.' });
+  if (st.cnt.low) out.push({ k: 'warn', t: st.cnt.low + ' ' + plural(st.cnt.low, 'mesure', 'mesures') + ' sous la cible.' });
+  return out.slice(0, 5);
+}
+function pulseInsights(list) {
+  const out = [], st = pulseStats(list), s = data.settings;
+  if (!st) return out;
+  if (st.n < 5) out.push({ k: 'info', t: 'Ajoutez encore quelques mesures pour obtenir une analyse plus fiable.' });
+  out.push({ k: st.mean >= s.pulseMin && st.mean <= s.pulseMax ? 'ok' : 'warn', t: 'Pouls moyen : ' + Math.round(st.mean) + ' bpm (plage : ' + s.pulseMin + ' à ' + s.pulseMax + ' bpm).' });
+  out.push({ k: st.pct.ok >= 60 ? 'ok' : 'warn', t: Math.round(st.pct.ok) + ' % des mesures sont dans la plage.' });
+  if (st.cnt.vhigh) out.push({ k: 'warn', t: st.cnt.vhigh + ' ' + plural(st.cnt.vhigh, 'mesure', 'mesures') + ' à 100 bpm ou plus.' });
+  if (st.cnt.low) out.push({ k: 'warn', t: st.cnt.low + ' ' + plural(st.cnt.low, 'mesure', 'mesures') + ' sous ' + s.pulseMin + ' bpm.' });
+  return out.slice(0, 5);
+}
+
+/* =====================================================================
+   Composants d’affichage
+   ===================================================================== */
+function gauge(v, min, max, zones, ticks, label) {
+  const pos = x => clamp((x - min) / (max - min), 0, 1) * 100;
+  const segs = zones.map(z => '<span class="g-seg s-' + z.s + '" style="left:' + pos(z.a) + '%;width:' + (pos(z.b) - pos(z.a)) + '%"></span>').join('');
+  const tk = ticks.map(t => '<span class="g-tick" style="left:' + pos(t.v) + '%">' + t.l + '</span>').join('');
+  return '<div class="gauge" role="img" aria-label="' + esc(label) + '"><div class="g-track">' + segs + '<span class="g-dot" style="left:' + pos(v) + '%"></span></div><div class="g-ticks" aria-hidden="true">' + tk + '</div></div>';
+}
+function gluGauge(r) {
+  const s = data.settings, mx = gMax(r.m), lo = 40, hi = 300;
+  return gauge(r.v, lo, hi, [
+    { a: lo, b: s.low, s: 'low' }, { a: s.low, b: mx, s: 'ok' }, { a: mx, b: s.vhigh, s: 'high' }, { a: s.vhigh, b: hi, s: 'vhigh' }
+  ], [{ v: s.low, l: fmtGlu(s.low) }, { v: mx, l: fmtGlu(mx) }, { v: s.vhigh, l: fmtGlu(s.vhigh) }],
+  'Position de la valeur par rapport à la cible');
+}
+const TIR_NAMES = {
+  glu: { low: 'Basses', ok: 'Dans la cible', high: 'Élevées', vhigh: 'Très élevées' },
+  bp: { low: 'Sous la cible', ok: 'Dans la cible', high: 'Un peu élevées', vhigh: 'Élevées' },
+  pulse: { low: 'Sous la plage', ok: 'Dans la plage', high: 'Au-dessus', vhigh: 'Élevé' }
+};
+function tirBar(st, kind) {
+  const names = TIR_NAMES[kind || 'glu'];
+  const seg = STATUSES.map(k => st.pct[k] > 0 ? '<span class="tir-seg s-' + k + '" style="width:' + st.pct[k] + '%"></span>' : '').join('');
+  const leg = STATUSES.map(k => '<li class="s-' + k + '"><span class="dot"></span>' + names[k] + '<b>' + Math.round(st.pct[k]) + ' %</b></li>').join('');
+  return '<div class="tir" role="img" aria-label="Répartition des mesures : ' + STATUSES.map(k => names[k] + ' ' + Math.round(st.pct[k]) + ' %').join(', ') + '">' + seg + '</div><ul class="tir-legend">' + leg + '</ul>';
+}
+const bpSubLabel = r => ({ morning: 'Tension du matin', evening: 'Tension du soir' }[r.m] || 'Tension') + (r.p ? ', pouls ' + r.p : '');
+function rowHTML(kind, r) {
+  const st = kind === 'glu' ? gluStatus(r) : bpStatus(r);
+  const val = kind === 'glu' ? fmtGlu(r.v) + '<small>' + unitLabel() + '</small>' : r.s + '/' + r.d + '<small>mmHg</small>';
+  const sub = kind === 'glu' ? momentLabel(r.m) : bpSubLabel(r);
+  return '<button class="row s-' + st + '" data-action="edit" data-kind="' + kind + '" data-id="' + r.id + '">' +
+    '<span class="mark">' + SHAPES[st] + '</span>' +
+    '<span class="row-main"><span class="row-val">' + val + '</span><span class="row-sub">' + esc(sub) + '</span></span>' +
+    '<span class="row-side"><span class="row-time">' + dtTime.format(r.t) + '</span><span class="row-status">' + STATUS_LABEL[kind][st] + '</span></span>' +
+    (r.note ? '<span class="row-note">' + esc(r.note) + '</span>' : '') + '</button>';
+}
+const statHTML = (label, val, unit) => '<div class="stat"><div class="stat-label">' + label + '</div><div class="stat-val">' + val + (unit ? '<small>' + unit + '</small>' : '') + '</div></div>';
+function insightsHTML(items) {
+  if (!items.length) return '';
+  return '<ul class="insights">' + items.map(i => {
+    const cls = i.k === 'ok' ? 's-ok' : i.k === 'warn' ? 's-high' : 'info';
+    const ic = i.k === 'ok' ? ICON.check : i.k === 'warn' ? ICON.alert : ICON.info;
+    return '<li class="' + cls + '"><span class="ic-wrap">' + ic + '</span><span>' + esc(i.t) + '</span></li>';
+  }).join('') + '</ul>';
+}
+function emptyHTML(title, text, withDemo, type) {
+  type = type === 'pulse' ? 'bp' : (type || 'glu');
+  return '<div class="empty"><div class="empty-ic">' + (type === 'bp' ? ICON.heart : ICON.drop) + '</div><h2>' + title + '</h2><p>' + text + '</p><div class="btn-row">' +
+    '<button class="btn btn-primary" data-action="open-add" data-type="' + type + '">' + ICON.plus + (type === 'bp' ? 'Ajouter une tension' : 'Ajouter une glycémie') + '</button>' +
+    (withDemo ? '<button class="btn btn-quiet" data-action="load-demo">Essayer avec des données d’exemple</button>' : '') + '</div></div>';
+}
+const initials = n => { const p = (n || '').trim().split(/\s+/).filter(Boolean); return p.length ? (p[0][0] + (p[1] ? p[1][0] : '')).toUpperCase() : ''; };
+
+/* =====================================================================
+   Planning et pastilles du jour
+   ===================================================================== */
+const todayReading = (list, m) => { const t0 = startOfDay(Date.now()); return list.filter(r => r.m === m && r.t >= t0).sort((a, b) => b.t - a.t)[0]; };
+const slotActiveToday = () => data.schedule.days.includes(new Date().getDay());
+function glucoseSlotHTML(m, s, nowMin) {
+  const rd = todayReading(data.readings, m.id), [h, mi] = hm(s.time), due = nowMin >= h * 60 + mi;
+  if (rd) {
+    const st = gluStatus(rd);
+    return '<button class="slot done s-' + st + '" data-action="edit" data-kind="glu" data-id="' + rd.id + '"><span class="slot-ic">' + SHAPES[st] + '</span>' +
+      '<span class="slot-main"><span class="slot-title">' + m.label + '</span><span class="slot-sub">' + fmtGlu(rd.v) + ' ' + unitLabel() + ', ' + STATUS_LABEL.glu[st] + '</span></span>' +
+      '<span class="slot-side">' + dtTime.format(rd.t) + '</span></button>';
+  }
+  return '<button class="slot' + (due ? ' due' : '') + '" data-action="open-add" data-type="glu" data-moment="' + m.id + '"><span class="slot-ic">' + ICON[m.icon] + '</span>' +
+    '<span class="slot-main"><span class="slot-title">' + m.label + '</span><span class="slot-sub">' + (due ? 'À faire maintenant' : 'Prévu à ' + s.time) + '</span></span>' +
+    '<span class="slot-side">' + (due ? '<span class="pill-btn">Mesurer</span>' : ICON.chevron) + '</span></button>';
+}
+function planningHTML() {
+  const now = new Date(), nowMin = now.getHours() * 60 + now.getMinutes();
+  const rows = slotActiveToday() ? MOMENTS.filter(m => data.schedule.slots[m.id].on).map(m => glucoseSlotHTML(m, data.schedule.slots[m.id], nowMin)) : [];
+  const head = '<div class="section-head"><h2>Planning du jour</h2><button class="round-btn sm" data-action="open-schedule" aria-label="Planning et rappels">' + ICON.bell + '</button></div>';
+  if (!rows.length) {
+    return '<section class="plan">' + head + '<div class="white-card note-card"><p>' + (slotActiveToday() ? 'Aucune mesure prévue aujourd’hui.' : 'Pas de mesure prévue aujourd’hui.') + ' Réglez vos horaires et vos rappels pour ne rien oublier.</p>' +
+      '<button class="btn" data-action="open-schedule">' + ICON.calendar + 'Régler le planning</button></div></section>';
+  }
+  return '<section class="plan">' + head + '<div class="slots">' + rows.join('') + '</div></section>';
+}
+function bpCardHTML() {
+  const rows = BP_MOMENTS.map(m => {
+    const rd = todayReading(data.bps, m.id);
+    if (rd) {
+      const st = bpStatus(rd);
+      return '<button class="row s-' + st + '" data-action="edit" data-kind="bp" data-id="' + rd.id + '"><span class="mark">' + SHAPES[st] + '</span>' +
+        '<span class="row-main"><span class="row-val">' + rd.s + '/' + rd.d + '<small>mmHg</small></span><span class="row-sub">' + m.label + (rd.p ? ', pouls ' + rd.p : '') + '</span></span>' +
+        '<span class="row-side"><span class="row-time">' + dtTime.format(rd.t) + '</span><span class="row-status">' + STATUS_LABEL.bp[st] + '</span></span></button>';
+    }
+    return '<button class="row" data-action="open-add" data-type="bp" data-moment="' + m.id + '"><span class="slot-ic">' + ICON[m.icon] + '</span>' +
+      '<span class="row-main"><span class="row-val" style="font-size:19px">' + m.label + '</span><span class="row-sub">Tension à mesurer</span></span>' +
+      '<span class="row-side"><span class="pill-btn">Ajouter</span></span></button>';
+  }).join('');
+  return '<section><div class="section-head"><h2>Tension du jour</h2></div><div class="list">' + rows + '</div></section>';
+}
+function ringBig(pct, label) {
+  const r = 74, c = 2 * Math.PI * r, off = c * (1 - pct / 100), ang = pct / 100 * 2 * Math.PI, kx = 100 + r * Math.sin(ang), ky = 100 - r * Math.cos(ang);
+  return '<div class="ring-plate" role="img" aria-label="' + Math.round(pct) + ' % ' + label + '"><svg viewBox="0 0 200 200"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--teal-2)"/><stop offset="1" style="stop-color:var(--primary)"/></linearGradient></defs>' +
+    '<circle class="rg-bg" cx="100" cy="100" r="' + r + '"/><circle class="rg-fg" cx="100" cy="100" r="' + r + '" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '" transform="rotate(-90 100 100)"/>' +
+    (pct > 0 && pct < 100 ? '<circle class="rg-knob" cx="' + kx.toFixed(1) + '" cy="' + ky.toFixed(1) + '" r="11"/>' : '') +
+    '</svg><div class="ring-in"><b>' + Math.round(pct) + ' %</b><span>' + label + '</span></div></div>';
+}
+const miniCard = (icon, label, value, unit) => '<div class="mini-card"><span class="tile-ic">' + icon + '</span><div><div class="k">' + label + '</div><div class="v">' + value + (unit ? '<small>' + unit + '</small>' : '') + '</div></div></div>';
+
+let deferredPrompt = null;
+const isStandalone = () => { try { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; } catch (e) { return false; } };
+function installBannerHTML() {
+  if (!deferredPrompt || isStandalone() || ui.installDismissed) return '';
+  return '<section class="install-card white-card" aria-label="Installer l’application"><span class="tile-ic">' + ICON.download + '</span>' +
+    '<div class="ic-text"><b>Installer GlycoTens</b><span>Accès direct depuis l’écran d’accueil, même sans internet.</span></div>' +
+    '<button class="pill-btn" data-action="install-app">Installer</button><button class="icon-btn small" data-action="install-dismiss" aria-label="Masquer">' + ICON.x + '</button></section>';
+}
+function viewHome() {
+  const readings = data.readings.slice().sort((a, b) => b.t - a.t);
+  const bps = data.bps.slice().sort((a, b) => b.t - a.t);
+  let html = '<h1 class="sr-only">Accueil GlycoTens</h1>' + installBannerHTML();
+  if (!readings.length && !bps.length) {
+    return html + emptyHTML('Votre carnet est vide', 'Encodez votre première mesure en quelques secondes. Vous verrez tout de suite si elle est dans la cible.', true) + planningHTML();
+  }
+  const last = readings[0], week = inWin(data.readings, 7), st7 = gluStats(week);
+  if (last) {
+    const st = gluStatus(last);
+    html += '<section class="glass-panel hero-card s-' + st + '" aria-label="Dernière glycémie"><div class="bignum"><span class="n">' + fmtGlu(last.v) + '</span><span class="u">' + unitLabel() + '</span></div>' +
+      '<p class="hero-cap">Dernière glycémie, ' + relTime(last.t) + '<br><b>' + momentLabel(last.m) + '</b></p>' +
+      '<div class="hero-chip">' + chipHTML(st, STATUS_LABEL.glu[st]) + '</div>' + gluGauge(last) + '<p class="hero-msg">' + esc(gluMsg(st, last)) + '</p></section>';
+  }
+  if (st7) html += '<div class="duo">' + miniCard(ICON.drop, 'Moyenne 7 jours', fmtGlu(st7.mean), unitLabel()) + miniCard(ICON.target, 'Dans la cible', Math.round(st7.pct.ok) + ' %') + '</div>';
+  if (week.length) {
+    html += '<section class="glass-panel chart-panel"><div class="section-head"><h2>7 derniers jours</h2><button class="link-btn" data-action="goto-chart">Tout voir</button></div>' +
+      '<div id="homeBox"><canvas id="homeChart" role="img" aria-label="Graphique des glycémies des 7 derniers jours, moyenne ' + fmtGlu(st7.mean) + ' ' + unitLabel() + '"></canvas></div></section>';
+  }
+  html += planningHTML() + bpCardHTML();
+  return html;
+}
+
+function chartSeries() {
+  const isGlu = ui.chart === 'glu';
+  let list = inWin(isGlu ? data.readings : (ui.chart === 'pulse' ? data.bps.filter(r => r.p) : data.bps), ui.days);
+  if (isGlu && ui.moment !== 'all') list = list.filter(r => r.m === ui.moment);
+  return list;
+}
+function bannerHTML() {
+  const b = ui.banner; if (!b) return '';
+  const isGlu = b.type === 'glu', rec = (isGlu ? data.readings : data.bps).find(r => r.id === b.id);
+  if (!rec) return '';
+  const st = isGlu ? gluStatus(rec) : bpStatus(rec);
+  const head = isGlu ? 'Glycémie enregistrée : ' + fmtGlu(rec.v) + ' ' + unitLabel() : 'Tension enregistrée : ' + rec.s + '/' + rec.d + ' mmHg';
+  return '<div class="banner s-' + st + '" role="status"><div class="banner-top"><span class="banner-ic">' + SHAPES[st] + '</span><strong>' + head + '</strong>' +
+    '<button class="icon-btn small" data-action="dismiss-banner" aria-label="Masquer ce message">' + ICON.x + '</button></div>' +
+    '<p><span class="label">' + STATUS_LABEL[b.type][st] + '.</span> ' + esc(isGlu ? gluMsg(st, rec) : bpMsg(st, rec)) + '</p></div>';
+}
+function viewChart() {
+  const isGlu = ui.chart === 'glu', isP = ui.chart === 'pulse';
+  const list = chartSeries();
+  let html = '<div class="seg" role="group" aria-label="Type de mesure"><button data-action="chart-type" data-type="glu" aria-pressed="' + isGlu + '">Glycémie</button><button data-action="chart-type" data-type="bp" aria-pressed="' + (ui.chart === 'bp') + '">Tension</button><button data-action="chart-type" data-type="pulse" aria-pressed="' + isP + '">Pouls</button></div>';
+  html += bannerHTML();
+  html += '<div class="chips scroll" role="group" aria-label="Période">' + PERIODS.map(p => '<button class="chip-btn" data-action="period" data-days="' + p.d + '" aria-pressed="' + (ui.days === p.d) + '">' + p.l + '</button>').join('') + '</div>';
+  if (isGlu) {
+    html += '<div class="chips scroll" role="group" aria-label="Moment de la journée"><button class="chip-btn" data-action="moment-filter" data-id="all" aria-pressed="' + (ui.moment === 'all') + '">Tous</button>' +
+      MOMENTS.map(m => '<button class="chip-btn" data-action="moment-filter" data-id="' + m.id + '" aria-pressed="' + (ui.moment === m.id) + '">' + m.label + '</button>').join('') + '</div>';
+  }
+  if (!list.length) {
+    const nm = isGlu ? 'glycémie' : isP ? 'mesure de pouls' : 'tension';
+    return html + emptyHTML('Aucune mesure à afficher', 'Aucune ' + nm + ' sur cette période. Choisissez « Tout » ou encodez une mesure.', !data.readings.length && !data.bps.length, ui.chart);
+  }
+  const legend = isGlu
+    ? '<li><span class="sw-band" style="background:var(--band-dark);border:1px solid var(--m-ok)"></span>Cible à jeun / avant repas</li><li><span class="sw-band" style="background:var(--band-light);border:1px solid var(--m-ok)"></span>Cible au coucher</li>' +
+      (list.length > 25 ? '<li><span class="sw-line"></span>Moyenne du jour</li>' : '') +
+      '<li class="s-ok" style="color:var(--st)">' + SHAPES.ok + 'Dans la cible</li><li class="s-high" style="color:var(--st)">' + SHAPES.high + 'Élevée</li><li class="s-low" style="color:var(--st)">' + SHAPES.low + 'Basse</li>'
+    : isP
+    ? '<li><span class="sw-band" style="background:var(--band-dark);border:1px solid var(--m-ok)"></span>Plage cible (' + data.settings.pulseMin + ' à ' + data.settings.pulseMax + ' bpm)</li><li class="s-ok" style="color:var(--st)">' + SHAPES.ok + 'Dans la plage</li><li class="s-high" style="color:var(--st)">' + SHAPES.high + 'Au-dessus</li><li class="s-low" style="color:var(--st)">' + SHAPES.low + 'Sous la plage</li>'
+    : '<li><span class="sw-band" style="background:var(--band-light);border:1px solid var(--m-ok)"></span>Zones cibles (' + data.settings.sysMin + '-' + data.settings.sysMax + ' / ' + data.settings.diaMin + '-' + data.settings.diaMax + ')</li><li>● Systolique (haute)</li><li>○ Diastolique (basse)</li>';
+  html += '<section class="glass-panel chart-panel"><div id="chartBox"><canvas id="chart" role="img" aria-label="' + esc(chartAria(list)) + '"></canvas></div><ul class="legend">' + legend + '</ul>' +
+    '<div class="detail" id="chartDetail" aria-live="polite"></div></section>';
+  const insBlock = ins => ins.length ? '<section><div class="section-head"><h2>À retenir</h2></div><div class="white-card pad">' + insightsHTML(ins) + '<p class="field-hint">Observations automatiques à titre indicatif. Parlez-en avec votre médecin.</p></div></section>' : '';
+  if (isGlu) {
+    const st = gluStats(list);
+    html += '<section class="ring-section">' + ringBig(st.pct.ok, 'dans la cible') + '</section>' +
+      '<section><div class="section-head"><h2>Résumé</h2><span class="muted">' + st.n + ' ' + plural(st.n, 'mesure', 'mesures') + '</span></div>' +
+      '<div class="trio">' + miniCard(ICON.drop, 'Moyenne', fmtGlu(st.mean), unitLabel()) + miniCard(ICON.arrowDL, 'Minimum', fmtGlu(st.min), unitLabel()) + miniCard(ICON.arrowUR, 'Maximum', fmtGlu(st.max), unitLabel()) + '</div>' +
+      '<div class="white-card pad" style="margin-top:12px">' + tirBar(st, 'glu') + '</div></section>';
+    const bm = ui.moment === 'all' ? byMoment(list) : [];
+    if (bm.length > 1) {
+      html += '<section><div class="section-head"><h2>Par moment de la journée</h2></div><div class="white-card pad"><table class="moment-table"><thead><tr><th scope="col">Moment</th><th scope="col">Moyenne (' + unitLabel() + ')</th><th scope="col">Dans la cible</th></tr></thead><tbody>' +
+        bm.map(x => '<tr><td>' + x.m.label + '</td><td>' + fmtGlu(x.st.mean) + '</td><td>' + Math.round(x.st.pct.ok) + ' %<span class="mini" aria-hidden="true"><i style="width:' + x.st.pct.ok + '%"></i></span></td></tr>').join('') +
+        '</tbody></table></div></section>';
+    }
+    html += insBlock(gluInsights(list));
+  } else if (isP) {
+    const st = pulseStats(list);
+    html += '<section class="ring-section">' + ringBig(st.pct.ok, 'dans la plage') + '</section>' +
+      '<section><div class="section-head"><h2>Résumé</h2><span class="muted">' + st.n + ' ' + plural(st.n, 'mesure', 'mesures') + '</span></div>' +
+      '<div class="trio">' + miniCard(ICON.heart, 'Moyenne', Math.round(st.mean), 'bpm') + miniCard(ICON.arrowDL, 'Minimum', st.min, 'bpm') + miniCard(ICON.arrowUR, 'Maximum', st.max, 'bpm') + '</div>' +
+      '<div class="white-card pad" style="margin-top:12px">' + tirBar(st, 'pulse') + '</div></section>' + insBlock(pulseInsights(list));
+  } else {
+    const st = bpStats(list);
+    html += '<section class="ring-section">' + ringBig(st.pct.ok, 'dans la cible') + '</section>' +
+      '<section><div class="section-head"><h2>Résumé</h2><span class="muted">' + st.n + ' ' + plural(st.n, 'mesure', 'mesures') + '</span></div>' +
+      '<div class="trio">' + miniCard(ICON.heart, 'Moyenne', Math.round(st.s) + '/' + Math.round(st.d), 'mmHg') + miniCard(ICON.target, 'Dans la cible', Math.round(st.pct.ok) + ' %') + miniCard(ICON.drop, 'Pouls moyen', st.p ? Math.round(st.p) : '–', st.p ? 'bpm' : '') + '</div>' +
+      '<div class="white-card pad" style="margin-top:12px">' + tirBar(st, 'bp') + '</div></section>' + insBlock(bpInsights(list));
+  }
+  return html;
+}
+function chartAria(list) {
+  if (ui.chart === 'glu') { const st = gluStats(list); return 'Graphique de ' + st.n + ' glycémies, moyenne ' + fmtGlu(st.mean) + ' ' + unitLabel() + ', ' + Math.round(st.pct.ok) + ' % dans la cible. Le détail est disponible dans l’historique.'; }
+  if (ui.chart === 'pulse') { const st = pulseStats(list); return 'Graphique de ' + st.n + ' mesures de pouls, moyenne ' + Math.round(st.mean) + ' battements par minute. Le détail est disponible dans l’historique.'; }
+  const st = bpStats(list); return 'Graphique de ' + st.n + ' mesures de tension, moyenne ' + Math.round(st.s) + ' sur ' + Math.round(st.d) + '. Le détail est disponible dans l’historique.';
+}
+
+function viewHistory() {
+  const items = [];
+  if (ui.hist !== 'bp') data.readings.forEach(r => items.push({ k: 'glu', r }));
+  if (ui.hist !== 'glu') data.bps.forEach(r => items.push({ k: 'bp', r }));
+  items.sort((a, b) => b.r.t - a.r.t);
+  let html = '<div class="seg" role="group" aria-label="Filtrer">' +
+    [['all', 'Tout'], ['glu', 'Glycémie'], ['bp', 'Tension']].map(x => '<button data-action="hist-filter" data-id="' + x[0] + '" aria-pressed="' + (ui.hist === x[0]) + '">' + x[1] + '</button>').join('') + '</div>';
+  if (!items.length) return html + emptyHTML('Rien à afficher', 'Vos mesures apparaîtront ici, classées par jour. Touchez une mesure pour la modifier ou la supprimer.', !data.readings.length && !data.bps.length);
+  const groups = []; let cur = null;
+  items.forEach(x => { const d = startOfDay(x.r.t); if (!cur || cur.d !== d) { cur = { d, list: [] }; groups.push(cur); } cur.list.push(x); });
+  html += '<div>' + groups.map(g => '<div class="day-group"><h2 class="day-head">' + dayLabel(g.d + 12 * 3600000) + '</h2><div class="list">' + g.list.map(x => rowHTML(x.k, x.r)).join('') + '</div></div>').join('') + '</div>';
+  return html;
+}
+
+const periodText = d => d === 1 ? 'dernières 24 heures' : d ? d + ' derniers jours' : 'toutes les mesures';
+function reportSummary() {
+  const r = data.report, g = inWin(data.readings, r.days), b = r.includeBp ? inWin(data.bps, r.days) : [];
+  if (!g.length && !b.length) return '<p class="muted">Aucune mesure sur cette période. Choisissez une période plus longue ou encodez des mesures.</p>';
+  const st = gluStats(g);
+  let h = '<ul class="insights"><li class="info"><span class="ic-wrap">' + ICON.file + '</span><span><strong>' + g.length + '</strong> ' + plural(g.length, 'glycémie', 'glycémies') + (b.length ? ' et <strong>' + b.length + '</strong> ' + plural(b.length, 'mesure de tension', 'mesures de tension') : '') + ' (' + periodText(r.days) + ')</span></li>';
+  if (st) h += '<li class="info"><span class="ic-wrap">' + ICON.chart + '</span><span>Moyenne ' + fmtGlu(st.mean) + ' ' + unitLabel() + ', ' + Math.round(st.pct.ok) + ' % dans la cible</span></li>';
+  return h + '</ul>';
+}
+function reportCardHTML() {
+  const p = data.profile, r = data.report, g = inWin(data.readings, r.days), b = r.includeBp ? inWin(data.bps, r.days) : [];
+  return '<div class="ec-top">Rapport PDF pour mon médecin</div><div class="rc-num">' + g.length + ' ' + plural(g.length, 'glycémie', 'glycémies') + (b.length ? ' et ' + b.length + ' ' + plural(b.length, 'tension', 'tensions') : '') + '</div>' +
+    '<div class="rc-sub">' + periodText(r.days) + '</div>' +
+    '<div class="ec-foot"><div><b>' + esc(p.name || 'Votre nom') + '</b><span>Patient</span></div><div class="ec-right"><b>' + esc(p.doctor || 'Votre médecin') + '</b><span>Destinataire</span></div></div>';
+}
+function viewReport() {
+  const p = data.profile, r = data.report;
+  return '<section class="entry-card" id="reportCard">' + reportCardHTML() + '</section>' +
+    '<section class="panel"><h2>Période</h2><div class="chips" role="group" aria-label="Période du rapport">' + PERIODS.map(x => '<button class="chip-btn" data-action="report-days" data-days="' + x.d + '" aria-pressed="' + (r.days === x.d) + '">' + x.l + '</button>').join('') + '</div></section>' +
+    '<section class="panel"><h2>Contenu</h2><div>' +
+    '<label class="switch-row"><span>Inclure la tension et le pouls</span><input type="checkbox" role="switch" class="sw" data-bind="report.includeBp"' + (r.includeBp ? ' checked' : '') + '></label>' +
+    '<label class="switch-row"><span>Inclure mes notes</span><input type="checkbox" role="switch" class="sw" data-bind="report.includeNotes"' + (r.includeNotes ? ' checked' : '') + '></label></div></section>' +
+    '<section class="panel"><h2>Informations</h2><div class="fields">' +
+    '<label class="field"><span class="field-label">Votre nom</span><input class="input" data-bind="profile.name" autocomplete="name" value="' + esc(p.name) + '"></label>' +
+    '<label class="field"><span class="field-label">Date de naissance</span><input class="input" type="date" data-bind="profile.birth" value="' + esc(p.birth) + '"></label>' +
+    '<label class="field"><span class="field-label">Nom du médecin</span><input class="input" data-bind="profile.doctor" placeholder="Dr Dupont" value="' + esc(p.doctor) + '"></label>' +
+    '<label class="field"><span class="field-label">Adresse e-mail du médecin</span><input class="input" type="email" inputmode="email" autocomplete="off" data-bind="profile.email" placeholder="cabinet@exemple.be" value="' + esc(p.email) + '"><span class="field-hint">Elle sera copiée au moment du partage pour que vous puissiez la coller dans votre messagerie.</span></label></div></section>' +
+    '<section class="panel"><h2>Aperçu</h2><div id="reportSummary">' + reportSummary() + '</div></section>' +
+    '<div class="btn-row" id="reportActions">' + reportActions() + '</div>' +
+    '<p class="field-hint" style="text-align:center">Au partage, votre téléphone propose vos applications : choisissez Gmail ou votre messagerie, le PDF sera déjà joint.</p>';
+}
+function reportActions() {
+  const r = data.report, none = !inWin(data.readings, r.days).length && !(r.includeBp && inWin(data.bps, r.days).length);
+  return '<button class="btn btn-primary" data-action="share-report" aria-disabled="' + none + '">' + ICON.mail + 'Envoyer par e-mail</button>' +
+    '<button class="btn" data-action="download-report" aria-disabled="' + none + '">' + ICON.download + 'Télécharger le PDF</button>';
+}
+function updateReportSummary() {
+  const a = $('#reportSummary'), b = $('#reportActions'), c = $('#reportCard');
+  if (a) a.innerHTML = reportSummary();
+  if (b) b.innerHTML = reportActions();
+  if (c) c.innerHTML = reportCardHTML();
+}
+
+/* =====================================================================
+   Rendu et navigation
+   ===================================================================== */
+const view = $('#view'), sheetRoot = $('#sheetRoot'), app = $('#app');
+const TABS = [
+  { id: 'home', label: 'Accueil', icon: ICON.home },
+  { id: 'chart', label: 'Graphique', icon: ICON.chart },
+  { id: 'add' },
+  { id: 'history', label: 'Historique', icon: ICON.list },
+  { id: 'report', label: 'Rapport', icon: ICON.file }
+];
+const TITLES = { chart: 'Évolution', history: 'Historique', report: 'Rapport' };
+function renderTopbar() {
+  const bar = $('#topbar'), ini = initials(data.profile.name);
+  const menu = '<button class="round-btn" data-action="open-settings" aria-label="Réglages" id="btnSettings">' + ICON.menu + '</button>';
+  if (ui.tab === 'home') {
+    const name = (data.profile.name || '').trim();
+    bar.innerHTML = '<div class="profile"><span class="avatar" aria-hidden="true">' + (ini ? esc(ini) : ICON.drop) + '</span><div class="profile-txt"><span class="p-name">' + (name ? esc(name) : 'Bienvenue') + '</span><span class="p-sub">GlycoTens</span></div></div>' + menu;
+  } else {
+    bar.innerHTML = '<button class="round-btn" data-action="tab" data-id="home" aria-label="Retour à l’accueil">' + ICON.back + '</button><h1 class="top-title">' + TITLES[ui.tab] + '</h1>' + menu;
+  }
+}
+function renderTabbar() {
+  $('#tabbar').innerHTML = TABS.map(t => t.id === 'add'
+    ? '<button class="tab-add" data-action="open-add" data-type="glu" aria-label="Ajouter une mesure">' + ICON.plus + '</button>'
+    : '<button class="tab" data-action="tab" data-id="' + t.id + '" aria-label="' + t.label + '" title="' + t.label + '"' + (ui.tab === t.id ? ' aria-current="page"' : '') + '>' + t.icon + '<span class="tab-label">' + t.label + '</span></button>').join('');
+}
+function render() {
+  const views = { home: viewHome, chart: viewChart, history: viewHistory, report: viewReport };
+  view.innerHTML = views[ui.tab]();
+  renderTopbar(); renderTabbar();
+  if (ui.tab === 'chart') requestAnimationFrame(drawScreenChart);
+  if (ui.tab === 'home') requestAnimationFrame(drawHomeChart);
+}
+function setTab(id) {
+  if (ui.tab !== id) ui.banner = null;
+  ui.tab = id; render(); window.scrollTo(0, 0);
+}
+
+/* =====================================================================
+   Graphique (canvas)
+   ===================================================================== */
+const LIGHT = { surface: '#FFFFFF', grid: 'rgba(26,63,61,0.12)', text: '#456E6B', ink: '#1A3F3D', line: '#8FAAA7', muted: '#6B8785', primary: '#247E8A', areaTop: 'rgba(36,126,138,0.30)', areaBot: 'rgba(36,126,138,0)',
+  bandLight: 'rgba(30,154,106,0.10)', bandDark: 'rgba(30,154,106,0.22)', low: '#C2185B', mark: { ok: '#1E9A6A', high: '#E8A010', vhigh: '#D9480F', low: '#C2185B' } };
+function themeColors() {
+  const cs = getComputedStyle(document.documentElement), g = n => (cs.getPropertyValue(n) || '').trim();
+  const c = { surface: g('--surface-solid'), grid: g('--line'), text: g('--ink-2'), ink: g('--ink'), line: g('--chart-line'), muted: g('--chart-muted'), primary: g('--primary'),
+    bandLight: g('--band-light'), bandDark: g('--band-dark'), low: g('--m-low'), areaTop: g('--area-top'), areaBot: g('--area-bot'),
+    mark: { ok: g('--m-ok'), high: g('--m-high'), vhigh: g('--m-vhigh'), low: g('--m-low') } };
+  return c.surface ? c : LIGHT;
+}
+function niceStep(range) {
+  const maxTicks = 8, pow = Math.pow(10, Math.floor(Math.log10(range / maxTicks)));
+  for (const m of [1, 2, 5, 10, 20, 50]) if (range / (m * pow) <= maxTicks) return m * pow;
+  return pow * 100;
+}
+function xTicks(from, to) {
+  const span = to - from, H = 3600000;
+  const steps = [3 * H, 6 * H, 12 * H, DAY, 2 * DAY, 3 * DAY, 7 * DAY, 14 * DAY, 30 * DAY];
+  const step = steps.find(s => span / s <= 6) || 30 * DAY, out = [];
+  if (step < DAY) { let t = startOfDay(from); while (t < from) t += step; for (; t <= to; t += step) out.push(t); }
+  else { const n = Math.round(step / DAY), d = new Date(from); d.setHours(0, 0, 0, 0); while (d.getTime() < from) d.setDate(d.getDate() + n); for (; d.getTime() <= to; d.setDate(d.getDate() + n)) out.push(d.getTime()); }
+  return { ticks: out, sub: step < DAY };
+}
+function marker(ctx, st, x, y, r, C, hollow) {
+  ctx.beginPath();
+  if (st === 'ok') ctx.arc(x, y, r, 0, Math.PI * 2);
+  else if (st === 'low') { ctx.moveTo(x - r * 1.2, y - r * .8); ctx.lineTo(x + r * 1.2, y - r * .8); ctx.lineTo(x, y + r * 1.25); ctx.closePath(); }
+  else { ctx.moveTo(x, y - r * 1.25); ctx.lineTo(x + r * 1.2, y + r * .8); ctx.lineTo(x - r * 1.2, y + r * .8); ctx.closePath(); }
+  ctx.lineJoin = 'round';
+  ctx.fillStyle = hollow ? C.surface : C.mark[st];
+  ctx.strokeStyle = hollow ? C.mark[st] : C.surface;
+  ctx.lineWidth = hollow ? r * .42 : r * .4;
+  ctx.fill(); ctx.stroke();
+}
+function drawChart(canvas, o) {
+  const k = o.k || 1, dpr = o.dpr || 1, w = o.w, h = o.h, C = o.colors, s = data.settings, list = o.list, isGlu = o.type === 'glu', isP = o.type === 'pulse';
+  canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+  canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+  const ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (o.bg) { ctx.fillStyle = o.bg; ctx.fillRect(0, 0, w, h); } else ctx.clearRect(0, 0, w, h);
+  const font = (px, wt) => (wt || '400') + ' ' + (px * k) + 'px "Atkinson Hyperlegible", system-ui, sans-serif';
+  const pad = { l: ((isGlu && isMmol()) ? 38 : 44) * k, r: 16 * k, t: 14 * k, b: 30 * k };
+  const iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+  let ymin, ymax, conv = x => x;
+  if (isGlu) {
+    conv = toDisp; const vs = list.map(r => r.v);
+    ymin = Math.max(20, Math.floor(Math.min.apply(null, [50].concat(vs.map(v => v - 10))) / 10) * 10);
+    ymax = Math.ceil(Math.max.apply(null, [Math.max(s.bedMax, s.fastMax) + 40].concat(vs.map(v => v + 15))) / 10) * 10;
+  } else if (isP) {
+    const ps = list.map(r => r.p);
+    ymin = Math.max(30, Math.floor(Math.min.apply(null, [s.pulseMin - 10].concat(ps.map(v => v - 8))) / 10) * 10);
+    ymax = Math.ceil(Math.max.apply(null, [s.pulseMax + 20].concat(ps.map(v => v + 8))) / 10) * 10;
+  } else {
+    ymin = Math.max(30, Math.floor(Math.min.apply(null, [50].concat(list.map(r => r.d - 10))) / 10) * 10);
+    ymax = Math.ceil(Math.max.apply(null, [s.sysMax + 40].concat(list.map(r => r.s + 10))) / 10) * 10;
+  }
+  const Y = v => pad.t + (1 - (v - ymin) / (ymax - ymin)) * ih;
+  const X = t => pad.l + (t - o.from) / (o.to - o.from) * iw;
+  const band = (a, b, col) => { const y1 = Y(Math.min(b, ymax)), y2 = Y(Math.max(a, ymin)); ctx.fillStyle = col; ctx.fillRect(pad.l, y1, iw, y2 - y1); };
+  if (isGlu) { band(s.low, Math.max(s.bedMax, s.fastMax), C.bandLight); band(s.low, s.fastMax, C.bandDark); }
+  else if (isP) { band(s.pulseMin, s.pulseMax, C.bandDark); }
+  else { band(s.sysMin, s.sysMax, C.bandLight); band(s.diaMin, s.diaMax, C.bandLight); }
+
+  ctx.font = font(12); ctx.textBaseline = 'middle'; ctx.textAlign = 'right'; ctx.lineWidth = 1 * k;
+  const dmin = conv(ymin), dmax = conv(ymax), step = niceStep(dmax - dmin);
+  for (let v = Math.ceil(dmin / step - 1e-9) * step; v <= dmax + 1e-9; v += step) {
+    const mg = (isGlu && isMmol()) ? v * MGDL : v, y = Y(mg);
+    ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(w - pad.r, y); ctx.stroke();
+    ctx.fillStyle = C.text; ctx.fillText(fmtNum(v, Number.isInteger(step) ? 0 : 1), pad.l - 8 * k, y);
+  }
+  ctx.setLineDash([5 * k, 4 * k]); ctx.lineWidth = 1.5 * k;
+  if (isGlu) { ctx.strokeStyle = C.low; ctx.beginPath(); ctx.moveTo(pad.l, Y(s.low)); ctx.lineTo(w - pad.r, Y(s.low)); ctx.stroke(); }
+  else { ctx.strokeStyle = C.muted; (isP ? [s.pulseMin, s.pulseMax] : [s.sysMax, s.diaMax]).forEach(v => { ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(w - pad.r, Y(v)); ctx.stroke(); }); }
+  ctx.setLineDash([]);
+  const xt = xTicks(o.from, o.to);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = C.text; ctx.font = font(12);
+  xt.ticks.forEach(t => {
+    const lab = xt.sub ? dtTime.format(t) : dtShort.format(t), tw = ctx.measureText(lab).width, x = clamp(X(t), tw / 2 + 2, w - tw / 2 - 2);
+    ctx.fillText(lab, x, h - pad.b + 8 * k);
+  });
+  const hits = [], n = list.length, r = (n > 90 ? 3.2 : n > 40 ? 4.2 : 5.2) * k;
+  const selP = o.sel ? list.find(p => p.id === o.sel) : null;
+  if (selP) {
+    const bw = 34 * k, g0 = ctx.createLinearGradient(0, pad.t, 0, pad.t + ih);
+    g0.addColorStop(0, C.areaTop); g0.addColorStop(1, C.areaBot);
+    ctx.fillStyle = g0; ctx.fillRect(X(selP.t) - bw / 2, pad.t, bw, ih);
+  }
+  const curve = pts => pts.forEach((q, i) => { if (!i) ctx.moveTo(q.x, q.y); else { const p = pts[i - 1], cx = (p.x + q.x) / 2; ctx.bezierCurveTo(cx, p.y, cx, q.y, q.x, q.y); } });
+  const area = pts => {
+    if (pts.length < 2) return;
+    const g = ctx.createLinearGradient(0, pad.t, 0, pad.t + ih); g.addColorStop(0, C.areaTop); g.addColorStop(1, C.areaBot);
+    ctx.beginPath(); curve(pts); ctx.lineTo(pts[pts.length - 1].x, pad.t + ih); ctx.lineTo(pts[0].x, pad.t + ih); ctx.closePath(); ctx.fillStyle = g; ctx.fill();
+  };
+  const stroke = (pts, col, lw) => {
+    if (pts.length < 2) return;
+    ctx.strokeStyle = col; ctx.lineWidth = lw * k; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath(); curve(pts); ctx.stroke();
+  };
+  if (isGlu) {
+    let pts;
+    if (n > 25) {
+      const byDay = {};
+      list.forEach(q => { const d = startOfDay(q.t); (byDay[d] = byDay[d] || []).push(q.v); });
+      pts = Object.keys(byDay).map(d => ({ t: clamp(+d + 12 * 3600000, o.from, o.to), v: avg(byDay[d]) })).sort((a, b) => a.t - b.t).map(q => ({ x: X(q.t), y: Y(q.v) }));
+      area(pts); stroke(pts, C.primary, 3);
+    } else {
+      pts = list.map(p => ({ x: X(p.t), y: Y(p.v) }));
+      area(pts); stroke(pts, C.primary, 2.6);
+    }
+    list.forEach(p => { const st = gluStatus(p), x = X(p.t), y = Y(p.v); marker(ctx, st, x, y, r, C, false); hits.push({ x, y, id: p.id }); });
+  } else if (isP) {
+    const pts = list.map(p => ({ x: X(p.t), y: Y(p.p) }));
+    area(pts); stroke(pts, C.primary, 2.6);
+    list.forEach(p => { const st = pulseStatus(p.p), x = X(p.t), y = Y(p.p); marker(ctx, st, x, y, r, C, false); hits.push({ x, y, id: p.id }); });
+  } else {
+    stroke(list.map(p => ({ x: X(p.t), y: Y(p.s) })), C.primary, 2.6);
+    stroke(list.map(p => ({ x: X(p.t), y: Y(p.d) })), C.muted, 2.6);
+    list.forEach(p => {
+      const st = bpStatus(p), x = X(p.t);
+      marker(ctx, st, x, Y(p.s), r * .85, C, false); marker(ctx, st, x, Y(p.d), r * .8, C, true);
+      hits.push({ x, y: Y(p.s), id: p.id }, { x, y: Y(p.d), id: p.id });
+    });
+  }
+  if (selP) {
+    const sx = X(selP.t), sy = Y(isGlu ? selP.v : isP ? selP.p : selP.s);
+    ctx.strokeStyle = C.surface; ctx.lineWidth = 3.5 * k; ctx.beginPath(); ctx.arc(sx, sy, r + 5 * k, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = C.primary; ctx.lineWidth = 2.5 * k; ctx.beginPath(); ctx.arc(sx, sy, r + 5 * k, 0, Math.PI * 2); ctx.stroke();
+    if (!isGlu && !isP) { ctx.beginPath(); ctx.arc(sx, Y(selP.d), r + 5 * k, 0, Math.PI * 2); ctx.stroke(); }
+    const txt = isGlu ? fmtGlu(selP.v) : isP ? String(selP.p) : selP.s + '/' + selP.d;
+    ctx.font = font(13, '700'); const tw = ctx.measureText(txt).width, bwid = tw + 20 * k, bh = 28 * k, rad = 9 * k;
+    const bx = clamp(sx - bwid / 2, 2, w - bwid - 2); let by = sy - r - 16 * k - bh, below = false;
+    if (by < 2) { by = sy + r + 16 * k; below = true; }
+    ctx.save(); ctx.shadowColor = 'rgba(30,80,100,0.25)'; ctx.shadowBlur = 10 * k; ctx.shadowOffsetY = 3 * k; ctx.fillStyle = C.surface;
+    ctx.beginPath(); ctx.moveTo(bx + rad, by); ctx.arcTo(bx + bwid, by, bx + bwid, by + bh, rad); ctx.arcTo(bx + bwid, by + bh, bx, by + bh, rad); ctx.arcTo(bx, by + bh, bx, by, rad); ctx.arcTo(bx, by, bx + bwid, by, rad); ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    if (below) { ctx.moveTo(sx - 6 * k, by); ctx.lineTo(sx + 6 * k, by); ctx.lineTo(sx, by - 7 * k); }
+    else { ctx.moveTo(sx - 6 * k, by + bh); ctx.lineTo(sx + 6 * k, by + bh); ctx.lineTo(sx, by + bh + 7 * k); }
+    ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.fillStyle = C.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(txt, bx + bwid / 2, by + bh / 2 + 1 * k);
+  }
+  return hits;
+}
+function rangeFor(list, days) {
+  const to = Date.now();
+  let from = days ? to - days * DAY : (list.length ? list[0].t : to - DAY);
+  if (to - from < DAY) from = to - DAY;
+  return { from, to };
+}
+function effSel(list, sel) { return sel && list.some(p => p.id === sel) ? sel : (list.length ? list[list.length - 1].id : null); }
+function redrawAll() { const t = ui.tab; if (t === 'chart') drawScreenChart(); else if (t === 'home') drawHomeChart(); }
+function drawScreenChart() {
+  const box = $('#chartBox'), cv = $('#chart');
+  if (!box || !cv) return;
+  const list = chartSeries(); if (!list.length) return;
+  const w = Math.max(280, box.clientWidth), h = Math.round(clamp(w * 0.72, 250, 340));
+  const { from, to } = rangeFor(list, ui.days), sel = effSel(list, ui.selected);
+  ui.hits = drawChart(cv, { w, h, dpr: window.devicePixelRatio || 1, type: ui.chart, list, from, to, colors: themeColors(), sel });
+  showDetail(sel);
+}
+function drawHomeChart() {
+  const box = $('#homeBox'), cv = $('#homeChart');
+  if (!box || !cv) return;
+  const list = inWin(data.readings, 7); if (!list.length) return;
+  const w = Math.max(260, box.clientWidth), h = Math.round(clamp(w * 0.66, 210, 290));
+  const { from, to } = rangeFor(list, 7), sel = effSel(list, ui.homeSel);
+  ui.homeHits = drawChart(cv, { w, h, dpr: window.devicePixelRatio || 1, type: 'glu', list, from, to, colors: themeColors(), sel });
+}
+function showDetail(sel) {
+  const el = $('#chartDetail'); if (!el) return;
+  const isGlu = ui.chart === 'glu', isP = ui.chart === 'pulse', rec = (isGlu ? data.readings : data.bps).find(r => r.id === (sel || ui.selected));
+  el.className = 'detail';
+  if (!rec) { el.innerHTML = '<span class="muted">Touchez un point du graphique pour voir la mesure.</span>'; return; }
+  const st = isGlu ? gluStatus(rec) : isP ? pulseStatus(rec.p) : bpStatus(rec);
+  el.className = 'detail s-' + st;
+  const val = isGlu ? '<strong>' + fmtGlu(rec.v) + '</strong> ' + unitLabel() : isP ? '<strong>' + rec.p + '</strong> bpm' : '<strong>' + rec.s + '/' + rec.d + '</strong> mmHg' + (rec.p ? ', pouls ' + rec.p : '');
+  el.innerHTML = '<div>' + val + '</div>' +
+    '<div class="d-sub">' + esc(momentLabel(rec.m)) + ', ' + esc(fmtDT(rec.t)) + '</div>' +
+    '<div style="margin-top:8px">' + chipHTML(st, STATUS_LABEL[isGlu ? 'glu' : isP ? 'pulse' : 'bp'][st]) + '</div>';
+}
+document.addEventListener('click', e => {
+  const id = e.target.id; if (id !== 'chart' && id !== 'homeChart') return;
+  const b = e.target.getBoundingClientRect(), x = e.clientX - b.left, y = e.clientY - b.top, hits = (id === 'chart' ? ui.hits : ui.homeHits) || [];
+  let best = null, bd = 28 * 28;
+  hits.forEach(h => { const d = (h.x - x) ** 2 + (h.y - y) ** 2; if (d < bd) { bd = d; best = h; } });
+  if (!best) return;
+  if (id === 'chart') { ui.selected = best.id; drawScreenChart(); } else { ui.homeSel = best.id; drawHomeChart(); }
+});
+let resizeT;
+window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { redrawAll(); }, 120); });
+try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { redrawAll(); }); } catch (e) { /* ancien navigateur */ }
+try { new MutationObserver(() => { redrawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch (e) { /* ignoré */ }
+
+/* =====================================================================
+   Saisie d’une mesure
+   ===================================================================== */
+const defaultGluMoment = h => h < 5 ? 'bedtime' : h < 10 ? 'fasting' : h < 15 ? 'lunch' : h < 21 ? 'dinner' : 'bedtime';
+const defaultBpMoment = h => h < 14 ? 'morning' : 'evening';
+function newDraft(o) {
+  if (o.item) {
+    const it = o.item;
+    return o.type === 'bp'
+      ? { type: 'bp', id: it.id, val: '', gm: 'fasting', sys: String(it.s), dia: String(it.d), pulse: it.p ? String(it.p) : '', bm: it.m, t: it.t, dateStr: dateKey(it.t), auto: false, dateSet: false, note: it.note || '' }
+      : { type: 'glu', id: it.id, val: fmtRaw(it.v), gm: it.m, sys: '', dia: '', pulse: '', bm: 'morning', t: it.t, dateStr: dateKey(it.t), auto: false, dateSet: false, note: it.note || '' };
+  }
+  const now = Date.now(), h = new Date(now).getHours(), type = o.type || 'glu';
+  const gm = MOMENTS.some(m => m.id === o.moment) && type === 'glu' ? o.moment : defaultGluMoment(h);
+  const bm = BP_MOMENTS.some(m => m.id === o.moment) && type === 'bp' ? o.moment : defaultBpMoment(h);
+  return { type, id: null, val: '', gm, sys: '', dia: '', pulse: '', bm, t: now, dateStr: dateKey(now), auto: true, dateSet: false, note: '' };
+}
+function slotMinutes(d) {
+  const m = d.type === 'glu' ? d.gm : d.bm;
+  if (d.type === 'glu') { const [h, mi] = hm((data.schedule.slots[m] || DEFAULT_SCHEDULE.slots[m]).time); return h * 60 + mi; }
+  return m === 'morning' ? 8 * 60 : 20 * 60;
+}
+function draftTime(d) {
+  if (d.auto) return Date.now();
+  if (d.id && !d.dateSet) return d.t;
+  const base = parseDateKey(d.dateStr); if (base == null) return Date.now();
+  return Math.min(base + slotMinutes(d) * 60000, Date.now());
+}
+function dateLabel(d) {
+  if (d.auto) return 'Aujourd’hui';
+  if (d.id && !d.dateSet) return fmtDT(d.t);
+  const base = parseDateKey(d.dateStr); return base == null ? '' : dayLabel(base);
+}
+function openSheet(kind, opts) {
+  ui.lastFocus = document.activeElement;
+  ui.sheet = kind;
+  if (kind === 'add') ui.draft = newDraft(opts || {});
+  ui.confirmErase = false;
+  renderSheet(true);
+  document.body.classList.add('no-scroll');
+  app.inert = true;
+}
+function closeSheet() {
+  const was = ui.sheet;
+  ui.sheet = null; ui.draft = null; ui.confirmErase = false;
+  sheetRoot.innerHTML = ''; document.body.classList.remove('no-scroll'); app.inert = false;
+  if (was === 'settings' || was === 'schedule') render();
+  if (ui.lastFocus && ui.lastFocus.focus) { try { ui.lastFocus.focus(); } catch (e) { /* ignoré */ } }
+}
+const MOMENT_DESC = { fasting: 'Avant le petit-déjeuner', lunch: 'Avant le repas de midi', dinner: 'Avant le repas du soir', bedtime: 'Juste avant de dormir', morning: 'Au calme, après 5 minutes de repos', evening: 'Au calme, après 5 minutes de repos' };
+function momentRowsHTML(list, selected) {
+  return '<div class="mrows" role="radiogroup" aria-labelledby="momLbl">' + list.map(m =>
+    '<button type="button" class="mrow" role="radio" aria-checked="' + (selected === m.id) + '" data-action="pick-moment" data-id="' + m.id + '"><span class="m-t">' + m.label + '</span><span class="m-d">' + MOMENT_DESC[m.id] + '</span><span class="sw-vis" aria-hidden="true"></span></button>').join('') + '</div>';
+}
+const sheetBar = title => '<div class="sheet-bar"><button class="round-btn" data-action="close-sheet" aria-label="Fermer">' + ICON.back + '</button><h2 id="sheetTitle" class="top-title">' + title + '</h2><span class="bar-spacer"></span></div>';
+function dateShort(d) { return d.auto ? 'Aujourd’hui' : (d.id && !d.dateSet ? fmtDT(d.t) : dateLabel(d)); }
+function ecFoot(d) {
+  return '<div class="ec-foot"><div><b id="ecMoment">' + esc(momentLabel(d.type === 'glu' ? d.gm : d.bm)) + '</b><span>Moment</span></div><div class="ec-right"><b id="ecDate">' + esc(dateShort(d)) + '</b><span>Date</span></div></div>';
+}
+function updateEntryMeta() {
+  const d = ui.draft; if (!d) return;
+  const m = $('#ecMoment'), dt = $('#ecDate'), dl = $('#dateLabel');
+  if (m) m.textContent = momentLabel(d.type === 'glu' ? d.gm : d.bm);
+  if (dt) dt.textContent = dateShort(d);
+  if (dl) dl.textContent = dateLabel(d);
+}
+function entryGlu(d) {
+  return '<section class="entry-card"><div class="ec-top">Glycémie</div><div class="ec-main"><label class="sr-only" for="fVal">Glycémie en ' + unitLabel() + '</label>' +
+    '<input id="fVal" class="big-input" inputmode="decimal" autocomplete="off" placeholder="0" value="' + esc(d.val) + '" aria-describedby="fErr preview"><span class="big-unit">' + unitLabel() + '</span></div>' +
+    '<p id="fErr" class="err" role="alert" hidden></p>' + ecFoot(d) + '</section>';
+}
+function entryBp(d) {
+  const f = (id, label, hint, val, ph) => '<label class="field bp-field"><span class="field-label">' + label + '</span><input id="' + id + '" class="input" inputmode="numeric" autocomplete="off" placeholder="' + ph + '" value="' + esc(val) + '"><span class="field-hint">' + hint + '</span></label>';
+  return '<section class="entry-card"><div class="ec-top">Tension artérielle</div><div class="bp-grid">' + f('fSys', 'Haute', 'systolique', d.sys, '120') + f('fDia', 'Basse', 'diastolique', d.dia, '80') + f('fPulse', 'Pouls', 'facultatif', d.pulse, '70') + '</div>' +
+    '<p id="fErr" class="err" role="alert" hidden></p>' + ecFoot(d) + '</section>';
+}
+function renderSheet(focusFirst) {
+  if (ui.sheet === 'settings') return renderSettings();
+  if (ui.sheet === 'schedule') return renderSchedule();
+  const d = ui.draft, editing = !!d.id;
+  const seg = (id, label) => '<button role="tab" data-action="seg-type" data-type="' + id + '" aria-selected="' + (d.type === id) + '">' + label + '</button>';
+  const prev = $('.sheet-body', sheetRoot), top = prev ? prev.scrollTop : 0;
+  sheetRoot.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">' + sheetBar(editing ? 'Modifier la mesure' : 'Nouvelle mesure') +
+    '<div class="sheet-body">' +
+    (editing ? '' : '<div class="seg" role="tablist" aria-label="Type de mesure">' + seg('glu', 'Glycémie') + seg('bp', 'Tension') + '</div>') +
+    (d.type === 'glu' ? entryGlu(d) : entryBp(d)) +
+    '<div id="preview" class="preview glass-panel pad" aria-live="polite" style="border-radius:26px"></div>' +
+    '<div class="item"><span class="tile-ic">' + ICON.calendar + '</span><div><b>Date</b><span id="dateLabel" class="muted">' + esc(dateLabel(d)) + '</span></div><button type="button" class="btn small" data-action="date-toggle">Changer</button></div>' +
+    '<input id="fDate" class="input" type="date" hidden value="' + d.dateStr + '" max="' + dateKey(Date.now()) + '" style="margin-top:-8px">' +
+    '<section class="bsheet"><div class="grab"></div><h2 id="momLbl">Moment de la mesure</h2>' + momentRowsHTML(d.type === 'glu' ? MOMENTS : BP_MOMENTS, d.type === 'glu' ? d.gm : d.bm) +
+    '<label class="field"><span class="field-label">Note (facultatif)</span><input id="fNote" class="input" maxlength="140" autocomplete="off" placeholder="Repas, activité, médicament…" value="' + esc(d.note) + '"></label></section>' +
+    '</div><div class="sheet-foot"><div class="sheet-foot-in' + (editing ? ' two' : '') + '">' +
+    (editing ? '<button class="btn btn-danger" data-action="delete-item">' + ICON.trash + 'Supprimer</button>' : '') +
+    '<button class="btn btn-primary" data-action="save-item">' + (editing ? 'Enregistrer les modifications' : 'Enregistrer la mesure') + '</button></div></div></div>';
+  const body = $('.sheet-body', sheetRoot); if (body) body.scrollTop = top;
+  updatePreview();
+  if (focusFirst && !editing) setTimeout(() => { const f = $('#fVal') || $('#fSys'); if (f) f.focus(); }, 60);
+}
+function draftGlu() { const d = ui.draft, n = parseNum(d.val); if (!isFinite(n)) return null; return { v: fromDisp(n), m: d.gm }; }
+const validGlu = v => v >= GLU_MIN && v <= GLU_MAX;
+function draftBp() {
+  const d = ui.draft, s = parseInt(d.sys, 10), di = parseInt(d.dia, 10), p = d.pulse ? parseInt(d.pulse, 10) : null;
+  if (!isFinite(s) || !isFinite(di)) return null;
+  return { s, d: di, p: isFinite(p) ? p : null, m: d.bm };
+}
+const validBp = r => r.s >= 60 && r.s <= 260 && r.d >= 30 && r.d <= 160 && r.s > r.d && (r.p == null || (r.p >= 30 && r.p <= 220));
+function updatePreview() {
+  const el = $('#preview'); if (!el || !ui.draft) return;
+  const d = ui.draft;
+  if (d.type === 'glu') {
+    const r = draftGlu();
+    if (!r) { el.innerHTML = '<p class="preview-empty">Saisissez la valeur affichée par votre lecteur. Le résultat s’affiche ici.</p>'; return; }
+    if (!validGlu(r.v)) { el.innerHTML = '<p class="preview-empty">Valeur inhabituelle : vérifiez la saisie.</p>'; return; }
+    const st = gluStatus(r);
+    el.innerHTML = '<div class="preview-box s-' + st + '"><div class="preview-top">' + chipHTML(st, STATUS_LABEL.glu[st]) + '</div>' + gluGauge(r) + '<p class="preview-msg">' + esc(gluMsg(st, r)) + '</p></div>';
+  } else {
+    const r = draftBp();
+    if (!r) { el.innerHTML = '<p class="preview-empty">Saisissez les deux valeurs de tension. Le résultat s’affiche ici.</p>'; return; }
+    if (!validBp(r)) { el.innerHTML = '<p class="preview-empty">Valeurs inhabituelles : vérifiez la saisie.</p>'; return; }
+    const st = bpStatus(r), pl = r.p ? '<p class="preview-msg"><b>Pouls ' + r.p + ' bpm.</b> ' + esc(pulseMsg(r.p)) + '</p>' : '';
+    el.innerHTML = '<div class="preview-box s-' + st + '"><div class="preview-top">' + chipHTML(st, STATUS_LABEL.bp[st]) + '</div><p class="preview-msg">' + esc(bpMsg(st, r)) + '</p>' + pl + '</div>';
+  }
+}
+function showErr(msg, focusId) {
+  const e = $('#fErr'); if (e) { e.textContent = msg; e.hidden = false; }
+  const f = $('#' + focusId); if (f) f.focus();
+}
+function saveDraft() {
+  const d = ui.draft, t = draftTime(d), note = d.note.trim();
+  let rec, kind = d.type;
+  if (kind === 'glu') {
+    const r = draftGlu();
+    if (!r || !validGlu(r.v)) return showErr('Entrez une valeur comprise entre ' + fmtGlu(GLU_MIN) + ' et ' + fmtGlu(GLU_MAX) + ' ' + unitLabel() + '.', 'fVal');
+    rec = { id: d.id || uid(), t, v: Math.round(r.v * 10) / 10, m: d.gm, note };
+    if (d.id) { const i = data.readings.findIndex(x => x.id === d.id); data.readings[i] = Object.assign({}, data.readings[i], rec); } else data.readings.push(rec);
+  } else {
+    const r = draftBp();
+    if (!r || !validBp(r)) return showErr('Vérifiez les valeurs : la haute doit être supérieure à la basse (par exemple 125 et 80).', 'fSys');
+    rec = { id: d.id || uid(), t, s: r.s, d: r.d, p: r.p, m: d.bm, note };
+    if (d.id) { const i = data.bps.findIndex(x => x.id === d.id); data.bps[i] = Object.assign({}, data.bps[i], rec); } else data.bps.push(rec);
+  }
+  persist();
+  const edited = !!d.id;
+  closeSheet();
+  if (edited) { toast('Mesure modifiée'); render(); return; }
+  ui.chart = kind;
+  if (ui.days && rec.t < Date.now() - ui.days * DAY) ui.days = 0;
+  ui.moment = 'all'; ui.selected = rec.id; ui.banner = { type: kind, id: rec.id }; ui.tab = 'chart';
+  render(); window.scrollTo(0, 0); toast('Mesure enregistrée');
+}
+function deleteDraft() {
+  const d = ui.draft; if (!d || !d.id) return;
+  const store = d.type === 'glu' ? data.readings : data.bps, i = store.findIndex(x => x.id === d.id);
+  if (i < 0) return;
+  const rec = store.splice(i, 1)[0];
+  persist(); closeSheet();
+  ui.undo = { type: d.type, rec }; if (ui.selected === rec.id) ui.selected = null;
+  render(); toast('Mesure supprimée', { act: 'undo', label: 'Annuler' });
+}
+
+/* =====================================================================
+   Planning, rappels, agenda
+   ===================================================================== */
+function renderSchedule() {
+  const sc = data.schedule, prev = $('.sheet-body', sheetRoot), top = prev ? prev.scrollTop : 0;
+  const notifOK = typeof Notification !== 'undefined';
+  const rows = MOMENTS.map(m => {
+    const s = sc.slots[m.id];
+    return '<div class="sched-row"><span class="tile-ic">' + ICON[m.icon] + '</span><div class="sched-main"><span class="slot-title">' + m.label + '</span>' +
+      '<input type="time" class="input" data-slot-time="' + m.id + '" value="' + esc(s.time) + '" aria-label="Heure du rappel : ' + esc(m.label) + '"></div>' +
+      '<input type="checkbox" role="switch" class="sw" data-slot-on="' + m.id + '" aria-label="Activer : ' + esc(m.label) + '"' + (s.on ? ' checked' : '') + '></div>';
+  }).join('');
+  sheetRoot.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">' + sheetBar('Planning et rappels') +
+    '<div class="sheet-body">' +
+    '<div class="glass-panel" style="border-radius:22px;padding:14px 16px"><p>Choisissez vos horaires de mesure. Par défaut : 6 h, 12 h, 18 h 30 et 22 h.</p></div>' +
+    '<section class="panel"><h2>Mesures de glycémie</h2><div>' + rows + '</div></section>' +
+    '<section class="panel"><h2>Jours concernés</h2><div class="days" role="group" aria-label="Jours de la semaine">' +
+    DAYS_FR.map(x => '<button class="chip-btn" data-action="sched-day" data-day="' + x.d + '" aria-pressed="' + sc.days.includes(x.d) + '">' + x.l + '</button>').join('') + '</div></section>' +
+    '<section class="glass-panel callout"><h3>Rappel dans l’agenda Android (recommandé)</h3>' +
+    '<p>Crée 4 rappels récurrents avec alarme à l’heure choisie, le jour même, application fermée ou non. Ouvrez le fichier avec Google Agenda pour l’importer.</p>' +
+    '<button class="btn btn-primary" data-action="export-ics">' + ICON.calendar + 'Ajouter à mon agenda</button></section>' +
+    '<section class="panel callout"><h3>Notifications de l’application</h3>' +
+    '<p>Un rappel s’affiche à l’heure prévue tant que l’application reste ouverte ou active en arrière-plan. Android peut la mettre en veille : l’agenda est plus fiable.</p>' +
+    (notifOK ? '<label class="switch-row"><span>Activer les notifications</span><input type="checkbox" role="switch" class="sw" data-notif' + (sc.notify && Notification.permission === 'granted' ? ' checked' : '') + '></label>' : '<p class="field-hint">Les notifications ne sont pas disponibles sur ce navigateur.</p>') +
+    '</section><div style="height:8px"></div></div><div class="sheet-foot"><div class="sheet-foot-in"><button class="btn btn-primary" data-action="close-sheet">Terminé</button></div></div></div>';
+  const body = $('.sheet-body', sheetRoot); if (body) body.scrollTop = top;
+}
+const icsEsc = s => String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+const icsFold = l => l.length <= 60 ? l : l.match(/.{1,60}/g).join('\r\n ');
+function buildICS() {
+  const sc = data.schedule, BY = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+  const days = sc.days.slice().sort().map(d => BY[d]).join(',');
+  const now = new Date(), stamp = now.getUTCFullYear() + pad(now.getUTCMonth() + 1) + pad(now.getUTCDate()) + 'T' + pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + pad(now.getUTCSeconds()) + 'Z';
+  let start = new Date(now); start.setHours(0, 0, 0, 0);
+  for (let i = 0; i < 7 && !sc.days.includes(start.getDay()); i++) start.setDate(start.getDate() + 1);
+  const ds = start.getFullYear() + pad(start.getMonth() + 1) + pad(start.getDate());
+  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//GlycoTens//FR', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'X-WR-CALNAME:Mesures de glycémie'];
+  MOMENTS.filter(m => sc.slots[m.id].on).forEach(m => {
+    const [h, mi] = hm(sc.slots[m.id].time), endMin = Math.min(h * 60 + mi + 15, 1439);
+    L.push('BEGIN:VEVENT', 'UID:glycotens-' + m.id + '@glycotens.app', 'DTSTAMP:' + stamp, 'DTSTART:' + ds + 'T' + pad(h) + pad(mi) + '00',
+      'DTEND:' + ds + 'T' + pad(Math.floor(endMin / 60)) + pad(endMin % 60) + '00', 'RRULE:FREQ=WEEKLY;BYDAY=' + days,
+      'SUMMARY:' + icsEsc('Glycémie : ' + m.label), 'DESCRIPTION:' + icsEsc('Prenez votre glycémie (' + m.label + ') puis encodez-la dans GlycoTens.'),
+      'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Mesure de glycémie', 'TRIGGER:PT0S', 'END:VALARM', 'END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  return L.map(icsFold).join('\r\n') + '\r\n';
+}
+async function exportICS() {
+  if (!MOMENTS.some(m => data.schedule.slots[m.id].on)) { toast('Activez au moins une mesure'); return; }
+  const ok = await saveFile(new Blob([buildICS()], { type: 'text/calendar' }), 'glycotens-rappels.ics');
+  if (ok) toast('Ouvrez le fichier avec Google Agenda pour importer les rappels');
+}
+function fireReminder(m, timeStr) {
+  const tag = 'data-type="glu" data-moment="' + m.id + '"';
+  toast('Il est l’heure : glycémie « ' + m.label + ' »', { act: 'open-add', label: 'Mesurer', attrs: tag }, 20000);
+  if (data.schedule.notify && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+    const opts = { body: 'Il est ' + timeStr + '. Prenez votre mesure puis encodez-la.', icon: 'icons/icon-192.png', badge: 'icons/icon-192.png', tag: 'glyco-' + m.id, data: { url: './index.html?add=glu&moment=' + m.id }, vibrate: [120, 60, 120] };
+    try {
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) navigator.serviceWorker.ready.then(reg => reg.showNotification('Glycémie : ' + m.label, opts)).catch(() => {});
+      else new Notification('Glycémie : ' + m.label, opts);
+    } catch (e) { /* notifications bloquées */ }
+  }
+}
+function checkReminders() {
+  const sc = data.schedule, now = new Date();
+  if (!sc.days.includes(now.getDay())) return;
+  const today = dateKey(now), t0 = startOfDay(now);
+  MOMENTS.forEach(m => {
+    const s = sc.slots[m.id]; if (!s.on) return;
+    const [h, mi] = hm(s.time), due = new Date(now); due.setHours(h, mi, 0, 0);
+    const diff = now - due; if (diff < 0 || diff > 90 * 60000) return;
+    const key = today + '-' + m.id; if (sc.fired[key]) return;
+    if (data.readings.some(r => r.m === m.id && r.t >= t0)) return;
+    const fired = {}; Object.keys(sc.fired).forEach(k => { if (k.indexOf(today) === 0) fired[k] = 1; }); fired[key] = 1; sc.fired = fired; persist();
+    fireReminder(m, s.time);
+    if (ui.tab === 'home' && !ui.sheet) render();
+  });
+}
+setInterval(checkReminders, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkReminders(); if (ui.tab === 'home' && !ui.sheet) render(); } });
+
+/* =====================================================================
+   Réglages
+   ===================================================================== */
+const kindUnit = k => k === 'glu' ? unitLabel() : k === 'bp' ? 'mmHg' : 'bpm';
+function sliderHTML(key, label, kind, mn, mx) {
+  const s = data.settings, g = kind === 'glu', mm = g && isMmol();
+  const dmin = mm ? +(mn / MGDL).toFixed(1) : mn, dmax = mm ? +(mx / MGDL).toFixed(1) : mx, step = mm ? 0.1 : 1;
+  const v = mm ? +(s[key] / MGDL).toFixed(1) : s[key], p = clamp((v - dmin) / (dmax - dmin) * 100, 0, 100);
+  return '<div class="slider"><div class="slider-top"><label for="rg-' + key + '">' + label + '</label><b id="rv-' + key + '">' + fmtNum(v, mm ? 1 : 0) + ' ' + kindUnit(kind) + '</b></div>' +
+    '<input id="rg-' + key + '" type="range" class="range" data-setting="' + key + '" data-kind="' + kind + '" min="' + dmin + '" max="' + dmax + '" step="' + step + '" value="' + v + '" style="--p:' + p.toFixed(1) + '%"></div>';
+}
+function renderSettings() {
+  const prev = $('.sheet-body', sheetRoot), top = prev ? prev.scrollTop : 0;
+  const hasDemo = data.readings.concat(data.bps).some(r => r.demo);
+  sheetRoot.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">' + sheetBar('Réglages') +
+    '<div class="sheet-body">' +
+    (storageOK ? '' : '<p class="notice">Le stockage de ce navigateur est indisponible : vos mesures seront perdues à la fermeture. Exportez une sauvegarde.</p>') +
+    '<button class="nav-row white-card" data-action="open-schedule"><span class="tile-ic">' + ICON.bell + '</span><span class="grow">Planning et rappels<small>6 h, 12 h, 18 h 30, 22 h</small></span>' + ICON.chevron + '</button>' +
+    '<section class="panel"><h2>Application</h2>' +
+    '<p id="updStatus" class="muted" style="font-size:15px">Version ' + APP_VERSION + (isStandalone() ? ', installée sur cet appareil.' : '.') + '</p>' +
+    (!isStandalone() ? (deferredPrompt ? '<button class="btn btn-primary" data-action="install-app">' + ICON.download + 'Installer l’application</button>' : '<p class="muted" style="font-size:15px">Pour l’installer : menu ⋮ de Chrome, puis « Installer l’application ».</p>') : '') +
+    '<button class="btn" data-action="check-update">' + ICON.refresh + 'Rechercher une mise à jour</button></section>' +
+    '<section class="panel"><h2>Unité de glycémie</h2><div class="seg" role="group" aria-label="Unité"><button data-action="set-unit" data-unit="mgdl" aria-pressed="' + !isMmol() + '">mg/dL</button><button data-action="set-unit" data-unit="mmol" aria-pressed="' + isMmol() + '">mmol/L</button></div></section>' +
+    '<section class="panel"><h2>Cibles de glycémie</h2><p class="muted" style="font-size:15px">Valeurs de référence courantes pour un adulte diabétique. Votre médecin peut les adapter : réglez-les selon ses indications.</p>' +
+    sliderHTML('low', 'Seuil bas (hypoglycémie)', 'glu', 40, 100) + sliderHTML('fastMax', 'Maximum à jeun / avant repas', 'glu', 90, 200) + sliderHTML('bedMax', 'Maximum au coucher', 'glu', 90, 250) + sliderHTML('vhigh', 'Seuil très élevé', 'glu', 150, 400) + '</section>' +
+    '<section class="panel"><h2>Cibles de tension</h2><p class="muted" style="font-size:15px">Pression haute (systolique) et basse (diastolique) : de … à …</p>' +
+    sliderHTML('sysMin', 'Haute (systolique), minimum', 'bp', 90, 150) + sliderHTML('sysMax', 'Haute (systolique), maximum', 'bp', 100, 170) +
+    sliderHTML('diaMin', 'Basse (diastolique), minimum', 'bp', 50, 100) + sliderHTML('diaMax', 'Basse (diastolique), maximum', 'bp', 60, 110) + '</section>' +
+    '<section class="panel"><h2>Plage du pouls</h2>' + sliderHTML('pulseMin', 'Pouls, minimum', 'pulse', 40, 90) + sliderHTML('pulseMax', 'Pouls, maximum', 'pulse', 60, 130) + '</section>' +
+    '<button class="btn" data-action="reset-targets">Rétablir les cibles par défaut</button>' +
+    '<section class="panel"><h2>Mes données</h2><div class="btn-row">' +
+    '<button class="btn" data-action="load-demo">Ajouter des données d’exemple</button>' +
+    (hasDemo ? '<button class="btn" data-action="clear-demo">Supprimer les données d’exemple</button>' : '') +
+    '<button class="btn btn-primary" data-action="export-xlsx">' + ICON.download + 'Backup (Excel)</button>' +
+    '<button class="btn" data-action="export-data">' + ICON.download + 'Exporter en JSON</button>' +
+    '<button class="btn" data-action="import-data">Restaurer un backup</button>' +
+    (ui.confirmErase
+      ? '<p class="err">Cette action efface toutes vos mesures et vos réglages. Elle est définitive.</p><div class="btn-row two"><button class="btn" data-action="erase-cancel">Annuler</button><button class="btn btn-danger-solid" data-action="erase-confirm">Tout effacer</button></div>'
+      : '<button class="btn btn-danger" data-action="erase-ask">' + ICON.trash + 'Effacer toutes mes données</button>') +
+    '</div></section>' +
+    '<section class="about"><h2 class="set-title">À propos</h2><p>GlycoTens garde vos mesures uniquement sur cet appareil. Rien n’est envoyé sur internet : le PDF ne quitte votre téléphone que lorsque vous le partagez.</p>' +
+    '<p>Cette application est un outil de suivi. Elle ne pose pas de diagnostic et ne remplace pas l’avis d’un professionnel de santé. En cas de malaise important, appelez le 112.</p></section><div style="height:8px"></div>' +
+    '</div><div class="sheet-foot"><div class="sheet-foot-in"><button class="btn btn-primary" data-action="close-sheet">Terminé</button></div></div></div>';
+  const body = $('.sheet-body', sheetRoot); if (body) body.scrollTop = top;
+}
+function commitSetting(input) {
+  const key = input.dataset.setting, isG = input.dataset.kind === 'glu', s = data.settings;
+  const n = parseNum(input.value);
+  if (!isFinite(n)) { toast('Valeur non valide'); renderSettings(); return; }
+  const val = isG ? Math.round(fromDisp(n)) : Math.round(n);
+  const next = Object.assign({}, s, { [key]: val });
+  let ok;
+  if (isG) {
+    const highs = [next.fastMax, next.bedMax];
+    ok = next.low >= 40 && next.low <= 100 && highs.every(h => h > next.low + 5 && h <= 400) && next.vhigh > Math.max.apply(null, highs) && next.vhigh <= 600;
+  } else if (input.dataset.kind === 'bp') {
+    ok = next.sysMin >= 90 && next.sysMin < next.sysMax - 4 && next.sysMax <= 170 && next.diaMin >= 50 && next.diaMin < next.diaMax - 4 && next.diaMax <= 110;
+  } else ok = next.pulseMin >= 40 && next.pulseMin < next.pulseMax - 4 && next.pulseMax <= 130;
+  if (!ok) { toast('Valeur incohérente avec les autres cibles'); renderSettings(); return; }
+  data.settings = next; persist(); renderSettings();
+}
+
+/* =====================================================================
+   Toast, fichiers, sauvegarde
+   ===================================================================== */
+const toastEl = $('#toast');
+function toast(msg, action, ms) {
+  clearTimeout(ui.toastTimer);
+  toastEl.innerHTML = '<span>' + esc(msg) + '</span>' + (action ? '<button data-action="' + action.act + '" ' + (action.attrs || '') + '>' + action.label + '</button>' : '');
+  toastEl.classList.add('show');
+  ui.toastTimer = setTimeout(() => { toastEl.classList.remove('show'); ui.undo = null; }, ms || (action ? 6500 : 3200));
+}
+async function saveFile(blob, name) {
+  try {
+    if (window.claude && window.claude.use) {
+      const dl = await window.claude.use('downloads');
+      if (dl) { await dl.save({ filename: name, data: blob }); return true; }
+    }
+  } catch (e) { if (e && e.code === 'declined') return false; }
+  const url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+  return true;
+}
+function exportData() {
+  const payload = { app: 'glycotens', version: 2, exportedAt: new Date().toISOString(), readings: data.readings, bps: data.bps, settings: data.settings, profile: data.profile, report: data.report, schedule: data.schedule };
+  return saveFile(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }), 'glycotens-sauvegarde-' + new Date().toISOString().slice(0, 10) + '.json')
+    .then(ok => { if (ok) toast('Sauvegarde exportée'); });
+}
+function importData(file) {
+  if (/\.xlsx?$/i.test(file.name)) return importXlsx(file);
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const j = JSON.parse(rd.result);
+      if (!j || !['glycotens', 'medizo', 'glycosuivi'].includes(j.app) || !Array.isArray(j.readings) || !Array.isArray(j.bps)) throw new Error('format');
+      j.readings = j.readings.filter(r => r && isFinite(r.t) && isFinite(r.v) && typeof r.id === 'string');
+      j.bps = j.bps.filter(r => r && isFinite(r.t) && isFinite(r.s) && isFinite(r.d) && typeof r.id === 'string');
+      data = normalizeData(j);
+      persist(); if (ui.sheet === 'settings') renderSettings(); render(); toast('Backup restauré (' + (data.readings.length + data.bps.length) + ' mesures)');
+    } catch (e) { toast('Ce fichier n’est pas un backup GlycoTens'); }
+  };
+  rd.readAsText(file);
+}
+
+/* Backup Excel */
+function loadXlsx() {
+  return new Promise((res, rej) => {
+    if (window.XLSX) return res(window.XLSX);
+    const sc = document.createElement('script'); sc.src = XLSX_SRC;
+    sc.onload = () => window.XLSX ? res(window.XLSX) : rej(new Error('xlsx'));
+    sc.onerror = () => rej(new Error('xlsx')); document.head.appendChild(sc);
+  });
+}
+async function exportXlsx() {
+  let X; try { X = await loadXlsx(); } catch (e) { toast('Le module Excel n’est pas chargé. Vérifiez votre connexion internet.'); return; }
+  const u = unitLabel(), gl = 'Glycémie (' + u + ')';
+  const glu = data.readings.slice().sort((a, b) => a.t - b.t).map(r => ({
+    'ID': r.id, 'Horodatage': new Date(r.t).toISOString(), 'Date': dtFull.format(r.t), 'Moment': momentLabel(r.m),
+    [gl]: isMmol() ? +(r.v / MGDL).toFixed(1) : Math.round(r.v), 'Glycémie (mg/dL)': r.v, 'Statut': STATUS_LABEL.glu[gluStatus(r)], 'Note': r.note || ''
+  }));
+  const bp = data.bps.slice().sort((a, b) => a.t - b.t).map(r => ({
+    'ID': r.id, 'Horodatage': new Date(r.t).toISOString(), 'Date': dtFull.format(r.t), 'Moment': momentLabel(r.m),
+    'Haute (mmHg)': r.s, 'Basse (mmHg)': r.d, 'Pouls (bpm)': r.p || '', 'Statut tension': STATUS_LABEL.bp[bpStatus(r)],
+    'Statut pouls': r.p ? STATUS_LABEL.pulse[pulseStatus(r.p)] : '', 'Note': r.note || ''
+  }));
+  const cfg = [['app', 'glycotens'], ['version', APP_VERSION], ['exporté le', new Date().toISOString()]];
+  Object.keys(data.settings).forEach(k => cfg.push(['settings.' + k, data.settings[k]]));
+  Object.keys(data.profile).forEach(k => cfg.push(['profile.' + k, data.profile[k]]));
+  Object.keys(data.report).forEach(k => cfg.push(['report.' + k, data.report[k]]));
+  cfg.push(['schedule', JSON.stringify(data.schedule)]);
+  const wb = X.utils.book_new();
+  const add = (rows, name, head, widths) => {
+    const ws = rows.length ? X.utils.json_to_sheet(rows) : X.utils.aoa_to_sheet([head]);
+    ws['!cols'] = widths.map(w => ({ wch: w })); X.utils.book_append_sheet(wb, ws, name);
+  };
+  add(glu, 'Glycémies', ['ID', 'Horodatage', 'Date', 'Moment', gl, 'Glycémie (mg/dL)', 'Statut', 'Note'], [14, 26, 12, 20, 16, 16, 14, 30]);
+  add(bp, 'Tension et pouls', ['ID', 'Horodatage', 'Date', 'Moment', 'Haute (mmHg)', 'Basse (mmHg)', 'Pouls (bpm)', 'Statut tension', 'Statut pouls', 'Note'], [14, 26, 12, 10, 14, 14, 12, 16, 20, 30]);
+  const wc = X.utils.aoa_to_sheet([['Clé', 'Valeur']].concat(cfg)); wc['!cols'] = [{ wch: 24 }, { wch: 60 }]; X.utils.book_append_sheet(wb, wc, 'Réglages');
+  const out = X.write(wb, { bookType: 'xlsx', type: 'array' });
+  const ok = await saveFile(new Blob([out], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), 'backup.xlsx');
+  if (ok) toast('backup.xlsx exporté');
+}
+async function importXlsx(file) {
+  let X; try { X = await loadXlsx(); } catch (e) { toast('Le module Excel n’est pas chargé. Vérifiez votre connexion internet.'); return; }
+  try {
+    const wb = X.read(await file.arrayBuffer(), { type: 'array' });
+    const rows = name => wb.Sheets[name] ? X.utils.sheet_to_json(wb.Sheets[name], { defval: '' }) : [];
+    const mid = lab => (MOMENTS.concat(BP_MOMENTS).find(m => m.label === lab) || {}).id;
+    const readings = rows('Glycémies').map(r => ({ id: String(r['ID']), t: Date.parse(r['Horodatage']), v: parseFloat(r['Glycémie (mg/dL)']), m: mid(r['Moment']), note: String(r['Note'] || '') }))
+      .filter(r => r.id && isFinite(r.t) && isFinite(r.v));
+    const bps = rows('Tension et pouls').map(r => ({ id: String(r['ID']), t: Date.parse(r['Horodatage']), s: parseInt(r['Haute (mmHg)'], 10), d: parseInt(r['Basse (mmHg)'], 10), p: r['Pouls (bpm)'] === '' ? null : parseInt(r['Pouls (bpm)'], 10), m: mid(r['Moment']), note: String(r['Note'] || '') }))
+      .filter(r => r.id && isFinite(r.t) && isFinite(r.s) && isFinite(r.d));
+    if (!wb.Sheets['Glycémies'] && !wb.Sheets['Tension et pouls']) throw new Error('format');
+    const raw = { readings, bps, settings: {}, profile: {}, report: {} };
+    rows('Réglages').forEach(r => {
+      const k = String(r['Clé']), v = r['Valeur'], m = /^(settings|profile|report)\.(.+)$/.exec(k);
+      if (m) raw[m[1]][m[2]] = (typeof v === 'string' && v === 'true') ? true : (typeof v === 'string' && v === 'false') ? false : v;
+      else if (k === 'schedule') { try { raw.schedule = JSON.parse(v); } catch (e) { /* ignoré */ } }
+    });
+    data = normalizeData(raw);
+    persist(); if (ui.sheet === 'settings') renderSettings(); render(); toast('Backup restauré (' + (readings.length + bps.length) + ' mesures)');
+  } catch (e) { toast('Ce fichier n’est pas un backup GlycoTens'); }
+}
+
+/* Installation et mises à jour */
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; refreshInstallUI(); });
+window.addEventListener('appinstalled', () => { deferredPrompt = null; toast('Application installée'); refreshInstallUI(); });
+function refreshInstallUI() { if (ui.sheet === 'settings') renderSettings(); else if (!ui.sheet && ui.tab === 'home') render(); }
+async function installApp() {
+  if (!deferredPrompt) { toast('Menu ⋮ de Chrome, puis « Installer l’application »'); return; }
+  const p = deferredPrompt; deferredPrompt = null;
+  try { p.prompt(); const r = await p.userChoice; if (r && r.outcome === 'accepted') toast('Installation en cours…'); } catch (e) { /* ignoré */ }
+  refreshInstallUI();
+}
+const setUpd = t => { const el = $('#updStatus'); if (el) el.textContent = t; };
+function refreshCaches() {
+  return new Promise(resolve => {
+    const ctl = navigator.serviceWorker.controller; if (!ctl) return resolve();
+    const done = e => { if (e.data && e.data.type === 'REFRESHED') { navigator.serviceWorker.removeEventListener('message', done); resolve(); } };
+    navigator.serviceWorker.addEventListener('message', done); ctl.postMessage({ type: 'REFRESH' }); setTimeout(resolve, 20000);
+  });
+}
+let updateBusy = false;
+async function checkUpdate() {
+  if (updateBusy) return;
+  const reg = ('serviceWorker' in navigator) ? await navigator.serviceWorker.getRegistration().catch(() => null) : null;
+  if (!reg) { setUpd('Mises à jour disponibles dans l’application installée. Version ' + APP_VERSION + '.'); toast('Disponible dans l’application installée'); return; }
+  updateBusy = true; setUpd('Recherche en cours…');
+  try {
+    const res = await fetch(new URL('index.html', location.href).href, { cache: 'no-store' });
+    if (!res.ok) throw new Error('http');
+    const m = /APP_VERSION = '([^']+)'/.exec(await res.text()), remote = m ? m[1] : null;
+    await reg.update().catch(() => {});
+    if (remote && remote !== APP_VERSION) {
+      await refreshCaches();
+      setUpd('Version ' + remote + ' prête. Rechargez pour l’utiliser.');
+      toast('Mise à jour installée : version ' + remote, { act: 'reload-app', label: 'Recharger' }, 20000);
+    } else { setUpd('Vous avez la dernière version (' + APP_VERSION + ').'); toast('Vous avez la dernière version'); }
+  } catch (e) { setUpd('Vérification impossible : êtes-vous connecté à internet ?'); toast('Vérification impossible : connexion indisponible'); }
+  updateBusy = false;
+}
+if ('serviceWorker' in navigator) {
+  let had = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (had) toast('Nouvelle version installée', { act: 'reload-app', label: 'Recharger' }, 20000); had = true; });
+}
+
+/* Données d’exemple (générateur déterministe) */
+function loadDemo() {
+  let seed = 20260617;
+  const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const gauss = (m, sd) => m + sd * Math.sqrt(-2 * Math.log(rnd() + 1e-9)) * Math.cos(2 * Math.PI * rnd());
+  const now = Date.now(), today = startOfDay(now);
+  const at = (day, h, mi) => { const d = new Date(today); d.setDate(d.getDate() - day); d.setHours(h, mi, 0, 0); return d.getTime(); };
+  for (let day = 29; day >= 0; day--) {
+    const trend = (day / 29) * 9;
+    const slots = [['fasting', 6, 20, 128 + trend, 16, 1], ['lunch', 12, 5, 122 + trend * .6, 15, .85], ['dinner', 18, 35, 120 + trend * .6, 15, .8], ['bedtime', 22, 0, 136 + trend * .7, 18, .7]];
+    slots.forEach(sl => {
+      if (rnd() > sl[5]) return;
+      let v = gauss(sl[3], sl[4]);
+      if (rnd() < .012) v = 52 + rnd() * 14; else if (rnd() < .02) v = 250 + rnd() * 40;
+      const t = at(day, sl[1], sl[2] + Math.floor(rnd() * 25));
+      if (t > now) return;
+      data.readings.push({ id: uid() + day, t, v: Math.round(clamp(v, 45, 330)), m: sl[0], note: '', demo: true });
+    });
+    [['morning', 8, 0], ['evening', 19, 30]].forEach((b, i) => {
+      if (rnd() > (i ? .55 : .85)) return;
+      const t = at(day, b[1], b[2] + Math.floor(rnd() * 20)); if (t > now) return;
+      const s = Math.round(clamp(gauss(133 + trend * .4, 10), 98, 175)), d = Math.round(clamp(gauss(81 + trend * .2, 6), 58, 104));
+      data.bps.push({ id: uid() + 'b' + day + i, t, s, d: Math.min(d, s - 25), p: Math.round(clamp(gauss(71, 6), 55, 95)), m: b[0], note: '', demo: true });
+    });
+  }
+  persist(); render(); if (ui.sheet === 'settings') renderSettings(); toast('Données d’exemple ajoutées');
+}
+
+/* =====================================================================
+   Rapport PDF
+   ===================================================================== */
+const pdfText = s => String(s).replace(/[’‘]/g, "'").replace(/[“”«»]/g, '"').replace(/…/g, '...').replace(/[–—]/g, '-').replace(/[\u00A0\u202F\u2009]/g, ' ');
+function buildPdf() {
+  if (!window.jspdf || !window.jspdf.jsPDF) throw new Error('jspdf');
+  const { jsPDF } = window.jspdf, doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+  const W = 210, H = 297, M = 15, CW = W - 2 * M, BOTTOM = H - 18;
+  const p = data.profile, rep = data.report, s = data.settings, u = unitLabel(), T = pdfText;
+  const now = Date.now();
+  const glu = inWin(data.readings, rep.days), bp = rep.includeBp ? inWin(data.bps, rep.days) : [];
+  const from = rep.days ? now - rep.days * DAY : Math.min.apply(null, glu.concat(bp).map(r => r.t).concat([now])), to = now;
+  const C = { teal: [37, 128, 124], ink: [23, 58, 58], mute: [76, 104, 103], line: [214, 228, 225], soft: [239, 246, 244],
+    mark: { ok: [30, 154, 106], high: [232, 160, 16], vhigh: [217, 72, 15], low: [194, 24, 91] },
+    txt: { ok: [11, 105, 68], high: [127, 75, 0], vhigh: [156, 42, 11], low: [157, 16, 73] } };
+  let y = 0;
+  const col = c => doc.setTextColor(c[0], c[1], c[2]);
+  const ensure = hh => { if (y + hh > BOTTOM) { doc.addPage(); y = M; return true; } return false; };
+  const h2 = title => { ensure(16); doc.setFont('helvetica', 'bold'); doc.setFontSize(13); col(C.ink); doc.text(T(title), M, y + 5); y += 8; doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(.3); doc.line(M, y, M + CW, y); y += 5; };
+  const boxes = items => {
+    const gap = 4, bw = (CW - gap * (items.length - 1)) / items.length; ensure(24);
+    items.forEach((it, i) => {
+      const x = M + i * (bw + gap);
+      doc.setFillColor(C.soft[0], C.soft[1], C.soft[2]); doc.roundedRect(x, y, bw, 20, 2.5, 2.5, 'F');
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); col(C.mute); doc.text(T(it[0]), x + 3, y + 5.5);
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(String(it[1]).length > 9 ? 11.5 : 14); col(it[2] ? C.txt[it[2]] : C.ink); doc.text(T(String(it[1])), x + 3, y + 13);
+      if (it[3]) { doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); col(C.mute); doc.text(T(it[3]), x + 3, y + 17.6); }
+    });
+    y += 24;
+  };
+  const fit = (txt, maxW) => { let t = String(txt); if (doc.getTextWidth(t) <= maxW) return t; while (t.length > 1 && doc.getTextWidth(t + '...') > maxW) t = t.slice(0, -1); return t + '...'; };
+  const table = (cols, rows) => {
+    const head = () => {
+      doc.setFillColor(C.soft[0], C.soft[1], C.soft[2]); doc.rect(M, y, CW, 7, 'F'); doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); col(C.mute);
+      let x = M; cols.forEach(c => { doc.text(T(c.h), c.right ? x + c.w - 2 : x + 2, y + 4.8, c.right ? { align: 'right' } : undefined); x += c.w; }); y += 7;
+    };
+    ensure(16); head();
+    rows.forEach(r => {
+      if (ensure(6.6)) head();
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); let x = M;
+      r.forEach((cell, i) => {
+        const c = cols[i], txt = typeof cell === 'string' ? cell : cell.t; col(typeof cell === 'string' ? C.ink : (cell.c || C.ink));
+        doc.text(T(fit(T(txt), c.w - 4)), c.right ? x + c.w - 2 : x + 2, y + 4.4, c.right ? { align: 'right' } : undefined); x += c.w;
+      });
+      doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(.15); doc.line(M, y + 6.2, M + CW, y + 6.2); y += 6.2;
+    });
+    y += 4;
+  };
+  const chartImg = (type, list, hh) => {
+    const cv = document.createElement('canvas'), cw = 900, ch = 380;
+    drawChart(cv, { w: cw, h: ch, dpr: 2, k: 1.45, type, list, from: rangeFor(list, rep.days).from, to, colors: LIGHT, bg: '#FFFFFF', sel: null });
+    ensure(hh + 4); doc.addImage(cv.toDataURL('image/png'), 'PNG', M, y, CW, CW * ch / cw); y += hh + 3;
+  };
+  const bullets = items => {
+    items.forEach(i => {
+      const lines = doc.splitTextToSize(T(i.t), CW - 8); ensure(lines.length * 4.6 + 2);
+      const c = i.k === 'ok' ? C.mark.ok : i.k === 'warn' ? C.mark.high : C.mute; doc.setFillColor(c[0], c[1], c[2]); doc.circle(M + 1.5, y + 1.6, 1.2, 'F');
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); col(C.ink); doc.text(lines, M + 6, y + 2.6); y += lines.length * 4.6 + 1.6;
+    });
+    y += 2;
+  };
+
+  doc.setFillColor(C.teal[0], C.teal[1], C.teal[2]); doc.rect(0, 0, W, 34, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.text(T('Rapport de suivi glycémique'), M, 16);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.text(T('Diabète de type 2'), M, 24);
+  doc.text(T('Généré le ' + dtFull.format(now)), W - M, 16, { align: 'right' });
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text('GlycoTens', W - M, 24, { align: 'right' }); doc.setFont('helvetica', 'normal');
+  y = 44;
+  const info = [['Patient', p.name || 'Non renseigné'], ['Date de naissance', fmtBirth(p.birth) || 'Non renseignée'], ['Médecin destinataire', p.doctor || 'Non renseigné'], ['Période du rapport', dtFull.format(from) + ' au ' + dtFull.format(to)]];
+  info.forEach((it, i) => {
+    const x = M + (i % 2) * (CW / 2), yy = y + Math.floor(i / 2) * 13;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); col(C.mute); doc.text(T(it[0]), x, yy);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11); col(C.ink); doc.text(T(fit(it[1], CW / 2 - 4)), x, yy + 5.5);
+  });
+  y += 30;
+
+  const st = gluStats(glu);
+  if (st) {
+    h2('Glycémie');
+    boxes([['Mesures', st.n], ['Moyenne', fmtGlu(st.mean), null, u], ['Minimum', fmtGlu(st.min), null, u], ['Maximum', fmtGlu(st.max), null, u]]);
+    boxes([['Dans la cible', Math.round(st.pct.ok) + ' %', 'ok', st.cnt.ok + ' mesures'], ['Basses', Math.round(st.pct.low) + ' %', st.cnt.low ? 'low' : null, st.cnt.low + ' mesures'],
+      ['Élevées', Math.round(st.pct.high + st.pct.vhigh) + ' %', st.cnt.high + st.cnt.vhigh ? 'high' : null, (st.cnt.high + st.cnt.vhigh) + ' mesures'], ['Variabilité (CV)', Math.round(st.cv) + ' %', null, 'écart-type ' + fmtGlu(st.sd)]]);
+    ensure(20); let x = M;
+    STATUSES.forEach(k => { const w = CW * st.pct[k] / 100; if (w > 0) { doc.setFillColor(C.mark[k][0], C.mark[k][1], C.mark[k][2]); doc.rect(x, y, w, 6, 'F'); x += w; } });
+    y += 10;
+    const names = { low: 'Basses', ok: 'Dans la cible', high: 'Élevées', vhigh: 'Très élevées' };
+    STATUSES.forEach((k, i) => { const xx = M + i * (CW / 4); doc.setFillColor(C.mark[k][0], C.mark[k][1], C.mark[k][2]); doc.rect(xx, y - 2.6, 3, 3, 'F'); doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); col(C.ink); doc.text(T(names[k] + ' ' + Math.round(st.pct[k]) + ' %'), xx + 4.5, y); });
+    y += 8;
+    chartImg('glu', glu, CW * 380 / 900);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); col(C.mute);
+    const tl = doc.splitTextToSize(T('Cibles utilisées (' + u + ') : à jeun / avant repas ' + fmtGlu(s.low) + ' à ' + fmtGlu(s.fastMax) + ', au coucher jusqu\'à ' + fmtGlu(s.bedMax) + ', seuil bas ' + fmtGlu(s.low) + ', seuil très élevé ' + fmtGlu(s.vhigh) + '. Zones vertes : cibles. Triangle vers le haut : élevée, vers le bas : basse.'), CW);
+    ensure(tl.length * 3.6 + 4); doc.text(tl, M, y + 2); y += tl.length * 3.6 + 5;
+
+    const bm = byMoment(glu);
+    if (bm.length) {
+      h2('Par moment de la journée');
+      table([{ h: 'Moment', w: 46 }, { h: 'Mesures', w: 26, right: true }, { h: 'Moyenne (' + u + ')', w: 34, right: true }, { h: 'Min - Max (' + u + ')', w: 40, right: true }, { h: 'Dans la cible', w: CW - 146, right: true }],
+        bm.map(x => [x.m.label, String(x.st.n), fmtGlu(x.st.mean), fmtGlu(x.st.min) + ' - ' + fmtGlu(x.st.max), Math.round(x.st.pct.ok) + ' %']));
+    }
+    const ins = gluInsights(glu);
+    if (ins.length) { h2('Observations automatiques'); bullets(ins); }
+  } else {
+    h2('Glycémie'); doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); col(C.mute); doc.text(T('Aucune glycémie enregistrée sur cette période.'), M, y + 3); y += 12;
+  }
+
+  const sb = bpStats(bp), sp = pulseStats(bp), bpp = bp.filter(r => r.p);
+  if (sb) {
+    h2('Tension artérielle');
+    boxes([['Mesures', sb.n], ['Moyenne', Math.round(sb.s) + '/' + Math.round(sb.d), null, 'mmHg'], ['Dans la cible', Math.round(sb.pct.ok) + ' %', 'ok', sb.cnt.ok + ' mesures'], ['Cible', s.sysMin + '-' + s.sysMax, null, '/ ' + s.diaMin + '-' + s.diaMax + ' mmHg']]);
+    chartImg('bp', bp, CW * 380 / 900);
+    const ib = bpInsights(bp); if (ib.length) bullets(ib);
+  }
+  if (sp) {
+    h2('Pouls (pulsations)');
+    boxes([['Mesures', sp.n], ['Moyenne', Math.round(sp.mean), null, 'bpm'], ['Min - Max', sp.min + '-' + sp.max, null, 'bpm'], ['Dans la plage', Math.round(sp.pct.ok) + ' %', 'ok', 'plage ' + s.pulseMin + '-' + s.pulseMax + ' bpm']]);
+    chartImg('pulse', bpp, CW * 380 / 900);
+    const ip = pulseInsights(bpp); if (ip.length) bullets(ip);
+  }
+
+  if (glu.length) {
+    h2('Journal des glycémies');
+    const colsG = [{ h: 'Date', w: 26 }, { h: 'Moment', w: 40 }, { h: 'Valeur (' + u + ')', w: 30, right: true }, { h: 'Statut', w: 34 }, { h: 'Note', w: CW - 130 }];
+    table(colsG, glu.slice().reverse().map(r => { const k = gluStatus(r); return [dtFull.format(r.t), momentLabel(r.m), { t: fmtGlu(r.v), c: C.txt[k] }, { t: STATUS_LABEL.glu[k], c: C.txt[k] }, rep.includeNotes ? (r.note || '') : '']; }));
+  }
+  if (bp.length) {
+    h2('Journal de la tension et du pouls');
+    const colsB = [{ h: 'Date', w: 26 }, { h: 'Moment', w: 22 }, { h: 'Tension (mmHg)', w: 32, right: true }, { h: 'Statut', w: 30 }, { h: 'Pouls (bpm)', w: 24, right: true }, { h: 'Note', w: CW - 134 }];
+    table(colsB, bp.slice().reverse().map(r => { const k = bpStatus(r), kp = r.p ? pulseStatus(r.p) : null; return [dtFull.format(r.t), momentLabel(r.m), { t: r.s + '/' + r.d, c: C.txt[k] }, { t: STATUS_LABEL.bp[k], c: C.txt[k] }, r.p ? { t: String(r.p), c: C.txt[kp] } : '-', rep.includeNotes ? (r.note || '') : '']; }));
+  }
+
+  const n = doc.getNumberOfPages();
+  for (let i = 1; i <= n; i++) {
+    doc.setPage(i); doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(.3); doc.line(M, H - 13, W - M, H - 13);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); col(C.mute);
+    doc.text(T('Généré avec GlycoTens à partir de mesures saisies par le patient. Document informatif : il ne remplace pas un avis médical.'), M, H - 8.5);
+    doc.text('Page ' + i + '/' + n, W - M, H - 8.5, { align: 'right' });
+  }
+  return doc.output('blob');
+}
+const reportFilename = () => 'rapport-glycemie-' + new Date().toISOString().slice(0, 10) + '.pdf';
+function reportReady() { const r = data.report; return inWin(data.readings, r.days).length || (r.includeBp && inWin(data.bps, r.days).length); }
+async function makePdfSafe() {
+  try { return buildPdf(); }
+  catch (e) {
+    toast(String(e.message) === 'jspdf' ? 'Le générateur de PDF n’est pas chargé. Vérifiez votre connexion internet puis réessayez.' : 'Impossible de créer le PDF.');
+    return null;
+  }
+}
+async function downloadReport() {
+  if (!reportReady()) return;
+  const blob = await makePdfSafe(); if (!blob) return;
+  const ok = await saveFile(blob, reportFilename()); if (ok) toast('PDF prêt');
+}
+async function shareReport() {
+  if (!reportReady()) return;
+  const p = data.profile, rep = data.report;
+  if (p.email && navigator.clipboard && navigator.clipboard.writeText) { try { await navigator.clipboard.writeText(p.email); } catch (e) { /* ignoré */ } }
+  const blob = await makePdfSafe(); if (!blob) return;
+  const name = reportFilename(), subject = 'Suivi glycémique' + (p.name ? ' de ' + p.name : '') + ' (' + periodText(rep.days) + ')';
+  const body = 'Bonjour' + (p.doctor ? ' ' + p.doctor : '') + ',\n\nVeuillez trouver ci-joint mon rapport de suivi glycémique (' + periodText(rep.days) + ').\n\nCordialement,\n' + (p.name || '');
+  try {
+    const file = new File([blob], name, { type: 'application/pdf' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: subject, text: body });
+      if (p.email) toast('Adresse du médecin copiée : collez-la dans le champ « À »');
+      return;
+    }
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  const saved = await saveFile(blob, name);
+  if (saved) {
+    toast('PDF enregistré. Joignez-le au message qui va s’ouvrir.');
+    setTimeout(() => { location.href = 'mailto:' + encodeURIComponent(p.email || '') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }, 900);
+  }
+}
+
+/* =====================================================================
+   Événements
+   ===================================================================== */
+const handlers = {
+  'tab': el => setTab(el.dataset.id),
+  'open-add': el => { if (ui.sheet) closeSheet(); openSheet('add', { type: el.dataset.type, moment: el.dataset.moment }); },
+  'open-settings': () => openSheet('settings'),
+  'open-schedule': () => { if (ui.sheet === 'settings') { ui.sheet = 'schedule'; renderSheet(); } else openSheet('schedule'); },
+  'close-sheet': () => closeSheet(),
+  'seg-type': el => { if (ui.draft.type !== el.dataset.type) { ui.draft.type = el.dataset.type; renderSheet(true); } },
+  'pick-moment': el => {
+    const d = ui.draft; if (d.type === 'glu') d.gm = el.dataset.id; else d.bm = el.dataset.id;
+    el.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-checked', String(b === el))); updatePreview(); updateEntryMeta();
+  },
+  'date-toggle': () => { const f = $('#fDate'); if (f) { f.hidden = !f.hidden; if (!f.hidden) f.focus(); } },
+  'save-item': () => saveDraft(),
+  'delete-item': () => deleteDraft(),
+  'edit': el => { const k = el.dataset.kind, item = (k === 'glu' ? data.readings : data.bps).find(r => r.id === el.dataset.id); if (item) openSheet('add', { type: k, item }); },
+  'undo': () => { if (ui.undo) { (ui.undo.type === 'glu' ? data.readings : data.bps).push(ui.undo.rec); persist(); ui.undo = null; toastEl.classList.remove('show'); render(); } },
+  'chart-type': el => { ui.chart = el.dataset.type; ui.selected = null; ui.banner = null; render(); },
+  'period': el => { ui.days = parseInt(el.dataset.days, 10); ui.selected = null; render(); },
+  'moment-filter': el => { ui.moment = el.dataset.id; ui.selected = null; render(); },
+  'hist-filter': el => { ui.hist = el.dataset.id; render(); },
+  'dismiss-banner': () => { ui.banner = null; render(); },
+  'goto-chart': () => { ui.chart = 'glu'; ui.days = 7; setTab('chart'); },
+  'report-days': el => { data.report.days = parseInt(el.dataset.days, 10); persist(); render(); },
+  'share-report': () => shareReport(),
+  'download-report': () => downloadReport(),
+  'sched-day': el => {
+    const d = parseInt(el.dataset.day, 10), sc = data.schedule, i = sc.days.indexOf(d);
+    if (i >= 0) { if (sc.days.length === 1) { toast('Gardez au moins un jour'); return; } sc.days.splice(i, 1); } else sc.days.push(d);
+    persist(); renderSchedule();
+  },
+  'export-ics': () => exportICS(),
+  'set-unit': el => { data.settings.unit = el.dataset.unit; persist(); renderSettings(); },
+  'reset-targets': () => { const u = data.settings.unit; data.settings = Object.assign({}, DEFAULT_SETTINGS, { unit: u }); persist(); renderSettings(); toast('Cibles rétablies'); },
+  'load-demo': () => loadDemo(),
+  'clear-demo': () => { data.readings = data.readings.filter(r => !r.demo); data.bps = data.bps.filter(r => !r.demo); persist(); renderSettings(); render(); toast('Données d’exemple supprimées'); },
+  'export-data': () => exportData(),
+  'export-xlsx': () => exportXlsx(),
+  'install-app': () => installApp(),
+  'install-dismiss': () => { ui.installDismissed = true; render(); },
+  'check-update': () => checkUpdate(),
+  'reload-app': () => location.reload(),
+  'import-data': () => $('#importFile').click(),
+  'erase-ask': () => { ui.confirmErase = true; renderSettings(); },
+  'erase-cancel': () => { ui.confirmErase = false; renderSettings(); },
+  'erase-confirm': () => { data = normalizeData({}); ui.selected = null; ui.banner = null; ui.confirmErase = false; persist(); renderSettings(); render(); toast('Toutes les données ont été effacées'); }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]'); if (!el) return;
+  if (el.getAttribute('aria-disabled') === 'true') return;
+  const h = handlers[el.dataset.action]; if (h) h(el, e);
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.type === 'range' && t.dataset && t.dataset.setting) {
+    const mn = parseFloat(t.min), mx = parseFloat(t.max), v = parseFloat(t.value), lab = $('#rv-' + t.dataset.setting);
+    t.style.setProperty('--p', clamp((v - mn) / (mx - mn) * 100, 0, 100).toFixed(1) + '%');
+    if (lab) lab.textContent = fmtNum(v, (t.dataset.kind === 'glu' && isMmol()) ? 1 : 0) + ' ' + kindUnit(t.dataset.kind);
+    return;
+  }
+  if (t.dataset && t.dataset.bind) {
+    const parts = t.dataset.bind.split('.'); data[parts[0]][parts[1]] = t.type === 'checkbox' ? t.checked : t.value; persist();
+    if (parts[0] === 'report' || parts[0] === 'profile') updateReportSummary(); return;
+  }
+  if (!ui.draft || ui.sheet !== 'add') return;
+  const d = ui.draft;
+  if (t.id === 'fVal') { t.value = t.value.replace(/[^0-9.,]/g, ''); d.val = t.value; }
+  else if (t.id === 'fSys' || t.id === 'fDia' || t.id === 'fPulse') { t.value = t.value.replace(/\D/g, '').slice(0, 3); d[t.id === 'fSys' ? 'sys' : t.id === 'fDia' ? 'dia' : 'pulse'] = t.value; }
+  else if (t.id === 'fNote') { d.note = t.value; return; }
+  else if (t.id === 'fDate') {
+    if (parseDateKey(t.value) == null) return;
+    d.dateStr = t.value; d.dateSet = true; d.auto = !d.id && t.value === dateKey(Date.now());
+    updateEntryMeta(); return;
+  } else return;
+  const e2 = $('#fErr'); if (e2) e2.hidden = true;
+  updatePreview();
+});
+document.addEventListener('change', async e => {
+  const t = e.target, ds = t.dataset || {};
+  if (ds.setting) { commitSetting(t); return; }
+  if (ds.slotTime !== undefined) { if (/^\d{2}:\d{2}$/.test(t.value)) { data.schedule.slots[ds.slotTime].time = t.value; data.schedule.fired = {}; persist(); } else renderSchedule(); return; }
+  if (ds.slotOn !== undefined) { data.schedule.slots[ds.slotOn].on = t.checked; persist(); return; }
+  if (ds.notif !== undefined) {
+    if (!t.checked) { data.schedule.notify = false; persist(); return; }
+    try {
+      const perm = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+      data.schedule.notify = perm === 'granted'; persist();
+      if (perm !== 'granted') { toast('Notifications refusées : autorisez-les dans les réglages du navigateur'); renderSchedule(); }
+      else toast('Notifications activées');
+    } catch (err) { data.schedule.notify = false; persist(); toast('Notifications indisponibles ici'); renderSchedule(); }
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && ui.sheet) closeSheet();
+  if (e.key === 'Enter' && ui.sheet === 'add' && e.target.tagName === 'INPUT' && e.target.id !== 'fNote' && e.target.id !== 'fDate') { e.preventDefault(); saveDraft(); }
+});
+$('#importFile').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) importData(f); e.target.value = ''; });
+
+/* =====================================================================
+   Démarrage
+   ===================================================================== */
+render();
+try {
+  const q = new URLSearchParams(location.search), add = q.get('add');
+  if (add === 'glu' || add === 'bp') openSheet('add', { type: add, moment: q.get('moment') || undefined });
+} catch (e) { /* ignoré */ }
+setTimeout(checkReminders, 1500);
+/*PWA:START*/
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => { /* hors ligne non disponible */ }); });
+}
+/*PWA:END*/
+})();
+</script>
+</body>
+</html>
