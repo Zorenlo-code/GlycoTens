@@ -444,6 +444,7 @@ h2{font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
 #toast button{color:var(--toast-link);font-weight:700;text-decoration:underline;min-height:36px;padding:0 4px}
 
 .install-card{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;padding:12px 10px 12px 14px;border-radius:22px}
+.install-card.ios{grid-template-columns:auto 1fr auto}
 .install-card .ic-text{display:flex;flex-direction:column;min-width:0}
 .install-card .ic-text b{font-size:16px;line-height:1.25}
 .install-card .ic-text span{font-size:14px;color:var(--ink-2);line-height:1.3}
@@ -476,7 +477,7 @@ h2{font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
 const MGDL = 18.016;
 const DAY = 86400000;
 const STORE_KEY = 'glycosuivi.v1';
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 const XLSX_SRC = 'vendor/xlsx.full.min.js';
 const $ = (s, r = document) => r.querySelector(s);
 const pad = n => String(n).padStart(2, '0');
@@ -526,6 +527,7 @@ const ICON = {
   bell: svg('<path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/>'),
   calendar: svg('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
   chevron: svg('<path d="m9 5 7 7-7 7"/>'),
+  share: svg('<path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>'),
   menu: svg('<path d="M4 7h16M4 12h16M4 17h10"/>'),
   back: svg('<path d="m15 5-7 7 7 7"/>'),
   target: svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12h.01"/>'),
@@ -863,8 +865,15 @@ const miniCard = (icon, label, value, unit) => '<div class="mini-card"><span cla
 
 let deferredPrompt = null;
 const isStandalone = () => { try { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; } catch (e) { return false; } };
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 function installBannerHTML() {
-  if (!deferredPrompt || isStandalone() || ui.installDismissed) return '';
+  if (isStandalone() || ui.installDismissed) return '';
+  if (!deferredPrompt && isIOS()) {
+    return '<section class="install-card ios white-card" aria-label="Installer sur iPhone"><span class="tile-ic">' + ICON.share + '</span>' +
+      '<div class="ic-text"><b>Installer sur iPhone</b><span>Touchez Partager, puis « Sur l’écran d’accueil ».</span></div>' +
+      '<button class="icon-btn small" data-action="install-dismiss" aria-label="Masquer">' + ICON.x + '</button></section>';
+  }
+  if (!deferredPrompt) return '';
   return '<section class="install-card white-card" aria-label="Installer l’application"><span class="tile-ic">' + ICON.download + '</span>' +
     '<div class="ic-text"><b>Installer GlycoTens</b><span>Accès direct depuis l’écran d’accueil, même sans internet.</span></div>' +
     '<button class="pill-btn" data-action="install-app">Installer</button><button class="icon-btn small" data-action="install-dismiss" aria-label="Masquer">' + ICON.x + '</button></section>';
@@ -1433,11 +1442,11 @@ function renderSchedule() {
     '<section class="panel"><h2>Mesures de glycémie</h2><div>' + rows + '</div></section>' +
     '<section class="panel"><h2>Jours concernés</h2><div class="days" role="group" aria-label="Jours de la semaine">' +
     DAYS_FR.map(x => '<button class="chip-btn" data-action="sched-day" data-day="' + x.d + '" aria-pressed="' + sc.days.includes(x.d) + '">' + x.l + '</button>').join('') + '</div></section>' +
-    '<section class="glass-panel callout"><h3>Rappel dans l’agenda Android (recommandé)</h3>' +
-    '<p>Crée 4 rappels récurrents avec alarme à l’heure choisie, le jour même, application fermée ou non. Ouvrez le fichier avec Google Agenda pour l’importer.</p>' +
+    '<section class="glass-panel callout"><h3>Rappel dans l’agenda du téléphone (recommandé)</h3>' +
+    '<p>Crée 4 rappels récurrents avec alarme à l’heure choisie, le jour même, application fermée ou non. Ouvrez le fichier avec l’application Agenda du téléphone (Google Agenda sur Android, Calendrier sur iPhone) pour l’importer.</p>' +
     '<button class="btn btn-primary" data-action="export-ics">' + ICON.calendar + 'Ajouter à mon agenda</button></section>' +
     '<section class="panel callout"><h3>Notifications de l’application</h3>' +
-    '<p>Un rappel s’affiche à l’heure prévue tant que l’application reste ouverte ou active en arrière-plan. Android peut la mettre en veille : l’agenda est plus fiable.</p>' +
+    '<p>Un rappel s’affiche à l’heure prévue tant que l’application reste ouverte ou active en arrière-plan. Le téléphone peut la mettre en veille : l’agenda est plus fiable.</p>' +
     (notifOK ? '<label class="switch-row"><span>Activer les notifications</span><input type="checkbox" role="switch" class="sw" data-notif' + (sc.notify && Notification.permission === 'granted' ? ' checked' : '') + '></label>' : '<p class="field-hint">Les notifications ne sont pas disponibles sur ce navigateur.</p>') +
     '</section><div style="height:8px"></div></div><div class="sheet-foot"><div class="sheet-foot-in"><button class="btn btn-primary" data-action="close-sheet">Terminé</button></div></div></div>';
   const body = $('.sheet-body', sheetRoot); if (body) body.scrollTop = top;
@@ -1465,7 +1474,7 @@ function buildICS() {
 async function exportICS() {
   if (!MOMENTS.some(m => data.schedule.slots[m.id].on)) { toast('Activez au moins une mesure'); return; }
   const ok = await saveFile(new Blob([buildICS()], { type: 'text/calendar' }), 'glycotens-rappels.ics');
-  if (ok) toast('Ouvrez le fichier avec Google Agenda pour importer les rappels');
+  if (ok) toast('Ouvrez le fichier avec l’application Agenda pour importer les rappels');
 }
 function fireReminder(m, timeStr) {
   const tag = 'data-type="glu" data-moment="' + m.id + '"';
@@ -1516,7 +1525,7 @@ function renderSettings() {
     '<button class="nav-row white-card" data-action="open-schedule"><span class="tile-ic">' + ICON.bell + '</span><span class="grow">Planning et rappels<small>6 h, 12 h, 18 h 30, 22 h</small></span>' + ICON.chevron + '</button>' +
     '<section class="panel"><h2>Application</h2>' +
     '<p id="updStatus" class="muted" style="font-size:15px">Version ' + APP_VERSION + (isStandalone() ? ', installée sur cet appareil.' : '.') + '</p>' +
-    (!isStandalone() ? (deferredPrompt ? '<button class="btn btn-primary" data-action="install-app">' + ICON.download + 'Installer l’application</button>' : '<p class="muted" style="font-size:15px">Pour l’installer : menu ⋮ de Chrome, puis « Installer l’application ».</p>') : '') +
+    (!isStandalone() ? (deferredPrompt ? '<button class="btn btn-primary" data-action="install-app">' + ICON.download + 'Installer l’application</button>' : '<p class="muted" style="font-size:15px">' + (isIOS() ? 'Pour l’installer sur iPhone : touchez Partager, puis « Sur l’écran d’accueil ».' : 'Pour l’installer : menu ⋮ de Chrome, puis « Installer l’application ».') + '</p>') : '') +
     '<button class="btn" data-action="check-update">' + ICON.refresh + 'Rechercher une mise à jour</button></section>' +
     '<section class="panel"><h2>Unité de glycémie</h2><div class="seg" role="group" aria-label="Unité"><button data-action="set-unit" data-unit="mgdl" aria-pressed="' + !isMmol() + '">mg/dL</button><button data-action="set-unit" data-unit="mmol" aria-pressed="' + isMmol() + '">mmol/L</button></div></section>' +
     '<section class="panel"><h2>Cibles de glycémie</h2><p class="muted" style="font-size:15px">Valeurs de référence courantes pour un adulte diabétique. Votre médecin peut les adapter : réglez-les selon ses indications.</p>' +
@@ -1666,7 +1675,7 @@ window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferr
 window.addEventListener('appinstalled', () => { deferredPrompt = null; toast('Application installée'); refreshInstallUI(); });
 function refreshInstallUI() { if (ui.sheet === 'settings') renderSettings(); else if (!ui.sheet && ui.tab === 'home') render(); }
 async function installApp() {
-  if (!deferredPrompt) { toast('Menu ⋮ de Chrome, puis « Installer l’application »'); return; }
+  if (!deferredPrompt) { toast(isIOS() ? 'Touchez Partager, puis « Sur l’écran d’accueil »' : 'Menu ⋮ de Chrome, puis « Installer l’application »'); return; }
   const p = deferredPrompt; deferredPrompt = null;
   try { p.prompt(); const r = await p.userChoice; if (r && r.outcome === 'accepted') toast('Installation en cours…'); } catch (e) { /* ignoré */ }
   refreshInstallUI();

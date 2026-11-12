@@ -1,5 +1,5 @@
 /* GlycoTens – service worker : fonctionnement hors ligne et mises à jour */
-const VERSION = 'glycotens-v5';
+const VERSION = 'glycotens-v6';
 const SHELL = [
   './',
   './index.html',

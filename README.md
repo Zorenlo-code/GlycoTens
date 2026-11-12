@@ -10,10 +10,24 @@ backup Excel. Les données restent sur le téléphone. Aucune dépendance extern
 - Tension : pression haute (systolique) 120 à 130 mmHg, pression basse (diastolique) 70 à 80 mmHg
 - Pouls : 60 à 80 bpm
 
+## Mise en ligne avec GitHub Pages
+
+1. Créez un dépôt **public** (par exemple `glycotens`) et envoyez **tout le contenu de ce dossier**, sous-dossiers compris
+   (`index.html`, `sw.js`, `manifest.webmanifest`, `.nojekyll`, `icons/`, `fonts/`, `vendor/`).
+   `index.html` doit se trouver à la racine du dépôt.
+2. **Settings**, puis **Pages** : source « Deploy from a branch », branche `main`, dossier `/ (root)`, puis **Save**.
+3. Après 1 à 2 minutes, l'adresse s'affiche : `https://VOTRE-NOM.github.io/glycotens/`
+
 ## Installation sur Android
 
 Ouvrez l'adresse dans **Chrome**. Un bouton **Installer** apparaît en haut de l'accueil (et dans Réglages, section
 « Application »). Sinon : menu ⋮, puis **Installer l'application**. L'application fonctionne ensuite hors ligne.
+
+## Installation sur iPhone
+
+Apple ne permet pas de bouton « Installer » dans une page web. Ouvrez l'adresse dans **Safari**, touchez **Partager**
+(le carré avec une flèche), puis **Sur l'écran d'accueil** et **Ajouter**. Une aide s'affiche aussi sur l'accueil.
+Installer l'application évite que Safari efface les données d'un site non installé après une semaine sans visite.
 
 ## Mises à jour
 
@@ -30,7 +44,7 @@ Réglages, puis **Backup (Excel)** : crée le fichier `backup.xlsx` (glycémies,
 ## Planning et rappels
 
 Réglages, puis **Planning et rappels** : 4 mesures de glycémie (6 h, 12 h, 18 h 30, 22 h par défaut).
-Le rappel le plus fiable passe par l'agenda Android (bouton « Ajouter à mon agenda »).
+Le rappel le plus fiable passe par l'agenda du téléphone (bouton « Ajouter à mon agenda » : Google Agenda sur Android, Calendrier sur iPhone).
 Les notifications de l'application ne fonctionnent que si elle est ouverte ou active en arrière-plan.
 
 ## Avertissement
