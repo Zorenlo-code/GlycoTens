@@ -10,14 +10,6 @@ backup Excel. Les données restent sur le téléphone. Aucune dépendance extern
 - Tension : pression haute (systolique) 120 à 130 mmHg, pression basse (diastolique) 70 à 80 mmHg
 - Pouls : 60 à 80 bpm
 
-## Mise en ligne avec GitHub Pages
-
-1. Créez un dépôt **public** (par exemple `glycotens`) et envoyez **tout le contenu de ce dossier**, sous-dossiers compris
-   (`index.html`, `sw.js`, `manifest.webmanifest`, `.nojekyll`, `icons/`, `fonts/`, `vendor/`).
-   `index.html` doit se trouver à la racine du dépôt.
-2. **Settings**, puis **Pages** : source « Deploy from a branch », branche `main`, dossier `/ (root)`, puis **Save**.
-3. Après 1 à 2 minutes, l'adresse s'affiche : `https://VOTRE-NOM.github.io/glycotens/`
-
 ## Installation sur Android
 
 Ouvrez l'adresse dans **Chrome**. Un bouton **Installer** apparaît en haut de l'accueil (et dans Réglages, section
