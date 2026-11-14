@@ -444,6 +444,57 @@ h2{font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
 #toast button{color:var(--toast-link);font-weight:700;text-decoration:underline;min-height:36px;padding:0 4px}
 
 .install-card{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;padding:12px 10px 12px 14px;border-radius:22px}
+.medal{display:block;flex:none;color:var(--ink-2)}
+.goals-card{border-radius:32px;padding:16px 14px 14px}
+.goals-card .section-head{padding:0 6px;margin-bottom:6px}
+.goal-row{display:grid;grid-template-columns:auto 1fr;gap:12px 14px;align-items:center;width:100%;text-align:left;padding:10px 8px;border-radius:20px}
+.goal-row+.goal-row{border-top:1px solid var(--line)}
+.goal-row:active{background:var(--primary-soft)}
+.goal-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.goal-txt b{font-size:17px;line-height:1.25}
+.goal-txt span{font-size:14.5px;color:var(--ink-2);line-height:1.3}
+.prog{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:6px}
+.prog i{display:block;height:100%;border-radius:4px;background:var(--tile)}
+.goals-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 8px 2px;font-size:14.5px;color:var(--ink-2)}
+.goals-foot b{color:var(--ink)}
+.level-card{border-radius:28px;padding:16px}
+.level-top{display:flex;align-items:center;gap:14px}
+.level-top h3{font-size:19px;line-height:1.2;margin:0}
+.level-top p{font-size:14.5px;color:var(--ink-2);margin:2px 0 0}
+.lv-legend{display:flex;justify-content:space-between;gap:4px;margin-top:14px}
+.lv-legend li{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12.5px;color:var(--ink-2);text-align:center;min-width:0;flex:1;line-height:1.2}
+.lv-legend li.on{color:var(--ink);font-weight:700}
+.lv-legend li.on .medal{filter:drop-shadow(0 3px 6px rgba(46,110,132,.4))}
+.streak-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:26px}
+.streak-card b{font-size:22px;letter-spacing:-.02em}
+.streak-card span.s{display:block;font-size:14.5px;color:var(--ink-2)}
+.bd-cat{margin:6px 2px 10px;font-size:18px}
+.bd-row{display:grid;grid-template-columns:auto 1fr;gap:12px 14px;align-items:center;padding:12px 14px;border-radius:22px}
+.bd-row+.bd-row{margin-top:10px}
+.bd-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.bd-txt b{font-size:16.5px;line-height:1.25}
+.bd-txt span{font-size:14px;color:var(--ink-2);line-height:1.3}
+.bd-row.locked .bd-txt b{color:var(--ink-2)}
+.bd-meta{font-size:13.5px;font-weight:700;color:var(--t-ok)}
+.bd-meta.todo{color:var(--ink-2);font-weight:400}
+.badge-banner{border-radius:26px;padding:14px}
+.bb-row{display:flex;align-items:center;gap:12px}
+.bb-row+.bb-row{margin-top:10px}
+.bb-row>div{display:flex;flex-direction:column;min-width:0}
+.bb-row b{font-size:16px;line-height:1.25}
+.bb-row span{font-size:14px;color:var(--ink-2)}
+.bb-actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.news-card{border-radius:24px;padding:14px}
+.news-top{display:flex;gap:12px;align-items:flex-start}
+.news-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
+.news-actions .btn{width:auto}
+.suffix{position:relative}
+.suffix .input{padding-right:62px}
+.suffix span{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--ink-2);font-size:15px;pointer-events:none}
+.bmi-box{margin-top:14px;padding:12px 14px;border-radius:18px;background:var(--glass-strong);border:1px solid var(--glass-border);font-size:15.5px}
+.bmi-box p+p{margin-top:6px}
+.bmi-box .btn{margin-top:10px}
+.track-sub{display:block;font-size:14px;color:var(--ink-2);font-weight:400}
 .install-card.ios{grid-template-columns:auto 1fr auto}
 .install-card .ic-text{display:flex;flex-direction:column;min-width:0}
 .install-card .ic-text b{font-size:16px;line-height:1.25}
@@ -464,6 +515,12 @@ h2{font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
   <nav class="tabbar" aria-label="Navigation principale"><div class="tabbar-in" id="tabbar"></div></nav>
 </div>
 <div id="sheetRoot"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<linearGradient id="mg-bronze" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3C792"/><stop offset="1" stop-color="#B3703A"/></linearGradient>
+<linearGradient id="mg-silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F7FA"/><stop offset="1" stop-color="#94A2AF"/></linearGradient>
+<linearGradient id="mg-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCE38D"/><stop offset="1" stop-color="#D49A14"/></linearGradient>
+<linearGradient id="mg-platinum" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CDF7FA"/><stop offset="1" stop-color="#43AEBC"/></linearGradient>
+</defs></svg>
 <div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="importFile" accept=".xlsx,.json,application/json" hidden>
 
@@ -477,7 +534,7 @@ h2{font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
 const MGDL = 18.016;
 const DAY = 86400000;
 const STORE_KEY = 'glycosuivi.v1';
-const APP_VERSION = '2.1.0';
+const APP_VERSION = '2.3.0';
 const XLSX_SRC = 'vendor/xlsx.full.min.js';
 const $ = (s, r = document) => r.querySelector(s);
 const pad = n => String(n).padStart(2, '0');
@@ -497,7 +554,8 @@ const PERIODS = [{ d: 1, l: '1 jour' }, { d: 7, l: '7 jours' }, { d: 14, l: '14 
 const STATUS_LABEL = {
   glu: { low: 'Basse', ok: 'Dans la cible', high: 'Élevée', vhigh: 'Très élevée' },
   bp: { low: 'Sous la cible', ok: 'Dans la cible', high: 'Un peu élevée', vhigh: 'Élevée' },
-  pulse: { low: 'Sous la plage', ok: 'Dans la plage', high: 'Au-dessus de la plage', vhigh: 'Élevé' }
+  pulse: { low: 'Sous la plage', ok: 'Dans la plage', high: 'Au-dessus de la plage', vhigh: 'Élevé' },
+  weight: { low: 'Sous la cible', ok: 'Dans la cible', high: 'Au-dessus de la cible', vhigh: 'Nettement au-dessus' }
 };
 const STATUSES = ['low', 'ok', 'high', 'vhigh'];
 const DAYS_FR = [{ d: 1, l: 'Lu' }, { d: 2, l: 'Ma' }, { d: 3, l: 'Me' }, { d: 4, l: 'Je' }, { d: 5, l: 'Ve' }, { d: 6, l: 'Sa' }, { d: 0, l: 'Di' }];
@@ -528,6 +586,11 @@ const ICON = {
   calendar: svg('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
   chevron: svg('<path d="m9 5 7 7-7 7"/>'),
   share: svg('<path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>'),
+  scale: svg('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 10a4.5 4.5 0 0 1 7 0M12 13l2-2.5"/>'),
+  user: svg('<circle cx="12" cy="8" r="4"/><path d="M4.5 21c0-4.2 3.4-7 7.5-7s7.5 2.8 7.5 7"/>'),
+  award: svg('<circle cx="12" cy="9" r="6"/><path d="m8.6 14-1.6 7 5-3 5 3-1.6-7"/>'),
+  pulse: svg('<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>'),
+  star: svg('<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'),
   menu: svg('<path d="M4 7h16M4 12h16M4 17h10"/>'),
   back: svg('<path d="m15 5-7 7 7 7"/>'),
   target: svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12h.01"/>'),
@@ -581,9 +644,9 @@ const hm = s => { const m = /^(\d{1,2}):(\d{2})$/.exec(s || ''); return m ? [+m[
    Données et stockage local
    ===================================================================== */
 const SETTINGS_V = 3;
-const DEFAULT_SETTINGS = { v: SETTINGS_V, unit: 'mgdl', low: 70, fastMax: 120, bedMax: 120, vhigh: 250, sysMin: 120, sysMax: 130, diaMin: 70, diaMax: 80, pulseMin: 60, pulseMax: 80 };
-const DEFAULT_PROFILE = { name: '', birth: '', doctor: '', email: '' };
-const DEFAULT_REPORT = { days: 30, includeBp: true, includeNotes: true };
+const DEFAULT_SETTINGS = { v: SETTINGS_V, track: { glu: true, bp: true, pulse: true, weight: false }, setupDone: false, introSeen: true, unit: 'mgdl', low: 70, fastMax: 120, bedMax: 120, vhigh: 250, sysMin: 120, sysMax: 130, diaMin: 70, diaMax: 80, pulseMin: 60, pulseMax: 80, imcMin: 18.5, imcMax: 25 };
+const DEFAULT_PROFILE = { name: '', birth: '', doctor: '', email: '', age: '', height: '', weight: '' };
+const DEFAULT_REPORT = { days: 30, includeBp: true, includeWeight: true, includeNotes: true };
 const DEFAULT_SCHEDULE = {
   days: [0, 1, 2, 3, 4, 5, 6], notify: false, fired: {},
   slots: { fasting: { on: true, time: '06:00' }, lunch: { on: true, time: '12:00' }, dinner: { on: true, time: '18:30' }, bedtime: { on: true, time: '22:00' } }
@@ -604,6 +667,9 @@ function migrateSettings(raw) {
     if (raw.sysT) st.sysMax = raw.sysT;
     if (raw.diaT) st.diaMax = raw.diaT;
   }
+  st.track = Object.assign({}, DEFAULT_SETTINGS.track, (raw && raw.track) || {});
+  if (!Object.values(st.track).some(Boolean)) st.track = Object.assign({}, DEFAULT_SETTINGS.track);
+  if (raw && raw.setupDone === undefined) { st.setupDone = true; st.introSeen = false; }   // utilisateur existant : carte « Nouveau » au lieu de l'écran d'accueil
   st.v = SETTINGS_V;
   delete st.sysT; delete st.diaT; delete st.postMax;
   return st;
@@ -616,6 +682,9 @@ function normalizeData(r) {
     readings: (Array.isArray(r.readings) ? r.readings : []).map(x => Object.assign({}, x, { m: glucoseMomentFor(x.m, x.t) })),
     bps: (Array.isArray(r.bps) ? r.bps : []).map(x => Object.assign({}, x, { m: bpMomentFor(x.m, x.t) })),
     settings: migrateSettings(r.settings),
+    weights: (Array.isArray(r.weights) ? r.weights : []).filter(x => x && typeof x.id === 'string' && isFinite(x.t) && isFinite(x.kg)),
+    badges: (r.badges && typeof r.badges === 'object') ? r.badges : null,
+    flags: Object.assign({}, r.flags || {}),
     profile: Object.assign({}, DEFAULT_PROFILE, r.profile || {}),
     report: Object.assign({}, DEFAULT_REPORT, r.report || {}),
     schedule: { days: Array.isArray(sched.days) && sched.days.length ? sched.days : DEFAULT_SCHEDULE.days.slice(), notify: !!sched.notify, fired: sched.fired && typeof sched.fired === 'object' ? sched.fired : {}, slots }
@@ -630,6 +699,28 @@ function loadData() {
 let data = loadData();
 function persist() { try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch (e) { storageOK = false; } }
 
+const tracked = k => !!data.settings.track[k];
+const trackedTypes = () => ['glu', 'bp', 'pulse', 'weight'].filter(tracked);
+const hasBP = r => r.s != null && r.d != null && isFinite(r.s) && isFinite(r.d);
+const bpRecs = () => data.bps.filter(hasBP);
+const pulseRecs = () => data.bps.filter(r => r.p);
+const recsFor = t => t === 'glu' ? data.readings : t === 'bp' ? bpRecs() : t === 'weight' ? data.weights : pulseRecs();
+const storeFor = t => t === 'glu' ? data.readings : t === 'weight' ? data.weights : data.bps;
+/* Poids, taille, IMC */
+const fmtKg = v => fmtNum(v, 1) + ' kg';
+const heightM = () => { const h = parseFloat(data.profile.height); return h >= 100 && h <= 230 ? h / 100 : null; };
+const bmiOf = kg => { const h = heightM(); return h ? kg / (h * h) : null; };
+const bmiStatus = (r, s = data.settings) => { const b = bmiOf(r.kg); return b == null ? 'ok' : b < s.imcMin ? 'low' : b >= 30 ? 'vhigh' : b > s.imcMax ? 'high' : 'ok'; };
+const bmiCat = b => b < 18.5 ? 'insuffisance pondérale' : b < 25 ? 'corpulence normale' : b < 30 ? 'surpoids' : b < 35 ? 'obésité modérée' : b < 40 ? 'obésité sévère' : 'obésité massive';
+const weightBand = () => { const h = heightM(); return h ? [data.settings.imcMin * h * h, data.settings.imcMax * h * h] : []; };
+const wLabel = r => heightM() == null ? 'Taille à renseigner' : STATUS_LABEL.weight[bmiStatus(r)];
+function userAge() {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(data.profile.birth || '');
+  if (m) { const bd = new Date(+m[1], +m[2] - 1, +m[3]), n = new Date(); let a = n.getFullYear() - bd.getFullYear(); if (n.getMonth() < bd.getMonth() || (n.getMonth() === bd.getMonth() && n.getDate() < bd.getDate())) a--; if (a >= 0 && a < 130) return a; }
+  const a = parseInt(data.profile.age, 10); return a > 0 && a < 120 ? a : null;
+}
+function syncProfileWeight() { const l = data.weights.slice().sort((a, b) => b.t - a.t)[0]; if (l) data.profile.weight = String(l.kg); }
+const entryTypes = () => { const t = []; if (tracked('glu')) t.push('glu'); if (tracked('bp')) t.push('bp'); else if (tracked('pulse')) t.push('pulse'); if (tracked('weight')) t.push('weight'); return t; };
 const ui = { tab: 'home', chart: 'glu', days: 30, moment: 'all', hist: 'all', sheet: null, banner: null, selected: null, draft: null,
   undo: null, toastTimer: null, confirmErase: false, lastFocus: null, hits: [] };
 
@@ -702,6 +793,43 @@ function bpStats(list) {
   const pulses = list.filter(r => r.p).map(r => r.p);
   const pct = {}; STATUSES.forEach(k => pct[k] = cnt[k] / n * 100);
   return { n, s: avg(list.map(r => r.s)), d: avg(list.map(r => r.d)), p: pulses.length ? avg(pulses) : null, cnt, pct };
+}
+function weightStats(list) {
+  const n = list.length; if (!n) return null;
+  const vals = list.map(r => r.kg), cnt = { low: 0, ok: 0, high: 0, vhigh: 0 };
+  list.forEach(r => cnt[bmiStatus(r)]++);
+  const pct = {}; STATUSES.forEach(k => pct[k] = cnt[k] / n * 100);
+  return { n, mean: avg(vals), min: Math.min.apply(null, vals), max: Math.max.apply(null, vals), delta: list[n - 1].kg - list[0].kg, last: list[n - 1], cnt, pct };
+}
+function weightMsg(r) {
+  const b = bmiOf(r.kg), s = data.settings;
+  if (b == null) return 'Indiquez votre taille dans « Mon profil » (réglages) pour calculer l’IMC.';
+  const st = bmiStatus(r), rg = fmtNum(s.imcMin, 1) + ' à ' + fmtNum(s.imcMax, 1), base = 'IMC ' + fmtNum(b, 1) + ' : ' + bmiCat(b) + ' selon l’OMS. ';
+  if (st === 'ok') return base + 'Dans la cible (' + rg + ').';
+  if (st === 'low') return base + 'Sous la cible (' + rg + '). À mentionner à votre médecin, surtout en cas de perte de poids involontaire.';
+  if (st === 'high') return base + 'Au-dessus de la cible (' + rg + '). Un objectif progressif se discute avec votre médecin.';
+  return base + 'Parlez-en avec votre médecin ou un diététicien pour un suivi adapté.';
+}
+function weightGauge(b) {
+  const s = data.settings, lo = 15, hi = 40;
+  return gauge(b, lo, hi, [{ a: lo, b: s.imcMin, s: 'low' }, { a: s.imcMin, b: s.imcMax, s: 'ok' }, { a: s.imcMax, b: 30, s: 'high' }, { a: 30, b: hi, s: 'vhigh' }],
+    [{ v: s.imcMin, l: fmtNum(s.imcMin, 1) }, { v: s.imcMax, l: fmtNum(s.imcMax, 1) }, { v: 30, l: '30' }], 'Position de l’IMC par rapport à la cible');
+}
+function weightInsights(list) {
+  const out = [], st = weightStats(list), s = data.settings;
+  if (!st) return out;
+  if (heightM() == null) { out.push({ k: 'warn', t: 'Renseignez votre taille dans « Mon profil » (réglages) pour calculer votre IMC.' }); return out; }
+  if (st.n < 3) out.push({ k: 'info', t: 'Ajoutez encore quelques pesées pour obtenir une analyse plus fiable.' });
+  const b = bmiOf(st.last.kg), band = weightBand();
+  out.push({ k: bmiStatus(st.last) === 'ok' ? 'ok' : 'warn', t: 'IMC actuel : ' + fmtNum(b, 1) + ' (' + bmiCat(b) + ' selon l’OMS). Cible : ' + fmtNum(s.imcMin, 1) + ' à ' + fmtNum(s.imcMax, 1) + '.' });
+  out.push({ k: 'info', t: 'Pour votre taille, la cible correspond à ' + fmtNum(band[0], 1) + ' à ' + fmtNum(band[1], 1) + ' kg.' });
+  if (st.n >= 2) {
+    out.push({ k: 'info', t: 'Variation sur la période : ' + (st.delta > 0 ? '+' : st.delta < 0 ? '-' : '') + fmtNum(Math.abs(st.delta), 1) + ' kg.' });
+    const dist = r => { const bb = bmiOf(r.kg); return Math.max(0, s.imcMin - bb, bb - s.imcMax); }, d0 = dist(list[0]), d1 = dist(st.last);
+    if (d0 > 0 && d1 < d0 - 0.05) out.push({ k: 'ok', t: 'Le poids se rapproche de la cible.' });
+    else if (d0 > 0 && d1 > d0 + 0.05) out.push({ k: 'warn', t: 'Le poids s’éloigne de la cible : à discuter avec votre médecin.' });
+  }
+  return out.slice(0, 5);
 }
 function pulseStats(list) {
   const l = list.filter(r => r.p), n = l.length; if (!n) return null;
@@ -776,7 +904,8 @@ function gluGauge(r) {
 const TIR_NAMES = {
   glu: { low: 'Basses', ok: 'Dans la cible', high: 'Élevées', vhigh: 'Très élevées' },
   bp: { low: 'Sous la cible', ok: 'Dans la cible', high: 'Un peu élevées', vhigh: 'Élevées' },
-  pulse: { low: 'Sous la plage', ok: 'Dans la plage', high: 'Au-dessus', vhigh: 'Élevé' }
+  pulse: { low: 'Sous la plage', ok: 'Dans la plage', high: 'Au-dessus', vhigh: 'Élevé' },
+  weight: { low: 'Sous la cible', ok: 'Dans la cible', high: 'Au-dessus', vhigh: 'Nettement au-dessus' }
 };
 function tirBar(st, kind) {
   const names = TIR_NAMES[kind || 'glu'];
@@ -784,15 +913,17 @@ function tirBar(st, kind) {
   const leg = STATUSES.map(k => '<li class="s-' + k + '"><span class="dot"></span>' + names[k] + '<b>' + Math.round(st.pct[k]) + ' %</b></li>').join('');
   return '<div class="tir" role="img" aria-label="Répartition des mesures : ' + STATUSES.map(k => names[k] + ' ' + Math.round(st.pct[k]) + ' %').join(', ') + '">' + seg + '</div><ul class="tir-legend">' + leg + '</ul>';
 }
-const bpSubLabel = r => ({ morning: 'Tension du matin', evening: 'Tension du soir' }[r.m] || 'Tension') + (r.p ? ', pouls ' + r.p : '');
+const bpSubLabel = r => ({ morning: 'Tension du matin', evening: 'Tension du soir' }[r.m] || 'Tension') + (r.p && tracked('pulse') ? ', pouls ' + r.p : '');
 function rowHTML(kind, r) {
-  const st = kind === 'glu' ? gluStatus(r) : bpStatus(r);
-  const val = kind === 'glu' ? fmtGlu(r.v) + '<small>' + unitLabel() + '</small>' : r.s + '/' + r.d + '<small>mmHg</small>';
-  const sub = kind === 'glu' ? momentLabel(r.m) : bpSubLabel(r);
+  const W = kind === 'weight', b = W ? bmiOf(r.kg) : null;
+  const st = kind === 'glu' ? gluStatus(r) : kind === 'pulse' ? pulseStatus(r.p) : W ? bmiStatus(r) : bpStatus(r);
+  const val = kind === 'glu' ? fmtGlu(r.v) + '<small>' + unitLabel() + '</small>' : kind === 'pulse' ? r.p + '<small>bpm</small>' : W ? fmtNum(r.kg, 1) + '<small>kg</small>' : r.s + '/' + r.d + '<small>mmHg</small>';
+  const sub = kind === 'glu' ? momentLabel(r.m) : kind === 'pulse' ? 'Pouls, ' + momentLabel(r.m).toLowerCase() : W ? (b != null ? 'IMC ' + fmtNum(b, 1) : 'Pesée') : bpSubLabel(r);
+  const lab = W ? wLabel(r) : STATUS_LABEL[kind][st];
   return '<button class="row s-' + st + '" data-action="edit" data-kind="' + kind + '" data-id="' + r.id + '">' +
     '<span class="mark">' + SHAPES[st] + '</span>' +
     '<span class="row-main"><span class="row-val">' + val + '</span><span class="row-sub">' + esc(sub) + '</span></span>' +
-    '<span class="row-side"><span class="row-time">' + dtTime.format(r.t) + '</span><span class="row-status">' + STATUS_LABEL[kind][st] + '</span></span>' +
+    '<span class="row-side"><span class="row-time">' + dtTime.format(r.t) + '</span><span class="row-status">' + lab + '</span></span>' +
     (r.note ? '<span class="row-note">' + esc(r.note) + '</span>' : '') + '</button>';
 }
 const statHTML = (label, val, unit) => '<div class="stat"><div class="stat-label">' + label + '</div><div class="stat-val">' + val + (unit ? '<small>' + unit + '</small>' : '') + '</div></div>';
@@ -805,9 +936,11 @@ function insightsHTML(items) {
   }).join('') + '</ul>';
 }
 function emptyHTML(title, text, withDemo, type) {
-  type = type === 'pulse' ? 'bp' : (type || 'glu');
-  return '<div class="empty"><div class="empty-ic">' + (type === 'bp' ? ICON.heart : ICON.drop) + '</div><h2>' + title + '</h2><p>' + text + '</p><div class="btn-row">' +
-    '<button class="btn btn-primary" data-action="open-add" data-type="' + type + '">' + ICON.plus + (type === 'bp' ? 'Ajouter une tension' : 'Ajouter une glycémie') + '</button>' +
+  type = type || entryTypes()[0] || 'glu';
+  if (type === 'pulse' && tracked('bp')) type = 'bp';
+  const lab = { glu: 'Ajouter une glycémie', bp: 'Ajouter une tension', pulse: 'Ajouter un pouls', weight: 'Ajouter une pesée' }[type];
+  return '<div class="empty"><div class="empty-ic">' + (type === 'glu' ? ICON.drop : type === 'weight' ? ICON.scale : ICON.heart) + '</div><h2>' + title + '</h2><p>' + text + '</p><div class="btn-row">' +
+    '<button class="btn btn-primary" data-action="open-add" data-type="' + type + '">' + ICON.plus + lab + '</button>' +
     (withDemo ? '<button class="btn btn-quiet" data-action="load-demo">Essayer avec des données d’exemple</button>' : '') + '</div></div>';
 }
 const initials = n => { const p = (n || '').trim().split(/\s+/).filter(Boolean); return p.length ? (p[0][0] + (p[1] ? p[1][0] : '')).toUpperCase() : ''; };
@@ -840,19 +973,33 @@ function planningHTML() {
   return '<section class="plan">' + head + '<div class="slots">' + rows.join('') + '</div></section>';
 }
 function bpCardHTML() {
+  const isBp = tracked('bp');
+  if (!isBp && !tracked('pulse')) return '';
   const rows = BP_MOMENTS.map(m => {
-    const rd = todayReading(data.bps, m.id);
-    if (rd) {
-      const st = bpStatus(rd);
-      return '<button class="row s-' + st + '" data-action="edit" data-kind="bp" data-id="' + rd.id + '"><span class="mark">' + SHAPES[st] + '</span>' +
-        '<span class="row-main"><span class="row-val">' + rd.s + '/' + rd.d + '<small>mmHg</small></span><span class="row-sub">' + m.label + (rd.p ? ', pouls ' + rd.p : '') + '</span></span>' +
-        '<span class="row-side"><span class="row-time">' + dtTime.format(rd.t) + '</span><span class="row-status">' + STATUS_LABEL.bp[st] + '</span></span></button>';
+    if (isBp) {
+      const rd = todayReading(bpRecs(), m.id);
+      if (rd) {
+        const st = bpStatus(rd);
+        return '<button class="row s-' + st + '" data-action="edit" data-kind="bp" data-id="' + rd.id + '"><span class="mark">' + SHAPES[st] + '</span>' +
+          '<span class="row-main"><span class="row-val">' + rd.s + '/' + rd.d + '<small>mmHg</small></span><span class="row-sub">' + m.label + (rd.p && tracked('pulse') ? ', pouls ' + rd.p : '') + '</span></span>' +
+          '<span class="row-side"><span class="row-time">' + dtTime.format(rd.t) + '</span><span class="row-status">' + STATUS_LABEL.bp[st] + '</span></span></button>';
+      }
+      return '<button class="row" data-action="open-add" data-type="bp" data-moment="' + m.id + '"><span class="slot-ic">' + ICON[m.icon] + '</span>' +
+        '<span class="row-main"><span class="row-val" style="font-size:19px">' + m.label + '</span><span class="row-sub">Tension à mesurer</span></span>' +
+        '<span class="row-side"><span class="pill-btn">Ajouter</span></span></button>';
     }
-    return '<button class="row" data-action="open-add" data-type="bp" data-moment="' + m.id + '"><span class="slot-ic">' + ICON[m.icon] + '</span>' +
-      '<span class="row-main"><span class="row-val" style="font-size:19px">' + m.label + '</span><span class="row-sub">Tension à mesurer</span></span>' +
+    const rd = todayReading(pulseRecs(), m.id);
+    if (rd) {
+      const st = pulseStatus(rd.p);
+      return '<button class="row s-' + st + '" data-action="edit" data-kind="pulse" data-id="' + rd.id + '"><span class="mark">' + SHAPES[st] + '</span>' +
+        '<span class="row-main"><span class="row-val">' + rd.p + '<small>bpm</small></span><span class="row-sub">' + m.label + '</span></span>' +
+        '<span class="row-side"><span class="row-time">' + dtTime.format(rd.t) + '</span><span class="row-status">' + STATUS_LABEL.pulse[st] + '</span></span></button>';
+    }
+    return '<button class="row" data-action="open-add" data-type="pulse" data-moment="' + m.id + '"><span class="slot-ic">' + ICON[m.icon] + '</span>' +
+      '<span class="row-main"><span class="row-val" style="font-size:19px">' + m.label + '</span><span class="row-sub">Pouls à mesurer</span></span>' +
       '<span class="row-side"><span class="pill-btn">Ajouter</span></span></button>';
   }).join('');
-  return '<section><div class="section-head"><h2>Tension du jour</h2></div><div class="list">' + rows + '</div></section>';
+  return '<section><div class="section-head"><h2>' + (isBp ? 'Tension du jour' : 'Pouls du jour') + '</h2></div><div class="list">' + rows + '</div></section>';
 }
 function ringBig(pct, label) {
   const r = 74, c = 2 * Math.PI * r, off = c * (1 - pct / 100), ang = pct / 100 * 2 * Math.PI, kx = 100 + r * Math.sin(ang), ky = 100 - r * Math.cos(ang);
@@ -878,60 +1025,106 @@ function installBannerHTML() {
     '<div class="ic-text"><b>Installer GlycoTens</b><span>Accès direct depuis l’écran d’accueil, même sans internet.</span></div>' +
     '<button class="pill-btn" data-action="install-app">Installer</button><button class="icon-btn small" data-action="install-dismiss" aria-label="Masquer">' + ICON.x + '</button></section>';
 }
+const homeDays = t => t === 'weight' ? 30 : 7;
+function weightCardHTML() {
+  if (!tracked('weight')) return '';
+  const last = data.weights.slice().sort((a, b) => b.t - a.t)[0], head = '<div class="section-head"><h2>Poids et IMC</h2></div>';
+  if (!last) return '<section>' + head + '<div class="list"><button class="row" data-action="open-add" data-type="weight"><span class="slot-ic">' + ICON.scale + '</span><span class="row-main"><span class="row-val" style="font-size:19px">Première pesée</span><span class="row-sub">Poids en kg et calcul de l’IMC</span></span><span class="row-side"><span class="pill-btn">Ajouter</span></span></button></div></section>';
+  const st = bmiStatus(last), b = bmiOf(last.kg);
+  return '<section>' + head + '<div class="list"><button class="row s-' + st + '" data-action="edit" data-kind="weight" data-id="' + last.id + '"><span class="mark">' + SHAPES[st] + '</span>' +
+    '<span class="row-main"><span class="row-val">' + fmtNum(last.kg, 1) + '<small>kg</small></span><span class="row-sub">' + (b != null ? 'IMC ' + fmtNum(b, 1) : 'Taille à renseigner') + ', ' + relTime(last.t) + '</span></span><span class="row-side"><span class="row-status">' + wLabel(last) + '</span></span></button>' +
+    '<button class="row" data-action="open-add" data-type="weight"><span class="slot-ic">' + ICON.plus + '</span><span class="row-main"><span class="row-val" style="font-size:19px">Nouvelle pesée</span></span><span class="row-side"><span class="pill-btn">Ajouter</span></span></button></div></section>';
+}
 function viewHome() {
-  const readings = data.readings.slice().sort((a, b) => b.t - a.t);
-  const bps = data.bps.slice().sort((a, b) => b.t - a.t);
-  let html = '<h1 class="sr-only">Accueil GlycoTens</h1>' + installBannerHTML();
-  if (!readings.length && !bps.length) {
-    return html + emptyHTML('Votre carnet est vide', 'Encodez votre première mesure en quelques secondes. Vous verrez tout de suite si elle est dans la cible.', true) + planningHTML();
+  const P = trackedTypes()[0], HD = homeDays(P);
+  let html = '<h1 class="sr-only">Accueil GlycoTens</h1>' + installBannerHTML() + whatsNewHTML();
+  const anyData = trackedTypes().some(t => recsFor(t).length);
+  if (!anyData) {
+    return html + emptyHTML('Votre carnet est vide', 'Encodez votre première mesure en quelques secondes. Vous verrez tout de suite si elle est dans la cible.', true) + badgesCardHTML() + (tracked('glu') ? planningHTML() : '');
   }
-  const last = readings[0], week = inWin(data.readings, 7), st7 = gluStats(week);
+  const recs = recsFor(P).slice().sort((a, b) => b.t - a.t), last = recs[0], week = inWin(recsFor(P), HD);
   if (last) {
-    const st = gluStatus(last);
-    html += '<section class="glass-panel hero-card s-' + st + '" aria-label="Dernière glycémie"><div class="bignum"><span class="n">' + fmtGlu(last.v) + '</span><span class="u">' + unitLabel() + '</span></div>' +
-      '<p class="hero-cap">Dernière glycémie, ' + relTime(last.t) + '<br><b>' + momentLabel(last.m) + '</b></p>' +
-      '<div class="hero-chip">' + chipHTML(st, STATUS_LABEL.glu[st]) + '</div>' + gluGauge(last) + '<p class="hero-msg">' + esc(gluMsg(st, last)) + '</p></section>';
+    if (P === 'glu') {
+      const st = gluStatus(last);
+      html += '<section class="glass-panel hero-card s-' + st + '" aria-label="Dernière glycémie"><div class="bignum"><span class="n">' + fmtGlu(last.v) + '</span><span class="u">' + unitLabel() + '</span></div>' +
+        '<p class="hero-cap">Dernière glycémie, ' + relTime(last.t) + '<br><b>' + momentLabel(last.m) + '</b></p>' +
+        '<div class="hero-chip">' + chipHTML(st, STATUS_LABEL.glu[st]) + '</div>' + gluGauge(last) + '<p class="hero-msg">' + esc(gluMsg(st, last)) + '</p></section>';
+    } else if (P === 'bp') {
+      const st = bpStatus(last);
+      html += '<section class="glass-panel hero-card s-' + st + '" aria-label="Dernière tension"><div class="bignum"><span class="n">' + last.s + '/' + last.d + '</span><span class="u">mmHg</span></div>' +
+        '<p class="hero-cap">Dernière tension, ' + relTime(last.t) + '<br><b>' + momentLabel(last.m) + '</b></p>' +
+        '<div class="hero-chip">' + chipHTML(st, STATUS_LABEL.bp[st]) + '</div><p class="hero-msg">' + esc(bpMsg(st, last)) + '</p>' +
+        (tracked('pulse') && last.p ? '<p class="hero-msg"><b>Pouls ' + last.p + ' bpm.</b> ' + esc(pulseMsg(last.p)) + '</p>' : '') + '</section>';
+    } else if (P === 'weight') {
+      const st = bmiStatus(last), b = bmiOf(last.kg);
+      html += '<section class="glass-panel hero-card s-' + st + '" aria-label="Dernière pesée"><div class="bignum"><span class="n">' + fmtNum(last.kg, 1) + '</span><span class="u">kg</span></div>' +
+        '<p class="hero-cap">Dernière pesée, ' + relTime(last.t) + '<br><b>' + (b != null ? 'IMC ' + fmtNum(b, 1) : 'Taille à renseigner') + '</b></p>' +
+        '<div class="hero-chip">' + chipHTML(st, wLabel(last)) + '</div>' + (b != null ? weightGauge(b) : '') + '<p class="hero-msg">' + esc(weightMsg(last)) + '</p></section>';
+    } else {
+      const st = pulseStatus(last.p);
+      html += '<section class="glass-panel hero-card s-' + st + '" aria-label="Dernier pouls"><div class="bignum"><span class="n">' + last.p + '</span><span class="u">bpm</span></div>' +
+        '<p class="hero-cap">Dernier pouls, ' + relTime(last.t) + '<br><b>' + momentLabel(last.m) + '</b></p>' +
+        '<div class="hero-chip">' + chipHTML(st, STATUS_LABEL.pulse[st]) + '</div><p class="hero-msg">' + esc(pulseMsg(last.p)) + '</p></section>';
+    }
   }
-  if (st7) html += '<div class="duo">' + miniCard(ICON.drop, 'Moyenne 7 jours', fmtGlu(st7.mean), unitLabel()) + miniCard(ICON.target, 'Dans la cible', Math.round(st7.pct.ok) + ' %') + '</div>';
+  const sw = P === 'glu' ? gluStats(week) : P === 'bp' ? bpStats(week) : P === 'weight' ? weightStats(week) : pulseStats(week);
+  if (sw) {
+    const lbl7 = 'Moyenne ' + HD + ' jours';
+    html += '<div class="duo">' + (P === 'glu' ? miniCard(ICON.drop, lbl7, fmtGlu(sw.mean), unitLabel()) : P === 'bp' ? miniCard(ICON.heart, lbl7, Math.round(sw.s) + '/' + Math.round(sw.d), 'mmHg') : P === 'weight' ? miniCard(ICON.scale, lbl7, fmtNum(sw.mean, 1), 'kg') : miniCard(ICON.pulse, lbl7, Math.round(sw.mean), 'bpm')) +
+      miniCard(ICON.target, P === 'pulse' ? 'Dans la plage' : 'Dans la cible', Math.round(sw.pct.ok) + ' %') + '</div>';
+  }
   if (week.length) {
-    html += '<section class="glass-panel chart-panel"><div class="section-head"><h2>7 derniers jours</h2><button class="link-btn" data-action="goto-chart">Tout voir</button></div>' +
-      '<div id="homeBox"><canvas id="homeChart" role="img" aria-label="Graphique des glycémies des 7 derniers jours, moyenne ' + fmtGlu(st7.mean) + ' ' + unitLabel() + '"></canvas></div></section>';
+    const lbl = { glu: 'glycémies', bp: 'mesures de tension', pulse: 'mesures de pouls', weight: 'pesées' }[P];
+    html += '<section class="glass-panel chart-panel"><div class="section-head"><h2>' + HD + ' derniers jours</h2><button class="link-btn" data-action="goto-chart">Tout voir</button></div>' +
+      '<div id="homeBox"><canvas id="homeChart" role="img" aria-label="Graphique des ' + lbl + ' des ' + HD + ' derniers jours"></canvas></div></section>';
   }
-  html += planningHTML() + bpCardHTML();
+  html += badgesCardHTML() + (tracked('glu') ? planningHTML() : '') + bpCardHTML() + (P !== 'weight' ? weightCardHTML() : '');
   return html;
 }
 
+function segChartHTML() {
+  const tt = trackedTypes(); if (tt.length < 2) return '';
+  const L = { glu: 'Glycémie', bp: 'Tension', pulse: 'Pouls', weight: 'Poids' };
+  return '<div class="seg" role="group" aria-label="Type de mesure">' + tt.map(k => '<button data-action="chart-type" data-type="' + k + '" aria-pressed="' + (ui.chart === k) + '">' + L[k] + '</button>').join('') + '</div>';
+}
 function chartSeries() {
   const isGlu = ui.chart === 'glu';
-  let list = inWin(isGlu ? data.readings : (ui.chart === 'pulse' ? data.bps.filter(r => r.p) : data.bps), ui.days);
+  let list = inWin(recsFor(ui.chart), ui.days);
   if (isGlu && ui.moment !== 'all') list = list.filter(r => r.m === ui.moment);
   return list;
 }
 function bannerHTML() {
   const b = ui.banner; if (!b) return '';
-  const isGlu = b.type === 'glu', rec = (isGlu ? data.readings : data.bps).find(r => r.id === b.id);
+  const rec = storeFor(b.type).find(r => r.id === b.id);
   if (!rec) return '';
-  const st = isGlu ? gluStatus(rec) : bpStatus(rec);
-  const head = isGlu ? 'Glycémie enregistrée : ' + fmtGlu(rec.v) + ' ' + unitLabel() : 'Tension enregistrée : ' + rec.s + '/' + rec.d + ' mmHg';
+  const st = b.type === 'glu' ? gluStatus(rec) : b.type === 'pulse' ? pulseStatus(rec.p) : b.type === 'weight' ? bmiStatus(rec) : bpStatus(rec);
+  const head = b.type === 'glu' ? 'Glycémie enregistrée : ' + fmtGlu(rec.v) + ' ' + unitLabel() : b.type === 'pulse' ? 'Pouls enregistré : ' + rec.p + ' bpm' : b.type === 'weight' ? 'Poids enregistré : ' + fmtKg(rec.kg) : 'Tension enregistrée : ' + rec.s + '/' + rec.d + ' mmHg';
+  const msg = b.type === 'glu' ? gluMsg(st, rec) : b.type === 'pulse' ? pulseMsg(rec.p) : b.type === 'weight' ? weightMsg(rec) : bpMsg(st, rec);
+  const lab = b.type === 'weight' ? wLabel(rec) : STATUS_LABEL[b.type][st];
   return '<div class="banner s-' + st + '" role="status"><div class="banner-top"><span class="banner-ic">' + SHAPES[st] + '</span><strong>' + head + '</strong>' +
     '<button class="icon-btn small" data-action="dismiss-banner" aria-label="Masquer ce message">' + ICON.x + '</button></div>' +
-    '<p><span class="label">' + STATUS_LABEL[b.type][st] + '.</span> ' + esc(isGlu ? gluMsg(st, rec) : bpMsg(st, rec)) + '</p></div>';
+    '<p><span class="label">' + lab + '.</span> ' + esc(msg) + '</p></div>';
 }
 function viewChart() {
-  const isGlu = ui.chart === 'glu', isP = ui.chart === 'pulse';
+  const tt0 = trackedTypes(); if (!tt0.includes(ui.chart)) ui.chart = tt0[0];
+  const isGlu = ui.chart === 'glu', isP = ui.chart === 'pulse', isW = ui.chart === 'weight';
   const list = chartSeries();
-  let html = '<div class="seg" role="group" aria-label="Type de mesure"><button data-action="chart-type" data-type="glu" aria-pressed="' + isGlu + '">Glycémie</button><button data-action="chart-type" data-type="bp" aria-pressed="' + (ui.chart === 'bp') + '">Tension</button><button data-action="chart-type" data-type="pulse" aria-pressed="' + isP + '">Pouls</button></div>';
-  html += bannerHTML();
+  let html = segChartHTML();
+  html += bannerHTML() + badgeBannerHTML();
   html += '<div class="chips scroll" role="group" aria-label="Période">' + PERIODS.map(p => '<button class="chip-btn" data-action="period" data-days="' + p.d + '" aria-pressed="' + (ui.days === p.d) + '">' + p.l + '</button>').join('') + '</div>';
   if (isGlu) {
     html += '<div class="chips scroll" role="group" aria-label="Moment de la journée"><button class="chip-btn" data-action="moment-filter" data-id="all" aria-pressed="' + (ui.moment === 'all') + '">Tous</button>' +
       MOMENTS.map(m => '<button class="chip-btn" data-action="moment-filter" data-id="' + m.id + '" aria-pressed="' + (ui.moment === m.id) + '">' + m.label + '</button>').join('') + '</div>';
   }
   if (!list.length) {
-    const nm = isGlu ? 'glycémie' : isP ? 'mesure de pouls' : 'tension';
+    const nm = isGlu ? 'glycémie' : isP ? 'mesure de pouls' : isW ? 'pesée' : 'tension';
     return html + emptyHTML('Aucune mesure à afficher', 'Aucune ' + nm + ' sur cette période. Choisissez « Tout » ou encodez une mesure.', !data.readings.length && !data.bps.length, ui.chart);
   }
-  const legend = isGlu
+  const wb = weightBand();
+  const legend = isW
+    ? (wb.length ? '<li><span class="sw-band" style="background:var(--band-dark);border:1px solid var(--m-ok)"></span>Cible d’IMC (' + fmtNum(data.settings.imcMin, 1) + ' à ' + fmtNum(data.settings.imcMax, 1) + ', soit ' + fmtNum(wb[0], 1) + ' à ' + fmtNum(wb[1], 1) + ' kg)</li>' : '<li>Renseignez votre taille pour afficher la cible</li>') +
+      '<li class="s-ok" style="color:var(--st)">' + SHAPES.ok + 'Dans la cible</li><li class="s-high" style="color:var(--st)">' + SHAPES.high + 'Au-dessus</li><li class="s-low" style="color:var(--st)">' + SHAPES.low + 'Sous la cible</li>'
+    : isGlu
     ? '<li><span class="sw-band" style="background:var(--band-dark);border:1px solid var(--m-ok)"></span>Cible à jeun / avant repas</li><li><span class="sw-band" style="background:var(--band-light);border:1px solid var(--m-ok)"></span>Cible au coucher</li>' +
       (list.length > 25 ? '<li><span class="sw-line"></span>Moyenne du jour</li>' : '') +
       '<li class="s-ok" style="color:var(--st)">' + SHAPES.ok + 'Dans la cible</li><li class="s-high" style="color:var(--st)">' + SHAPES.high + 'Élevée</li><li class="s-low" style="color:var(--st)">' + SHAPES.low + 'Basse</li>'
@@ -954,6 +1147,12 @@ function viewChart() {
         '</tbody></table></div></section>';
     }
     html += insBlock(gluInsights(list));
+  } else if (isW) {
+    const st = weightStats(list), b0 = bmiOf(st.last.kg);
+    html += '<section class="ring-section">' + ringBig(st.pct.ok, 'dans la cible') + '</section>' +
+      '<section><div class="section-head"><h2>Résumé</h2><span class="muted">' + st.n + ' ' + plural(st.n, 'pesée', 'pesées') + '</span></div>' +
+      '<div class="trio">' + miniCard(ICON.scale, 'Poids moyen', fmtNum(st.mean, 1), 'kg') + miniCard(st.delta <= 0 ? ICON.arrowDL : ICON.arrowUR, 'Variation', (st.delta > 0 ? '+' : '') + fmtNum(st.delta, 1), 'kg') + miniCard(ICON.target, 'IMC actuel', b0 != null ? fmtNum(b0, 1) : '–') + '</div>' +
+      '<div class="white-card pad" style="margin-top:12px">' + tirBar(st, 'weight') + '</div></section>' + insBlock(weightInsights(list));
   } else if (isP) {
     const st = pulseStats(list);
     html += '<section class="ring-section">' + ringBig(st.pct.ok, 'dans la plage') + '</section>' +
@@ -971,18 +1170,25 @@ function viewChart() {
 }
 function chartAria(list) {
   if (ui.chart === 'glu') { const st = gluStats(list); return 'Graphique de ' + st.n + ' glycémies, moyenne ' + fmtGlu(st.mean) + ' ' + unitLabel() + ', ' + Math.round(st.pct.ok) + ' % dans la cible. Le détail est disponible dans l’historique.'; }
+  if (ui.chart === 'weight') { const st = weightStats(list); return 'Graphique de ' + st.n + ' pesées, poids moyen ' + fmtNum(st.mean, 1) + ' kilos. Le détail est disponible dans l’historique.'; }
   if (ui.chart === 'pulse') { const st = pulseStats(list); return 'Graphique de ' + st.n + ' mesures de pouls, moyenne ' + Math.round(st.mean) + ' battements par minute. Le détail est disponible dans l’historique.'; }
   const st = bpStats(list); return 'Graphique de ' + st.n + ' mesures de tension, moyenne ' + Math.round(st.s) + ' sur ' + Math.round(st.d) + '. Le détail est disponible dans l’historique.';
 }
 
 function viewHistory() {
+  const et = entryTypes(); if (ui.hist !== 'all' && !et.includes(ui.hist)) ui.hist = 'all';
   const items = [];
-  if (ui.hist !== 'bp') data.readings.forEach(r => items.push({ k: 'glu', r }));
-  if (ui.hist !== 'glu') data.bps.forEach(r => items.push({ k: 'bp', r }));
+  if (tracked('glu') && (ui.hist === 'all' || ui.hist === 'glu')) data.readings.forEach(r => items.push({ k: 'glu', r }));
+  if (tracked('weight') && (ui.hist === 'all' || ui.hist === 'weight')) data.weights.forEach(r => items.push({ k: 'weight', r }));
+  data.bps.forEach(r => {
+    const k = (tracked('bp') && hasBP(r)) ? 'bp' : (tracked('pulse') && r.p ? 'pulse' : null);
+    if (k && (ui.hist === 'all' || ui.hist === k)) items.push({ k, r });
+  });
   items.sort((a, b) => b.r.t - a.r.t);
-  let html = '<div class="seg" role="group" aria-label="Filtrer">' +
-    [['all', 'Tout'], ['glu', 'Glycémie'], ['bp', 'Tension']].map(x => '<button data-action="hist-filter" data-id="' + x[0] + '" aria-pressed="' + (ui.hist === x[0]) + '">' + x[1] + '</button>').join('') + '</div>';
-  if (!items.length) return html + emptyHTML('Rien à afficher', 'Vos mesures apparaîtront ici, classées par jour. Touchez une mesure pour la modifier ou la supprimer.', !data.readings.length && !data.bps.length);
+  const L = { glu: 'Glycémie', bp: 'Tension', pulse: 'Pouls', weight: 'Poids' };
+  let html = et.length > 1 ? '<div class="seg" role="group" aria-label="Filtrer">' +
+    [['all', 'Tout']].concat(et.map(k => [k, L[k]])).map(x => '<button data-action="hist-filter" data-id="' + x[0] + '" aria-pressed="' + (ui.hist === x[0]) + '">' + x[1] + '</button>').join('') + '</div>' : '';
+  if (!items.length) return html + emptyHTML('Rien à afficher', 'Vos mesures apparaîtront ici, classées par jour. Touchez une mesure pour la modifier ou la supprimer.', !data.readings.length && !data.bps.length && !data.weights.length);
   const groups = []; let cur = null;
   items.forEach(x => { const d = startOfDay(x.r.t); if (!cur || cur.d !== d) { cur = { d, list: [] }; groups.push(cur); } cur.list.push(x); });
   html += '<div>' + groups.map(g => '<div class="day-group"><h2 class="day-head">' + dayLabel(g.d + 12 * 3600000) + '</h2><div class="list">' + g.list.map(x => rowHTML(x.k, x.r)).join('') + '</div></div>').join('') + '</div>';
@@ -990,18 +1196,39 @@ function viewHistory() {
 }
 
 const periodText = d => d === 1 ? 'dernières 24 heures' : d ? d + ' derniers jours' : 'toutes les mesures';
+function reportSets() {
+  const r = data.report, inc = r.includeBp !== false, all = inWin(data.bps, r.days);
+  return { glu: tracked('glu') ? inWin(data.readings, r.days) : [], bp: (tracked('bp') && inc) ? all.filter(hasBP) : [], pul: (tracked('pulse') && inc) ? all.filter(x => x.p) : [],
+    wt: (tracked('weight') && r.includeWeight !== false) ? inWin(data.weights, r.days) : [] };
+}
+function reportTitle() {
+  const g = tracked('glu'), b = tracked('bp'), p = tracked('pulse'), w = tracked('weight'), n = [g, b || p, w].filter(Boolean).length;
+  if (n > 1) return 'Rapport de suivi de santé';
+  if (g) return 'Rapport de suivi glycémique';
+  if (w) return 'Rapport de suivi du poids';
+  return b ? (p ? 'Rapport de suivi de la tension et du pouls' : 'Rapport de suivi de la tension') : 'Rapport de suivi du pouls';
+}
 function reportSummary() {
-  const r = data.report, g = inWin(data.readings, r.days), b = r.includeBp ? inWin(data.bps, r.days) : [];
-  if (!g.length && !b.length) return '<p class="muted">Aucune mesure sur cette période. Choisissez une période plus longue ou encodez des mesures.</p>';
-  const st = gluStats(g);
-  let h = '<ul class="insights"><li class="info"><span class="ic-wrap">' + ICON.file + '</span><span><strong>' + g.length + '</strong> ' + plural(g.length, 'glycémie', 'glycémies') + (b.length ? ' et <strong>' + b.length + '</strong> ' + plural(b.length, 'mesure de tension', 'mesures de tension') : '') + ' (' + periodText(r.days) + ')</span></li>';
+  const r = data.report, S = reportSets();
+  if (!S.glu.length && !S.bp.length && !S.pul.length && !S.wt.length) return '<p class="muted">Aucune mesure sur cette période. Choisissez une période plus longue ou encodez des mesures.</p>';
+  const parts = [];
+  if (tracked('glu')) parts.push('<strong>' + S.glu.length + '</strong> ' + plural(S.glu.length, 'glycémie', 'glycémies'));
+  if (tracked('bp') && r.includeBp !== false) parts.push('<strong>' + S.bp.length + '</strong> ' + plural(S.bp.length, 'tension', 'tensions'));
+  if (tracked('pulse') && r.includeBp !== false) parts.push('<strong>' + S.pul.length + '</strong> ' + plural(S.pul.length, 'mesure de pouls', 'mesures de pouls'));
+  if (tracked('weight') && r.includeWeight !== false) parts.push('<strong>' + S.wt.length + '</strong> ' + plural(S.wt.length, 'pesée', 'pesées'));
+  let h = '<ul class="insights"><li class="info"><span class="ic-wrap">' + ICON.file + '</span><span>' + parts.join(', ') + ' (' + periodText(r.days) + ')</span></li>';
+  const st = gluStats(S.glu);
   if (st) h += '<li class="info"><span class="ic-wrap">' + ICON.chart + '</span><span>Moyenne ' + fmtGlu(st.mean) + ' ' + unitLabel() + ', ' + Math.round(st.pct.ok) + ' % dans la cible</span></li>';
   return h + '</ul>';
 }
 function reportCardHTML() {
-  const p = data.profile, r = data.report, g = inWin(data.readings, r.days), b = r.includeBp ? inWin(data.bps, r.days) : [];
-  return '<div class="ec-top">Rapport PDF pour mon médecin</div><div class="rc-num">' + g.length + ' ' + plural(g.length, 'glycémie', 'glycémies') + (b.length ? ' et ' + b.length + ' ' + plural(b.length, 'tension', 'tensions') : '') + '</div>' +
-    '<div class="rc-sub">' + periodText(r.days) + '</div>' +
+  const p = data.profile, r = data.report, S = reportSets(), parts = [];
+  if (tracked('glu')) parts.push(S.glu.length + ' ' + plural(S.glu.length, 'glycémie', 'glycémies'));
+  if (tracked('bp') && r.includeBp !== false) parts.push(S.bp.length + ' ' + plural(S.bp.length, 'tension', 'tensions'));
+  if (tracked('pulse') && r.includeBp !== false) parts.push(S.pul.length + ' ' + plural(S.pul.length, 'pouls', 'pouls'));
+  if (tracked('weight') && r.includeWeight !== false) parts.push(S.wt.length + ' ' + plural(S.wt.length, 'pesée', 'pesées'));
+  return '<div class="ec-top">Rapport PDF pour mon médecin</div><div class="rc-num">' + (parts[0] || '0 mesure') + '</div>' +
+    '<div class="rc-sub">' + parts.slice(1).concat([periodText(r.days)]).join(', ') + '</div>' +
     '<div class="ec-foot"><div><b>' + esc(p.name || 'Votre nom') + '</b><span>Patient</span></div><div class="ec-right"><b>' + esc(p.doctor || 'Votre médecin') + '</b><span>Destinataire</span></div></div>';
 }
 function viewReport() {
@@ -1009,7 +1236,8 @@ function viewReport() {
   return '<section class="entry-card" id="reportCard">' + reportCardHTML() + '</section>' +
     '<section class="panel"><h2>Période</h2><div class="chips" role="group" aria-label="Période du rapport">' + PERIODS.map(x => '<button class="chip-btn" data-action="report-days" data-days="' + x.d + '" aria-pressed="' + (r.days === x.d) + '">' + x.l + '</button>').join('') + '</div></section>' +
     '<section class="panel"><h2>Contenu</h2><div>' +
-    '<label class="switch-row"><span>Inclure la tension et le pouls</span><input type="checkbox" role="switch" class="sw" data-bind="report.includeBp"' + (r.includeBp ? ' checked' : '') + '></label>' +
+    (tracked('weight') ? '<label class="switch-row"><span>Inclure le poids et l’IMC</span><input type="checkbox" role="switch" class="sw" data-bind="report.includeWeight"' + (r.includeWeight !== false ? ' checked' : '') + '></label>' : '') +
+    ((tracked('bp') || tracked('pulse')) ? '<label class="switch-row"><span>Inclure la tension et le pouls</span><input type="checkbox" role="switch" class="sw" data-bind="report.includeBp"' + (r.includeBp ? ' checked' : '') + '></label>' : '') +
     '<label class="switch-row"><span>Inclure mes notes</span><input type="checkbox" role="switch" class="sw" data-bind="report.includeNotes"' + (r.includeNotes ? ' checked' : '') + '></label></div></section>' +
     '<section class="panel"><h2>Informations</h2><div class="fields">' +
     '<label class="field"><span class="field-label">Votre nom</span><input class="input" data-bind="profile.name" autocomplete="name" value="' + esc(p.name) + '"></label>' +
@@ -1021,7 +1249,7 @@ function viewReport() {
     '<p class="field-hint" style="text-align:center">Au partage, votre téléphone propose vos applications : choisissez Gmail ou votre messagerie, le PDF sera déjà joint.</p>';
 }
 function reportActions() {
-  const r = data.report, none = !inWin(data.readings, r.days).length && !(r.includeBp && inWin(data.bps, r.days).length);
+  const S = reportSets(), none = !(S.glu.length || S.bp.length || S.pul.length || S.wt.length);
   return '<button class="btn btn-primary" data-action="share-report" aria-disabled="' + none + '">' + ICON.mail + 'Envoyer par e-mail</button>' +
     '<button class="btn" data-action="download-report" aria-disabled="' + none + '">' + ICON.download + 'Télécharger le PDF</button>';
 }
@@ -1030,6 +1258,260 @@ function updateReportSummary() {
   if (a) a.innerHTML = reportSummary();
   if (b) b.innerHTML = reportActions();
   if (c) c.innerHTML = reportCardHTML();
+}
+
+
+/* =====================================================================
+   Badges et niveaux
+   ===================================================================== */
+const LEVELS = [
+  { id: 'start', name: 'En route', min: 0 },
+  { id: 'bronze', name: 'Bronze', min: 30, tier: 'bronze' },
+  { id: 'silver', name: 'Argent', min: 50, tier: 'silver' },
+  { id: 'gold', name: 'Or', min: 70, tier: 'gold' },
+  { id: 'platinum', name: 'Platine', min: 90, tier: 'platinum' }
+];
+const TIER_NAME = { bronze: 'Bronze', silver: 'Argent', gold: 'Or', platinum: 'Platine' };
+const MEAS = {
+  glu: { label: 'Glycémie', icon: 'drop', recs: () => data.readings, ok: r => gluStatus(r) === 'ok', inT: 'dans la cible', first: 'Première glycémie dans la cible' },
+  bp: { label: 'Tension', icon: 'heart', recs: bpRecs, ok: r => bpStatus(r) === 'ok', inT: 'dans la cible', first: 'Première tension dans la cible' },
+  pulse: { label: 'Pouls', icon: 'pulse', recs: pulseRecs, ok: r => pulseStatus(r.p) === 'ok', inT: 'dans la plage', first: 'Premier pouls dans la plage' },
+  weight: { label: 'Poids', icon: 'scale', recs: () => data.weights, ok: r => bmiOf(r.kg) != null && bmiStatus(r) === 'ok', inT: 'dans la cible', first: 'Première pesée dans la cible', minN: 3 }
+};
+const LEVEL_MIN_N = 8;
+const shiftDay = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x.getTime(); };
+
+function medalSVG(tier, icon, size, locked) {
+  const inner = (ICON[icon] || ICON.star).replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
+  const g = '<g transform="translate(19 19) scale(1.083)" fill="none" stroke-linecap="round" stroke-linejoin="round" ';
+  if (locked || !tier) return '<svg class="medal locked" width="' + size + '" height="' + size + '" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="rgba(120,140,150,.14)" stroke="currentColor" stroke-opacity=".45" stroke-width="2" stroke-dasharray="4 4"/>' + g + 'stroke="currentColor" stroke-width="1.8" opacity=".5">' + inner + '</g></svg>';
+  return '<svg class="medal" width="' + size + '" height="' + size + '" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#mg-' + tier + ')"/><circle cx="32" cy="32" r="24.5" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="2"/><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(22,48,59,.2)" stroke-width="1"/>' + g + 'stroke="#16303B" stroke-width="1.9" opacity=".88">' + inner + '</g></svg>';
+}
+
+function levelFor(type) {
+  const M = MEAS[type], recs = M.recs().filter(r => r.t >= Date.now() - 30 * DAY), n = recs.length;
+  const MINN = M.minN || LEVEL_MIN_N; if (n < MINN) return { type, n, ready: false, need: MINN - n };
+  const ok = recs.filter(M.ok).length, pct = ok / n * 100;
+  let idx = 0; LEVELS.forEach((L, i) => { if (pct >= L.min) idx = i; });
+  const next = LEVELS[idx + 1] || null;
+  return { type, n, ok, pct, ready: true, level: LEVELS[idx], idx, next, toNext: next ? next.min - pct : 0, prog: next ? (pct - LEVELS[idx].min) / (next.min - LEVELS[idx].min) : 1 };
+}
+function streaks() {
+  const set = new Set();
+  trackedTypes().forEach(tp => MEAS[tp].recs().forEach(r => set.add(startOfDay(r.t))));
+  const days = Array.from(set).sort((a, b) => a - b), at = {};
+  let best = 0, run = 0, prev = null;
+  days.forEach(d => {
+    if (prev != null && Math.round((d - prev) / DAY) === 1) run++; else run = 1;
+    if (!at[run]) at[run] = d + 12 * 3600000;
+    best = Math.max(best, run); prev = d;
+  });
+  let cur = 0, d0 = startOfDay(Date.now()); if (!set.has(d0)) d0 = shiftDay(d0, -1);
+  while (set.has(d0)) { cur++; d0 = shiftDay(d0, -1); }
+  return { cur, best, total: days.length, at };
+}
+function fullDays() {
+  const out = { n: 0, at: {} };
+  if (!tracked('glu')) return out;
+  const sc = data.schedule, slots = MOMENTS.filter(m => sc.slots[m.id].on);
+  if (!slots.length) return out;
+  const by = {}; data.readings.forEach(r => { const d = startOfDay(r.t); (by[d] = by[d] || new Set()).add(r.m); });
+  Object.keys(by).map(Number).sort((a, b) => a - b).forEach(d => {
+    if (sc.days.includes(new Date(d).getDay()) && slots.every(m => by[d].has(m.id))) { out.n++; if (!out.at[out.n]) out.at[out.n] = d + 12 * 3600000; }
+  });
+  return out;
+}
+function windowStats(rs, okFn, from, to) {
+  const w = rs.filter(r => r.t >= from && r.t < to);
+  return { n: w.length, pct: w.length ? w.filter(okFn).length / w.length * 100 : 0 };
+}
+function windowHit(rs, okFn, days, minN, minPct) {
+  const ends = Array.from(new Set(rs.map(r => startOfDay(r.t)))).sort((a, b) => a - b);
+  for (const e of ends) {
+    const end = e + DAY, st = windowStats(rs, okFn, end - days * DAY, end);
+    if (st.n >= minN && st.pct >= minPct) return end - 1;
+  }
+  return null;
+}
+function badgeDefs() {
+  const D = [], st = streaks(), types = trackedTypes();
+  let all = []; types.forEach(tp => { all = all.concat(MEAS[tp].recs()); });
+  const firstT = all.length ? Math.min.apply(null, all.map(r => r.t)) : null;
+  D.push({ id: 'first', cat: 'reg', tier: 'bronze', icon: 'star', title: 'Premier pas', desc: 'Enregistrer votre première mesure.',
+    ev: () => ({ done: all.length > 0, cur: Math.min(all.length, 1), goal: 1, at: firstT }) });
+  [[3, 'bronze', 'Trois jours de suite'], [7, 'silver', 'Une semaine de suite'], [14, 'gold', 'Deux semaines de suite'], [30, 'platinum', 'Un mois de suite']].forEach(a => {
+    D.push({ id: 'streak' + a[0], cat: 'reg', tier: a[1], icon: 'calendar', title: a[2], desc: 'Mesurer au moins une fois par jour, ' + a[0] + ' jours d’affilée.', unit: 'jours',
+      ev: () => ({ done: st.best >= a[0], cur: Math.min(st.best, a[0]), goal: a[0], at: st.at[a[0]] || null }) });
+  });
+  if (tracked('glu')) {
+    const fd = fullDays();
+    [[1, 'bronze', 'Journée complète', 'Faire, le même jour, toutes les mesures prévues dans votre planning.'], [7, 'silver', 'Sept journées complètes', 'Réussir sept journées complètes de mesures.']].forEach(a => {
+      D.push({ id: 'full' + a[0], cat: 'reg', tier: a[1], icon: 'sun', title: a[2], desc: a[3], unit: 'journées', ev: () => ({ done: fd.n >= a[0], cur: Math.min(fd.n, a[0]), goal: a[0], at: fd.at[a[0]] || null }) });
+    });
+  }
+  types.forEach(tp => {
+    const M = MEAS[tp], rs = M.recs().slice().sort((a, b) => a.t - b.t), ok = rs.filter(M.ok), cat = 'obj:' + tp, W = tp === 'weight';
+    const RUN = W ? 3 : 5, runWord = W ? 'Trois' : 'Cinq', minMo = W ? 4 : 20, nm = W ? 'pesées' : 'mesures', nm1 = W ? 'pesée' : 'mesure';
+    D.push({ id: 't1:' + tp, cat, tier: 'bronze', icon: 'target', title: M.first, desc: 'Une ' + nm1 + ' ' + M.inT + ' fixée dans vos réglages.',
+      ev: () => ({ done: ok.length > 0, cur: Math.min(ok.length, 1), goal: 1, at: ok.length ? ok[0].t : null }) });
+    D.push({ id: 'run5:' + tp, cat, tier: 'silver', icon: 'check', title: runWord + (W ? ' pesées dans la cible d’affilée' : ' ' + M.inT + ' d’affilée'), desc: runWord + (W ? ' pesées consécutives dans la cible.' : ' mesures consécutives ' + M.inT + '.'), unit: nm,
+      ev: () => { let run = 0, best = 0, at = null; rs.forEach(r => { if (M.ok(r)) { run++; if (run > best) best = run; if (run === RUN && !at) at = r.t; } else run = 0; }); return { done: best >= RUN, cur: Math.min(best, RUN), goal: RUN, at }; } });
+    if (!W) D.push({ id: 'wk:' + tp, cat, tier: 'gold', icon: 'chart', title: 'Semaine au vert', desc: '70 % de vos mesures ' + M.inT + ' sur 7 jours (7 mesures au moins).', unit: '%',
+      ev: () => { const at = windowHit(rs, M.ok, 7, 7, 70), c = windowStats(rs, M.ok, Date.now() - 7 * DAY, Date.now() + 1); return { done: at != null, at, cur: c.n >= 7 ? Math.round(c.pct) : null, goal: 70, note: c.n + ' ' + (c.n > 1 ? 'mesures' : 'mesure') + ' sur les 7 derniers jours' }; } });
+    D.push({ id: 'mo:' + tp, cat, tier: 'platinum', icon: 'award', title: 'Mois au vert', desc: '70 % de vos ' + nm + ' ' + M.inT + ' sur 30 jours (' + minMo + ' ' + nm + ' au moins).', unit: '%',
+      ev: () => { const at = windowHit(rs, M.ok, 30, minMo, 70), c = windowStats(rs, M.ok, Date.now() - 30 * DAY, Date.now() + 1); return { done: at != null, at, cur: c.n >= minMo ? Math.round(c.pct) : null, goal: 70, note: c.n + ' ' + (c.n > 1 ? nm : nm1) + ' sur les 30 derniers jours' }; } });
+    if (W) {
+      D.push({ id: 'prog:weight', cat, tier: 'silver', icon: 'chart', title: 'Cap vers la cible', desc: 'Rapprocher votre IMC de la cible d’au moins 0,5 point en 30 jours.', unit: 'points',
+        ev: () => { const now = Date.now(), w = rs.filter(r => r.t >= now - 30 * DAY && bmiOf(r.kg) != null);
+          if (w.length < 2) return { done: false, cur: null, goal: 0.5, note: 'Il faut au moins 2 pesées sur 30 jours' };
+          const dist = r => { const b = bmiOf(r.kg), s = data.settings; return Math.max(0, s.imcMin - b, b - s.imcMax); }, gain = dist(w[0]) - dist(w[w.length - 1]);
+          return { done: gain >= 0.5, at: now, cur: Math.max(0, Math.min(0.5, Math.round(gain * 10) / 10)), goal: 0.5, note: dist(w[0]) === 0 ? 'Votre IMC était déjà dans la cible' : '' }; } });
+    } else D.push({ id: 'prog:' + tp, cat, tier: 'silver', icon: 'arrowUR', title: 'En progrès', desc: 'Gagner 10 points ' + M.inT + ' par rapport aux 14 jours précédents.', unit: 'points',
+      ev: () => { const now = Date.now(), a = windowStats(rs, M.ok, now - 14 * DAY, now + 1), b = windowStats(rs, M.ok, now - 28 * DAY, now - 14 * DAY), okk = a.n >= 8 && b.n >= 8;
+        const delta = okk ? a.pct - b.pct : null; return { done: okk && delta >= 10, at: now, cur: okk ? Math.max(0, Math.min(10, Math.round(delta))) : null, goal: 10, note: okk ? '' : 'Il faut 8 mesures sur chacune des deux périodes' }; } });
+  });
+  const fl = data.flags || {};
+  D.push({ id: 'backup', cat: 'good', tier: 'bronze', icon: 'download', title: 'Prévoyant', desc: 'Exporter un backup de vos données.', ev: () => ({ done: !!fl.backup, cur: fl.backup ? 1 : 0, goal: 1, at: fl.backup || null }) });
+  D.push({ id: 'report', cat: 'good', tier: 'silver', icon: 'file', title: 'Rapport partagé', desc: 'Créer votre rapport PDF pour votre médecin.', ev: () => ({ done: !!fl.report, cur: fl.report ? 1 : 0, goal: 1, at: fl.report || null }) });
+  if (tracked('glu')) D.push({ id: 'reminders', cat: 'good', tier: 'bronze', icon: 'bell', title: 'Rappels programmés', desc: 'Ajouter les rappels de mesure à l’agenda du téléphone.', ev: () => ({ done: !!fl.reminders, cur: fl.reminders ? 1 : 0, goal: 1, at: fl.reminders || null }) });
+  return D;
+}
+function evalBadges() {
+  const first = data.badges == null; if (first) data.badges = {};
+  const defs = badgeDefs(), newly = [];
+  defs.forEach(d => { const r = d.ev(); d._r = r; if (r.done && !data.badges[d.id]) { data.badges[d.id] = r.at || Date.now(); newly.push(d); } });
+  if (newly.length || first) persist();
+  return { defs, newly, first };
+}
+function checkBadges() { const r = evalBadges(); return r.first ? [] : r.newly; }
+function markFlag(name) {
+  if (data.flags[name]) return;
+  data.flags[name] = Date.now(); persist();
+  const nb = checkBadges();
+  if (nb.length) setTimeout(() => toast('Nouveau badge : ' + nb[0].title, { act: 'open-badges', label: 'Voir' }, 8000), 2600);
+}
+function badgeCounts() { const defs = badgeDefs(); return { got: defs.filter(d => data.badges && data.badges[d.id]).length, total: defs.length }; }
+
+function goalRowHTML(tp) {
+  const M = MEAS[tp], L = levelFor(tp);
+  if (!L.ready) {
+    return '<button class="goal-row" data-action="open-badges">' + medalSVG(null, M.icon, 52, true) + '<span class="goal-txt"><b>' + M.label + ' : niveau à venir</b><span>Encore ' + L.need + ' ' + (L.need > 1 ? 'mesures' : 'mesure') + ' pour calculer votre niveau.</span></span></button>';
+  }
+  const med = L.level.tier ? medalSVG(L.level.tier, M.icon, 52, false) : medalSVG(null, M.icon, 52, true);
+  const nxt = L.next ? 'Plus que ' + Math.max(1, Math.ceil(L.toNext)) + ' points pour le niveau ' + L.next.name : 'Niveau maximum atteint';
+  return '<button class="goal-row" data-action="open-badges">' + med + '<span class="goal-txt"><b>' + M.label + ' : ' + L.level.name + '</b><span>' + Math.round(L.pct) + ' % ' + M.inT + ' sur 30 jours</span>' +
+    '<span class="prog" aria-hidden="true"><i style="width:' + Math.round(L.prog * 100) + '%"></i></span><span>' + nxt + '</span></span></button>';
+}
+function badgesCardHTML() {
+  const types = trackedTypes(); if (!types.length) return '';
+  const st = streaks(), bc = badgeCounts();
+  return '<section class="glass-panel goals-card" aria-label="Mes objectifs"><div class="section-head"><h2>Mes objectifs</h2><button class="round-btn sm" data-action="open-badges" aria-label="Mes badges">' + ICON.award + '</button></div>' +
+    types.map(goalRowHTML).join('') +
+    '<div class="goals-foot"><span>Série en cours : <b>' + st.cur + ' ' + (st.cur > 1 ? 'jours' : 'jour') + '</b></span><span><b>' + bc.got + '</b> / ' + bc.total + ' badges</span></div></section>';
+}
+function badgeBannerHTML() {
+  const ids = ui.newBadges; if (!ids || !ids.length) return '';
+  const defs = badgeDefs().filter(d => ids.includes(d.id)).slice(0, 3); if (!defs.length) return '';
+  return '<section class="badge-banner white-card" role="status">' + defs.map(d => '<div class="bb-row">' + medalSVG(d.tier, d.icon, 52, false) + '<div><b>Nouveau badge : ' + esc(d.title) + '</b><span>' + esc(d.desc) + '</span></div></div>').join('') +
+    '<div class="bb-actions"><button class="btn small" data-action="open-badges">Voir mes badges</button><button class="icon-btn small" data-action="dismiss-badges" aria-label="Masquer">' + ICON.x + '</button></div></section>';
+}
+const CAT_NAME = { reg: 'Régularité', 'obj:glu': 'Objectifs : glycémie', 'obj:bp': 'Objectifs : tension', 'obj:pulse': 'Objectifs : pouls', 'obj:weight': 'Objectifs : poids', good: 'Bonnes pratiques' };
+function renderBadges() {
+  const prev = $('.sheet-body', sheetRoot), top = prev ? prev.scrollTop : 0;
+  const ev = evalBadges(), defs = ev.defs, types = trackedTypes(), st = streaks(), bc = badgeCounts();
+  const levelCard = tp => {
+    const M = MEAS[tp], L = levelFor(tp);
+    const legend = '<ul class="lv-legend" aria-label="Niveaux">' + LEVELS.map((x, i) => '<li' + (L.ready && L.idx === i ? ' class="on"' : '') + '>' + medalSVG(x.tier, M.icon, 30, !x.tier) + '<span>' + x.name + '<br>' + (x.min ? x.min + ' %' : 'départ') + '</span></li>').join('') + '</ul>';
+    if (!L.ready) {
+      return '<section class="glass-panel level-card"><div class="level-top">' + medalSVG(null, M.icon, 64, true) + '<div><h3>' + M.label + ' : niveau à venir</h3><p>Encore ' + L.need + ' ' + (L.need > 1 ? 'mesures' : 'mesure') + ' sur les 30 derniers jours pour calculer votre niveau.</p></div></div>' + legend + '</section>';
+    }
+    const nxt = L.next ? '<span class="prog" aria-hidden="true"><i style="width:' + Math.round(L.prog * 100) + '%"></i></span><p style="margin-top:6px">Plus que ' + Math.max(1, Math.ceil(L.toNext)) + ' points pour le niveau ' + L.next.name + ' (' + L.next.min + ' %).</p>' : '<p style="margin-top:6px">Niveau maximum atteint, bravo.</p>';
+    return '<section class="glass-panel level-card"><div class="level-top">' + (L.level.tier ? medalSVG(L.level.tier, M.icon, 64, false) : medalSVG(null, M.icon, 64, true)) +
+      '<div><h3>' + M.label + ' : ' + L.level.name + '</h3><p>' + Math.round(L.pct) + ' % ' + M.inT + ' (' + L.ok + ' sur ' + L.n + ' mesures, 30 jours)</p></div></div>' + '<div style="margin-top:12px">' + nxt + '</div>' + legend + '</section>';
+  };
+  const rowHTML2 = d => {
+    const got = data.badges[d.id], r = d._r, locked = !got;
+    let meta = '';
+    if (got) meta = '<span class="bd-meta">' + TIER_NAME[d.tier] + ', obtenu le ' + dtFull.format(got) + '</span>';
+    else if (d.unit && r.goal > 1 && r.cur != null) meta = '<span class="prog" aria-hidden="true"><i style="width:' + Math.round(clamp(r.cur / r.goal, 0, 1) * 100) + '%"></i></span><span class="bd-meta todo">' + (d.unit === '%' ? r.cur + ' % pour un objectif de ' + r.goal + ' %' : fmtNum(r.cur, r.goal % 1 ? 1 : 0) + ' sur ' + fmtNum(r.goal, r.goal % 1 ? 1 : 0) + ' ' + d.unit) + (r.note ? ', ' + r.note : '') + '</span>';
+    else if (r.note) meta = '<span class="bd-meta todo">' + r.note + '</span>';
+    return '<div class="bd-row white-card' + (locked ? ' locked' : '') + '">' + medalSVG(d.tier, d.icon, 54, locked) + '<div class="bd-txt"><b>' + esc(d.title) + '</b><span>' + esc(d.desc) + '</span>' + meta + '</div></div>';
+  };
+  const cats = ['reg'].concat(types.map(t => 'obj:' + t)).concat(['good']);
+  sheetRoot.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">' + sheetBar('Mes badges') +
+    '<div class="sheet-body">' +
+    '<div class="glass-panel pad" style="border-radius:26px"><p>Les badges vous aident à vous situer par rapport à <b>vos</b> objectifs. Ils récompensent la régularité autant que les résultats.</p><p class="field-hint"><b>' + bc.got + '</b> badges obtenus sur ' + bc.total + '.</p></div>' +
+    '<div class="glass-panel streak-card"><span class="tile-ic">' + ICON.calendar + '</span><div><b>' + st.cur + ' ' + (st.cur > 1 ? 'jours' : 'jour') + '</b><span class="s">Série en cours. Meilleure série : ' + st.best + ' ' + (st.best > 1 ? 'jours' : 'jour') + '.</span></div></div>' +
+    '<section><div class="section-head"><h2>Mon niveau</h2></div>' + types.map(levelCard).join('<div style="height:12px"></div>') +
+    '<p class="field-hint" style="margin-top:10px">Le niveau dépend de la part de vos mesures dans votre cible sur les 30 derniers jours (8 mesures au minimum, 3 pesées pour le poids). Il peut monter et descendre.</p></section>' +
+    cats.map(c => { const list = defs.filter(d => d.cat === c); return list.length ? '<section><h2 class="bd-cat">' + CAT_NAME[c] + '</h2>' + list.map(rowHTML2).join('') + '</section>' : ''; }).join('') +
+    '<div class="white-card pad"><p class="field-hint">Un badge obtenu est à vous pour toujours : une mesure hors cible n’en retire aucun. Ces repères servent à vous motiver, ils ne remplacent pas l’avis de votre médecin, qui fixe vos objectifs.</p></div>' +
+    '<div style="height:8px"></div></div><div class="sheet-foot"><div class="sheet-foot-in"><button class="btn btn-primary" data-action="close-sheet">Fermer</button></div></div></div>';
+  const body = $('.sheet-body', sheetRoot); if (body) body.scrollTop = top;
+}
+
+/* Choix du suivi (écran d'accueil et réglages) */
+const TRACK_ROWS = [['glu', 'Glycémie', 'Pour le diabète : cibles, planning de mesures et rappels'], ['bp', 'Tension artérielle', 'Pression haute et basse, avec zones cibles'], ['pulse', 'Pouls', 'Battements par minute, avec la tension ou seul'], ['weight', 'Poids et IMC', 'Poids en kg, IMC et cible selon votre taille']];
+function trackRowsHTML() {
+  return TRACK_ROWS.map(x => '<label class="switch-row"><span><b>' + x[1] + '</b><span class="track-sub">' + x[2] + '</span></span><input type="checkbox" role="switch" class="sw" data-track="' + x[0] + '" aria-label="Suivre : ' + x[1] + '"' + (tracked(x[0]) ? ' checked' : '') + '></label>').join('');
+}
+function whatsNewHTML() {
+  if (data.settings.introSeen || !data.settings.setupDone) return '';
+  return '<section class="news-card white-card" aria-label="Nouveautés"><div class="news-top"><span class="tile-ic">' + ICON.award + '</span><div class="ic-text"><b>Nouveau : poids et IMC, badges, suivi à la carte</b><span>Choisissez ce que vous suivez (glycémie, tension, pouls, poids) et situez-vous par rapport à vos objectifs grâce aux badges.</span></div></div>' +
+    '<div class="news-actions"><button class="btn small btn-primary" data-action="intro-setup">Personnaliser</button><button class="btn small" data-action="intro-badges">Voir les badges</button><button class="icon-btn small" data-action="intro-dismiss" aria-label="Masquer">' + ICON.x + '</button></div></section>';
+}
+function profilePanelHTML() {
+  const p = data.profile, age = userAge(), fromBirth = /^\d{4}-\d{2}-\d{2}$/.test(p.birth || '');
+  const h = heightM(), kg = parseNum(p.weight), b = (h && isFinite(kg) && kg > 0) ? kg / (h * h) : null, notes = [];
+  notes.push(b != null ? '<p>IMC : <b>' + fmtNum(b, 1) + '</b> (' + bmiCat(b) + ' selon l’OMS).</p>' : '<p>Renseignez la taille et le poids pour calculer l’IMC.</p>');
+  if (b != null) { const s = data.settings; notes.push('<p class="muted" style="font-size:14.5px">L’IMC est un repère : il ne tient pas compte de la masse musculaire ni de l’âge.</p>'); }
+  if (age != null && age < 18) notes.push('<p><b>Attention :</b> l’IMC des adultes ne s’applique pas avant 18 ans. Demandez conseil à votre médecin.</p>');
+  if (age != null && age >= 65 && tracked('weight') && (data.settings.imcMin !== 22 || data.settings.imcMax !== 27)) notes.push('<p>Après 65 ans, une cible d’IMC un peu plus élevée (22 à 27) est souvent retenue. Voyez avec votre médecin.</p><button class="btn small" data-action="imc-senior">Appliquer 22 à 27</button>');
+  return '<section class="panel"><h2>Mon profil</h2><p class="muted" style="font-size:15px">Ces informations servent à calculer l’IMC et figurent dans le rapport pour votre médecin.</p><div class="fields">' +
+    '<label class="field"><span class="field-label">Âge</span><div class="suffix"><input class="input" inputmode="numeric" data-pnum="age" placeholder="65" value="' + (age != null ? age : '') + '"' + (fromBirth ? ' disabled' : '') + '><span>ans</span></div>' + (fromBirth ? '<span class="field-hint">Calculé à partir de votre date de naissance (onglet Rapport).</span>' : '') + '</label>' +
+    '<label class="field"><span class="field-label">Taille</span><div class="suffix"><input class="input" inputmode="numeric" data-pnum="height" placeholder="170" value="' + esc(p.height || '') + '"><span>cm</span></div></label>' +
+    '<label class="field"><span class="field-label">Poids</span><div class="suffix"><input class="input" inputmode="decimal" data-pnum="weight" placeholder="70" value="' + esc(p.weight ? String(p.weight).replace('.', ',') : '') + '"><span>kg</span></div>' +
+    (tracked('weight') ? '<span class="field-hint">Une modification ajoute une nouvelle pesée à votre suivi.</span>' : '') + '</label></div><div class="bmi-box">' + notes.join('') + '</div></section>';
+}
+function weightPanelHTML() {
+  if (!tracked('weight')) return '';
+  const bd = weightBand();
+  return '<section class="panel"><h2>Cible d’IMC</h2><p class="muted" style="font-size:15px">Repère de l’OMS pour un adulte : 18,5 à 25. Votre médecin peut l’adapter.</p>' +
+    sliderHTML('imcMin', 'IMC, minimum', 'imc', 16, 24) + sliderHTML('imcMax', 'IMC, maximum', 'imc', 22, 29.5) +
+    '<p class="field-hint" style="margin-top:12px">' + (bd.length ? 'Pour votre taille (' + data.profile.height + ' cm), cela correspond à <b>' + fmtNum(bd[0], 1) + ' à ' + fmtNum(bd[1], 1) + ' kg</b>.' : 'Renseignez votre taille dans « Mon profil » pour voir la cible en kilos.') + '</p></section>';
+}
+function commitProfileNum(t) {
+  const k = t.dataset.pnum, raw = String(t.value).trim(), p = data.profile;
+  if (raw === '') { if (k === 'age' || k === 'height' || k === 'weight') p[k] = ''; persist(); renderSettings(); return; }
+  const n = parseNum(raw);
+  const okv = k === 'age' ? (n >= 1 && n <= 120) : k === 'height' ? (n >= 100 && n <= 230) : (n >= 20 && n <= 400);
+  if (!isFinite(n) || !okv) { toast(k === 'age' ? 'Âge : entre 1 et 120 ans' : k === 'height' ? 'Taille : entre 100 et 230 cm' : 'Poids : entre 20 et 400 kg'); renderSettings(); return; }
+  if (k === 'weight') {
+    const kg = Math.round(n * 10) / 10; p.weight = String(kg);
+    const last = data.weights.slice().sort((a, b) => b.t - a.t)[0];
+    if (tracked('weight') && (!last || Math.abs(last.kg - kg) > 0.04)) { data.weights.push({ id: uid(), t: Date.now(), kg, note: 'Saisi dans les réglages' }); toast('Nouvelle pesée ajoutée'); }
+  } else p[k] = String(Math.round(n));
+  evalBadges(); persist(); renderSettings();
+}
+function suiviPanelHTML() {
+  return '<section class="panel"><h2>Mon suivi</h2><p class="muted" style="font-size:15px">Choisissez ce qui apparaît dans l’application. Les mesures déjà encodées sont conservées si vous masquez un suivi.</p><div>' + trackRowsHTML() + '</div></section>';
+}
+function renderSetup() {
+  sheetRoot.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-bar"><span class="bar-spacer"></span><h2 id="sheetTitle" class="top-title">Bienvenue</h2><span class="bar-spacer"></span></div>' +
+    '<div class="sheet-body"><div class="glass-panel pad" style="border-radius:26px"><h2>Que souhaitez-vous suivre ?</h2><p class="muted" style="margin-top:8px">Choisissez uniquement ce qui vous concerne : l’application s’adapte, ainsi que vos objectifs et vos badges. Vous pourrez changer d’avis à tout moment dans les réglages.</p></div>' +
+    '<div class="chips" role="group" aria-label="Modèles rapides"><button class="chip-btn" data-action="setup-preset" data-preset="glu">Diabète seulement</button><button class="chip-btn" data-action="setup-preset" data-preset="bp">Tension et pouls</button><button class="chip-btn" data-action="setup-preset" data-preset="all">Tout suivre</button></div>' +
+    '<section class="panel"><div>' + trackRowsHTML() + '</div></section><div style="height:8px"></div></div>' +
+    '<div class="sheet-foot"><div class="sheet-foot-in"><button class="btn btn-primary" data-action="setup-done">Commencer</button></div></div></div>';
+}
+function toggleTrack(k, on, el) {
+  const tr = data.settings.track, n = Object.values(tr).filter(Boolean).length;
+  if (!on && tr[k] && n <= 1) { if (el) el.checked = true; toast('Gardez au moins un suivi'); return; }
+  tr[k] = on; persist();
+  if (k === 'weight' && on && heightM() == null) toast('Pensez à indiquer votre taille dans « Mon profil »');
+  const tt = trackedTypes(); if (!tt.includes(ui.chart)) ui.chart = tt[0];
+  if (ui.hist !== 'all' && !entryTypes().includes(ui.hist)) ui.hist = 'all';
+  evalBadges();
+  if (ui.sheet === 'setup') renderSetup(); else if (ui.sheet === 'settings') renderSettings();
 }
 
 /* =====================================================================
@@ -1067,7 +1549,7 @@ function render() {
   if (ui.tab === 'home') requestAnimationFrame(drawHomeChart);
 }
 function setTab(id) {
-  if (ui.tab !== id) ui.banner = null;
+  if (ui.tab !== id) { ui.banner = null; ui.newBadges = null; }
   ui.tab = id; render(); window.scrollTo(0, 0);
 }
 
@@ -1108,7 +1590,7 @@ function marker(ctx, st, x, y, r, C, hollow) {
   ctx.fill(); ctx.stroke();
 }
 function drawChart(canvas, o) {
-  const k = o.k || 1, dpr = o.dpr || 1, w = o.w, h = o.h, C = o.colors, s = data.settings, list = o.list, isGlu = o.type === 'glu', isP = o.type === 'pulse';
+  const k = o.k || 1, dpr = o.dpr || 1, w = o.w, h = o.h, C = o.colors, s = data.settings, list = o.list, isGlu = o.type === 'glu', isP = o.type === 'pulse', isW = o.type === 'weight';
   canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
   canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
   const ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -1121,6 +1603,10 @@ function drawChart(canvas, o) {
     conv = toDisp; const vs = list.map(r => r.v);
     ymin = Math.max(20, Math.floor(Math.min.apply(null, [50].concat(vs.map(v => v - 10))) / 10) * 10);
     ymax = Math.ceil(Math.max.apply(null, [Math.max(s.bedMax, s.fastMax) + 40].concat(vs.map(v => v + 15))) / 10) * 10;
+  } else if (isW) {
+    const ws = list.map(r => r.kg), bnd = weightBand();
+    const lo = Math.min.apply(null, ws.concat(bnd.length ? [bnd[0]] : [])), hi = Math.max.apply(null, ws.concat(bnd.length ? [bnd[1]] : []));
+    ymin = Math.floor((lo - 3) / 2) * 2; ymax = Math.ceil((hi + 3) / 2) * 2;
   } else if (isP) {
     const ps = list.map(r => r.p);
     ymin = Math.max(30, Math.floor(Math.min.apply(null, [s.pulseMin - 10].concat(ps.map(v => v - 8))) / 10) * 10);
@@ -1133,6 +1619,7 @@ function drawChart(canvas, o) {
   const X = t => pad.l + (t - o.from) / (o.to - o.from) * iw;
   const band = (a, b, col) => { const y1 = Y(Math.min(b, ymax)), y2 = Y(Math.max(a, ymin)); ctx.fillStyle = col; ctx.fillRect(pad.l, y1, iw, y2 - y1); };
   if (isGlu) { band(s.low, Math.max(s.bedMax, s.fastMax), C.bandLight); band(s.low, s.fastMax, C.bandDark); }
+  else if (isW) { const bd = weightBand(); if (bd.length) band(bd[0], bd[1], C.bandDark); }
   else if (isP) { band(s.pulseMin, s.pulseMax, C.bandDark); }
   else { band(s.sysMin, s.sysMax, C.bandLight); band(s.diaMin, s.diaMax, C.bandLight); }
 
@@ -1145,7 +1632,7 @@ function drawChart(canvas, o) {
   }
   ctx.setLineDash([5 * k, 4 * k]); ctx.lineWidth = 1.5 * k;
   if (isGlu) { ctx.strokeStyle = C.low; ctx.beginPath(); ctx.moveTo(pad.l, Y(s.low)); ctx.lineTo(w - pad.r, Y(s.low)); ctx.stroke(); }
-  else { ctx.strokeStyle = C.muted; (isP ? [s.pulseMin, s.pulseMax] : [s.sysMax, s.diaMax]).forEach(v => { ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(w - pad.r, Y(v)); ctx.stroke(); }); }
+  else { ctx.strokeStyle = C.muted; (isW ? weightBand() : isP ? [s.pulseMin, s.pulseMax] : [s.sysMax, s.diaMax]).forEach(v => { ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(w - pad.r, Y(v)); ctx.stroke(); }); }
   ctx.setLineDash([]);
   const xt = xTicks(o.from, o.to);
   ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = C.text; ctx.font = font(12);
@@ -1182,6 +1669,10 @@ function drawChart(canvas, o) {
       area(pts); stroke(pts, C.primary, 2.6);
     }
     list.forEach(p => { const st = gluStatus(p), x = X(p.t), y = Y(p.v); marker(ctx, st, x, y, r, C, false); hits.push({ x, y, id: p.id }); });
+  } else if (isW) {
+    const pts = list.map(p => ({ x: X(p.t), y: Y(p.kg) }));
+    area(pts); stroke(pts, C.primary, 2.6);
+    list.forEach(p => { const st = bmiStatus(p), x = X(p.t), y = Y(p.kg); marker(ctx, st, x, y, r, C, false); hits.push({ x, y, id: p.id }); });
   } else if (isP) {
     const pts = list.map(p => ({ x: X(p.t), y: Y(p.p) }));
     area(pts); stroke(pts, C.primary, 2.6);
@@ -1196,11 +1687,11 @@ function drawChart(canvas, o) {
     });
   }
   if (selP) {
-    const sx = X(selP.t), sy = Y(isGlu ? selP.v : isP ? selP.p : selP.s);
+    const sx = X(selP.t), sy = Y(isGlu ? selP.v : isW ? selP.kg : isP ? selP.p : selP.s);
     ctx.strokeStyle = C.surface; ctx.lineWidth = 3.5 * k; ctx.beginPath(); ctx.arc(sx, sy, r + 5 * k, 0, Math.PI * 2); ctx.stroke();
     ctx.strokeStyle = C.primary; ctx.lineWidth = 2.5 * k; ctx.beginPath(); ctx.arc(sx, sy, r + 5 * k, 0, Math.PI * 2); ctx.stroke();
-    if (!isGlu && !isP) { ctx.beginPath(); ctx.arc(sx, Y(selP.d), r + 5 * k, 0, Math.PI * 2); ctx.stroke(); }
-    const txt = isGlu ? fmtGlu(selP.v) : isP ? String(selP.p) : selP.s + '/' + selP.d;
+    if (!isGlu && !isP && !isW) { ctx.beginPath(); ctx.arc(sx, Y(selP.d), r + 5 * k, 0, Math.PI * 2); ctx.stroke(); }
+    const txt = isGlu ? fmtGlu(selP.v) : isW ? fmtNum(selP.kg, 1) : isP ? String(selP.p) : selP.s + '/' + selP.d;
     ctx.font = font(13, '700'); const tw = ctx.measureText(txt).width, bwid = tw + 20 * k, bh = 28 * k, rad = 9 * k;
     const bx = clamp(sx - bwid / 2, 2, w - bwid - 2); let by = sy - r - 16 * k - bh, below = false;
     if (by < 2) { by = sy + r + 16 * k; below = true; }
@@ -1234,22 +1725,21 @@ function drawScreenChart() {
 function drawHomeChart() {
   const box = $('#homeBox'), cv = $('#homeChart');
   if (!box || !cv) return;
-  const list = inWin(data.readings, 7); if (!list.length) return;
+  const P = trackedTypes()[0], list = inWin(recsFor(P), homeDays(P)); if (!list.length) return;
   const w = Math.max(260, box.clientWidth), h = Math.round(clamp(w * 0.66, 210, 290));
-  const { from, to } = rangeFor(list, 7), sel = effSel(list, ui.homeSel);
-  ui.homeHits = drawChart(cv, { w, h, dpr: window.devicePixelRatio || 1, type: 'glu', list, from, to, colors: themeColors(), sel });
+  const { from, to } = rangeFor(list, homeDays(P)), sel = effSel(list, ui.homeSel);
+  ui.homeHits = drawChart(cv, { w, h, dpr: window.devicePixelRatio || 1, type: P, list, from, to, colors: themeColors(), sel });
 }
 function showDetail(sel) {
   const el = $('#chartDetail'); if (!el) return;
-  const isGlu = ui.chart === 'glu', isP = ui.chart === 'pulse', rec = (isGlu ? data.readings : data.bps).find(r => r.id === (sel || ui.selected));
+  const T0 = ui.chart, isGlu = T0 === 'glu', isP = T0 === 'pulse', isW = T0 === 'weight', rec = storeFor(T0).find(r => r.id === (sel || ui.selected));
   el.className = 'detail';
   if (!rec) { el.innerHTML = '<span class="muted">Touchez un point du graphique pour voir la mesure.</span>'; return; }
-  const st = isGlu ? gluStatus(rec) : isP ? pulseStatus(rec.p) : bpStatus(rec);
+  const st = isGlu ? gluStatus(rec) : isP ? pulseStatus(rec.p) : isW ? bmiStatus(rec) : bpStatus(rec), b = isW ? bmiOf(rec.kg) : null;
   el.className = 'detail s-' + st;
-  const val = isGlu ? '<strong>' + fmtGlu(rec.v) + '</strong> ' + unitLabel() : isP ? '<strong>' + rec.p + '</strong> bpm' : '<strong>' + rec.s + '/' + rec.d + '</strong> mmHg' + (rec.p ? ', pouls ' + rec.p : '');
-  el.innerHTML = '<div>' + val + '</div>' +
-    '<div class="d-sub">' + esc(momentLabel(rec.m)) + ', ' + esc(fmtDT(rec.t)) + '</div>' +
-    '<div style="margin-top:8px">' + chipHTML(st, STATUS_LABEL[isGlu ? 'glu' : isP ? 'pulse' : 'bp'][st]) + '</div>';
+  const val = isGlu ? '<strong>' + fmtGlu(rec.v) + '</strong> ' + unitLabel() : isP ? '<strong>' + rec.p + '</strong> bpm' : isW ? '<strong>' + fmtNum(rec.kg, 1) + '</strong> kg' + (b != null ? ', IMC ' + fmtNum(b, 1) : '') : '<strong>' + rec.s + '/' + rec.d + '</strong> mmHg' + (rec.p ? ', pouls ' + rec.p : '');
+  const lab = isW ? wLabel(rec) : STATUS_LABEL[isGlu ? 'glu' : isP ? 'pulse' : 'bp'][st];
+  el.innerHTML = '<div>' + val + '</div><div class="d-sub">' + (isW ? '' : esc(momentLabel(rec.m)) + ', ') + esc(fmtDT(rec.t)) + '</div><div style="margin-top:8px">' + chipHTML(st, lab) + '</div>';
 }
 document.addEventListener('click', e => {
   const id = e.target.id; if (id !== 'chart' && id !== 'homeChart') return;
@@ -1272,14 +1762,15 @@ const defaultBpMoment = h => h < 14 ? 'morning' : 'evening';
 function newDraft(o) {
   if (o.item) {
     const it = o.item;
-    return o.type === 'bp'
-      ? { type: 'bp', id: it.id, val: '', gm: 'fasting', sys: String(it.s), dia: String(it.d), pulse: it.p ? String(it.p) : '', bm: it.m, t: it.t, dateStr: dateKey(it.t), auto: false, dateSet: false, note: it.note || '' }
+    if (o.type === 'weight') return { type: 'weight', id: it.id, val: '', gm: 'fasting', sys: '', dia: '', pulse: '', kg: String(it.kg).replace('.', ','), height: String(data.profile.height || ''), bm: 'morning', t: it.t, dateStr: dateKey(it.t), auto: false, dateSet: false, note: it.note || '' };
+    return (o.type === 'bp' || o.type === 'pulse')
+      ? { type: o.type, id: it.id, val: '', gm: 'fasting', sys: it.s == null ? '' : String(it.s), dia: it.d == null ? '' : String(it.d), pulse: it.p ? String(it.p) : '', bm: it.m, t: it.t, dateStr: dateKey(it.t), auto: false, dateSet: false, note: it.note || '' }
       : { type: 'glu', id: it.id, val: fmtRaw(it.v), gm: it.m, sys: '', dia: '', pulse: '', bm: 'morning', t: it.t, dateStr: dateKey(it.t), auto: false, dateSet: false, note: it.note || '' };
   }
-  const now = Date.now(), h = new Date(now).getHours(), type = o.type || 'glu';
+  const now = Date.now(), h = new Date(now).getHours(), type = o.type || entryTypes()[0] || 'glu';
   const gm = MOMENTS.some(m => m.id === o.moment) && type === 'glu' ? o.moment : defaultGluMoment(h);
-  const bm = BP_MOMENTS.some(m => m.id === o.moment) && type === 'bp' ? o.moment : defaultBpMoment(h);
-  return { type, id: null, val: '', gm, sys: '', dia: '', pulse: '', bm, t: now, dateStr: dateKey(now), auto: true, dateSet: false, note: '' };
+  const bm = BP_MOMENTS.some(m => m.id === o.moment) && (type === 'bp' || type === 'pulse') ? o.moment : defaultBpMoment(h);
+  return { type, id: null, val: '', gm, sys: '', dia: '', pulse: '', kg: '', height: String(data.profile.height || ''), bm, t: now, dateStr: dateKey(now), auto: true, dateSet: false, note: '' };
 }
 function slotMinutes(d) {
   const m = d.type === 'glu' ? d.gm : d.bm;
@@ -1310,7 +1801,8 @@ function closeSheet() {
   const was = ui.sheet;
   ui.sheet = null; ui.draft = null; ui.confirmErase = false;
   sheetRoot.innerHTML = ''; document.body.classList.remove('no-scroll'); app.inert = false;
-  if (was === 'settings' || was === 'schedule') render();
+  if (was === 'setup') { data.settings.setupDone = true; persist(); }
+  if (was === 'settings' || was === 'schedule' || was === 'setup' || was === 'badges') render();
   if (ui.lastFocus && ui.lastFocus.focus) { try { ui.lastFocus.focus(); } catch (e) { /* ignoré */ } }
 }
 const MOMENT_DESC = { fasting: 'Avant le petit-déjeuner', lunch: 'Avant le repas de midi', dinner: 'Avant le repas du soir', bedtime: 'Juste avant de dormir', morning: 'Au calme, après 5 minutes de repos', evening: 'Au calme, après 5 minutes de repos' };
@@ -1335,32 +1827,51 @@ function entryGlu(d) {
     '<input id="fVal" class="big-input" inputmode="decimal" autocomplete="off" placeholder="0" value="' + esc(d.val) + '" aria-describedby="fErr preview"><span class="big-unit">' + unitLabel() + '</span></div>' +
     '<p id="fErr" class="err" role="alert" hidden></p>' + ecFoot(d) + '</section>';
 }
+const bmiText = d => { const kg = parseNum(d.kg), h = parseFloat(d.height); return (isFinite(kg) && kg >= 20 && h >= 100 && h <= 230) ? fmtNum(kg / ((h / 100) * (h / 100)), 1) : '–'; };
+function entryWeight(d) {
+  return '<section class="entry-card"><div class="ec-top">Poids</div><div class="ec-main"><label class="sr-only" for="fKg">Poids en kilogrammes</label>' +
+    '<input id="fKg" class="big-input" inputmode="decimal" autocomplete="off" placeholder="0" value="' + esc(d.kg) + '" aria-describedby="fErr preview"><span class="big-unit">kg</span></div>' +
+    '<p id="fErr" class="err" role="alert" hidden></p>' +
+    '<div class="ec-foot"><div><b id="ecBmi">' + esc(bmiText(d)) + '</b><span>IMC</span></div><div class="ec-right"><b id="ecDate">' + esc(dateShort(d)) + '</b><span>Date</span></div></div></section>';
+}
+function heightFieldHTML(d) {
+  return '<div class="white-card pad"><label class="field"><span class="field-label">Taille</span><div class="suffix"><input id="fHeight" class="input" inputmode="numeric" autocomplete="off" placeholder="170" value="' + esc(d.height) + '"><span>cm</span></div>' +
+    '<span class="field-hint">Nécessaire au calcul de l’IMC. Elle est enregistrée dans votre profil.</span></label></div>';
+}
 function entryBp(d) {
   const f = (id, label, hint, val, ph) => '<label class="field bp-field"><span class="field-label">' + label + '</span><input id="' + id + '" class="input" inputmode="numeric" autocomplete="off" placeholder="' + ph + '" value="' + esc(val) + '"><span class="field-hint">' + hint + '</span></label>';
-  return '<section class="entry-card"><div class="ec-top">Tension artérielle</div><div class="bp-grid">' + f('fSys', 'Haute', 'systolique', d.sys, '120') + f('fDia', 'Basse', 'diastolique', d.dia, '80') + f('fPulse', 'Pouls', 'facultatif', d.pulse, '70') + '</div>' +
+  const withP = tracked('pulse');
+  return '<section class="entry-card"><div class="ec-top">Tension artérielle</div><div class="bp-grid"' + (withP ? '' : ' style="grid-template-columns:1fr 1fr"') + '>' + f('fSys', 'Haute', 'systolique', d.sys, '120') + f('fDia', 'Basse', 'diastolique', d.dia, '80') + (withP ? f('fPulse', 'Pouls', 'facultatif', d.pulse, '70') : '') + '</div>' +
+    '<p id="fErr" class="err" role="alert" hidden></p>' + ecFoot(d) + '</section>';
+}
+function entryPulse(d) {
+  return '<section class="entry-card"><div class="ec-top">Pouls</div><div class="ec-main"><label class="sr-only" for="fPulse">Pouls en battements par minute</label>' +
+    '<input id="fPulse" class="big-input" inputmode="numeric" autocomplete="off" placeholder="0" value="' + esc(d.pulse) + '" aria-describedby="fErr preview"><span class="big-unit">bpm</span></div>' +
     '<p id="fErr" class="err" role="alert" hidden></p>' + ecFoot(d) + '</section>';
 }
 function renderSheet(focusFirst) {
   if (ui.sheet === 'settings') return renderSettings();
   if (ui.sheet === 'schedule') return renderSchedule();
+  if (ui.sheet === 'setup') return renderSetup();
+  if (ui.sheet === 'badges') return renderBadges();
   const d = ui.draft, editing = !!d.id;
   const seg = (id, label) => '<button role="tab" data-action="seg-type" data-type="' + id + '" aria-selected="' + (d.type === id) + '">' + label + '</button>';
   const prev = $('.sheet-body', sheetRoot), top = prev ? prev.scrollTop : 0;
   sheetRoot.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">' + sheetBar(editing ? 'Modifier la mesure' : 'Nouvelle mesure') +
     '<div class="sheet-body">' +
-    (editing ? '' : '<div class="seg" role="tablist" aria-label="Type de mesure">' + seg('glu', 'Glycémie') + seg('bp', 'Tension') + '</div>') +
-    (d.type === 'glu' ? entryGlu(d) : entryBp(d)) +
-    '<div id="preview" class="preview glass-panel pad" aria-live="polite" style="border-radius:26px"></div>' +
+    ((editing || entryTypes().length < 2) ? '' : '<div class="seg" role="tablist" aria-label="Type de mesure">' + entryTypes().map(k => seg(k, { glu: 'Glycémie', bp: 'Tension', pulse: 'Pouls', weight: 'Poids' }[k])).join('') + '</div>') +
+    (d.type === 'glu' ? entryGlu(d) : d.type === 'pulse' ? entryPulse(d) : d.type === 'weight' ? entryWeight(d) : entryBp(d)) +
+    '<div id="preview" class="preview glass-panel pad" aria-live="polite" style="border-radius:26px"></div>' + (d.type === 'weight' ? heightFieldHTML(d) : '') +
     '<div class="item"><span class="tile-ic">' + ICON.calendar + '</span><div><b>Date</b><span id="dateLabel" class="muted">' + esc(dateLabel(d)) + '</span></div><button type="button" class="btn small" data-action="date-toggle">Changer</button></div>' +
     '<input id="fDate" class="input" type="date" hidden value="' + d.dateStr + '" max="' + dateKey(Date.now()) + '" style="margin-top:-8px">' +
-    '<section class="bsheet"><div class="grab"></div><h2 id="momLbl">Moment de la mesure</h2>' + momentRowsHTML(d.type === 'glu' ? MOMENTS : BP_MOMENTS, d.type === 'glu' ? d.gm : d.bm) +
+    '<section class="bsheet"><div class="grab"></div>' + (d.type === 'weight' ? '<h2 id="momLbl">Note</h2>' : '<h2 id="momLbl">Moment de la mesure</h2>' + momentRowsHTML(d.type === 'glu' ? MOMENTS : BP_MOMENTS, d.type === 'glu' ? d.gm : d.bm)) +
     '<label class="field"><span class="field-label">Note (facultatif)</span><input id="fNote" class="input" maxlength="140" autocomplete="off" placeholder="Repas, activité, médicament…" value="' + esc(d.note) + '"></label></section>' +
     '</div><div class="sheet-foot"><div class="sheet-foot-in' + (editing ? ' two' : '') + '">' +
     (editing ? '<button class="btn btn-danger" data-action="delete-item">' + ICON.trash + 'Supprimer</button>' : '') +
     '<button class="btn btn-primary" data-action="save-item">' + (editing ? 'Enregistrer les modifications' : 'Enregistrer la mesure') + '</button></div></div></div>';
   const body = $('.sheet-body', sheetRoot); if (body) body.scrollTop = top;
   updatePreview();
-  if (focusFirst && !editing) setTimeout(() => { const f = $('#fVal') || $('#fSys'); if (f) f.focus(); }, 60);
+  if (focusFirst && !editing) setTimeout(() => { const f = $('#fVal') || $('#fSys') || $('#fKg') || $('#fPulse'); if (f) f.focus(); }, 60);
 }
 function draftGlu() { const d = ui.draft, n = parseNum(d.val); if (!isFinite(n)) return null; return { v: fromDisp(n), m: d.gm }; }
 const validGlu = v => v >= GLU_MIN && v <= GLU_MAX;
@@ -1369,6 +1880,10 @@ function draftBp() {
   if (!isFinite(s) || !isFinite(di)) return null;
   return { s, d: di, p: isFinite(p) ? p : null, m: d.bm };
 }
+function draftWeight() { const d = ui.draft, kg = parseNum(d.kg); return isFinite(kg) ? { kg, h: parseFloat(d.height) } : null; }
+const validKg = k => k >= 20 && k <= 400;
+function draftPulse() { const d = ui.draft, p = parseInt(d.pulse, 10); return isFinite(p) ? { p, m: d.bm } : null; }
+const validPulse = r => r.p >= 30 && r.p <= 220;
 const validBp = r => r.s >= 60 && r.s <= 260 && r.d >= 30 && r.d <= 160 && r.s > r.d && (r.p == null || (r.p >= 30 && r.p <= 220));
 function updatePreview() {
   const el = $('#preview'); if (!el || !ui.draft) return;
@@ -1379,6 +1894,21 @@ function updatePreview() {
     if (!validGlu(r.v)) { el.innerHTML = '<p class="preview-empty">Valeur inhabituelle : vérifiez la saisie.</p>'; return; }
     const st = gluStatus(r);
     el.innerHTML = '<div class="preview-box s-' + st + '"><div class="preview-top">' + chipHTML(st, STATUS_LABEL.glu[st]) + '</div>' + gluGauge(r) + '<p class="preview-msg">' + esc(gluMsg(st, r)) + '</p></div>';
+  } else if (d.type === 'weight') {
+    const r = draftWeight(), eb = $('#ecBmi'); if (eb) eb.textContent = bmiText(d);
+    if (!r) { el.innerHTML = '<p class="preview-empty">Saisissez votre poids. Le résultat s’affiche ici.</p>'; return; }
+    if (!validKg(r.kg)) { el.innerHTML = '<p class="preview-empty">Valeur inhabituelle : vérifiez la saisie.</p>'; return; }
+    if (!(r.h >= 100 && r.h <= 230)) { el.innerHTML = '<p class="preview-empty">Indiquez votre taille ci-dessous pour calculer l’IMC.</p>'; return; }
+    const rec = { kg: r.kg }, st = bmiStatus(rec), b = r.kg / ((r.h / 100) * (r.h / 100));
+    const keep = data.profile.height; data.profile.height = String(r.h);
+    const msg = weightMsg(rec), gauge2 = weightGauge(b); data.profile.height = keep;
+    el.innerHTML = '<div class="preview-box s-' + st + '"><div class="preview-top">' + chipHTML(st, STATUS_LABEL.weight[st]) + '</div>' + gauge2 + '<p class="preview-msg">' + esc(msg) + '</p></div>';
+  } else if (d.type === 'pulse') {
+    const r = draftPulse();
+    if (!r) { el.innerHTML = '<p class="preview-empty">Saisissez le pouls affiché par votre appareil. Le résultat s’affiche ici.</p>'; return; }
+    if (!validPulse(r)) { el.innerHTML = '<p class="preview-empty">Valeur inhabituelle : vérifiez la saisie.</p>'; return; }
+    const st = pulseStatus(r.p);
+    el.innerHTML = '<div class="preview-box s-' + st + '"><div class="preview-top">' + chipHTML(st, STATUS_LABEL.pulse[st]) + '</div><p class="preview-msg">' + esc(pulseMsg(r.p)) + '</p></div>';
   } else {
     const r = draftBp();
     if (!r) { el.innerHTML = '<p class="preview-empty">Saisissez les deux valeurs de tension. Le résultat s’affiche ici.</p>'; return; }
@@ -1399,6 +1929,19 @@ function saveDraft() {
     if (!r || !validGlu(r.v)) return showErr('Entrez une valeur comprise entre ' + fmtGlu(GLU_MIN) + ' et ' + fmtGlu(GLU_MAX) + ' ' + unitLabel() + '.', 'fVal');
     rec = { id: d.id || uid(), t, v: Math.round(r.v * 10) / 10, m: d.gm, note };
     if (d.id) { const i = data.readings.findIndex(x => x.id === d.id); data.readings[i] = Object.assign({}, data.readings[i], rec); } else data.readings.push(rec);
+  } else if (kind === 'weight') {
+    const r = draftWeight();
+    if (!r || !validKg(r.kg)) return showErr('Entrez un poids compris entre 20 et 400 kg.', 'fKg');
+    if (!(r.h >= 100 && r.h <= 230)) return showErr('Indiquez votre taille en cm (entre 100 et 230) pour calculer l’IMC.', 'fHeight');
+    data.profile.height = String(Math.round(r.h));
+    rec = { id: d.id || uid(), t, kg: Math.round(r.kg * 10) / 10, note };
+    if (d.id) { const i = data.weights.findIndex(x => x.id === d.id); data.weights[i] = Object.assign({}, data.weights[i], rec); } else data.weights.push(rec);
+    syncProfileWeight();
+  } else if (kind === 'pulse') {
+    const r = draftPulse();
+    if (!r || !validPulse(r)) return showErr('Entrez un pouls compris entre 30 et 220 battements par minute.', 'fPulse');
+    rec = { id: d.id || uid(), t, p: r.p, m: d.bm, note };
+    if (d.id) { const i = data.bps.findIndex(x => x.id === d.id); data.bps[i] = Object.assign({}, data.bps[i], rec); } else { rec.s = null; rec.d = null; data.bps.push(rec); }
   } else {
     const r = draftBp();
     if (!r || !validBp(r)) return showErr('Vérifiez les valeurs : la haute doit être supérieure à la basse (par exemple 125 et 80).', 'fSys');
@@ -1412,13 +1955,15 @@ function saveDraft() {
   ui.chart = kind;
   if (ui.days && rec.t < Date.now() - ui.days * DAY) ui.days = 0;
   ui.moment = 'all'; ui.selected = rec.id; ui.banner = { type: kind, id: rec.id }; ui.tab = 'chart';
-  render(); window.scrollTo(0, 0); toast('Mesure enregistrée');
+  const nb = checkBadges(); ui.newBadges = nb.length ? nb.map(x => x.id) : null;
+  render(); window.scrollTo(0, 0); toast(ui.newBadges ? 'Mesure enregistrée. Nouveau badge !' : 'Mesure enregistrée');
 }
 function deleteDraft() {
   const d = ui.draft; if (!d || !d.id) return;
-  const store = d.type === 'glu' ? data.readings : data.bps, i = store.findIndex(x => x.id === d.id);
+  const store = storeFor(d.type), i = store.findIndex(x => x.id === d.id);
   if (i < 0) return;
   const rec = store.splice(i, 1)[0];
+  if (d.type === 'weight') syncProfileWeight();
   persist(); closeSheet();
   ui.undo = { type: d.type, rec }; if (ui.selected === rec.id) ui.selected = null;
   render(); toast('Mesure supprimée', { act: 'undo', label: 'Annuler' });
@@ -1474,7 +2019,7 @@ function buildICS() {
 async function exportICS() {
   if (!MOMENTS.some(m => data.schedule.slots[m.id].on)) { toast('Activez au moins une mesure'); return; }
   const ok = await saveFile(new Blob([buildICS()], { type: 'text/calendar' }), 'glycotens-rappels.ics');
-  if (ok) toast('Ouvrez le fichier avec l’application Agenda pour importer les rappels');
+  if (ok) { toast('Ouvrez le fichier avec l’application Agenda pour importer les rappels'); markFlag('reminders'); }
 }
 function fireReminder(m, timeStr) {
   const tag = 'data-type="glu" data-moment="' + m.id + '"';
@@ -1488,6 +2033,7 @@ function fireReminder(m, timeStr) {
   }
 }
 function checkReminders() {
+  if (!tracked('glu')) return;
   const sc = data.schedule, now = new Date();
   if (!sc.days.includes(now.getDay())) return;
   const today = dateKey(now), t0 = startOfDay(now);
@@ -1508,8 +2054,13 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) { ch
 /* =====================================================================
    Réglages
    ===================================================================== */
-const kindUnit = k => k === 'glu' ? unitLabel() : k === 'bp' ? 'mmHg' : 'bpm';
+const kindUnit = k => k === 'glu' ? unitLabel() : k === 'bp' ? 'mmHg' : k === 'imc' ? 'kg/m²' : 'bpm';
 function sliderHTML(key, label, kind, mn, mx) {
+  if (kind === 'imc') {
+    const v = data.settings[key], p = clamp((v - mn) / (mx - mn) * 100, 0, 100);
+    return '<div class="slider"><div class="slider-top"><label for="rg-' + key + '">' + label + '</label><b id="rv-' + key + '">' + fmtNum(v, 1) + ' kg/m²</b></div>' +
+      '<input id="rg-' + key + '" type="range" class="range" data-setting="' + key + '" data-kind="imc" min="' + mn + '" max="' + mx + '" step="0.5" value="' + v + '" style="--p:' + p.toFixed(1) + '%"></div>';
+  }
   const s = data.settings, g = kind === 'glu', mm = g && isMmol();
   const dmin = mm ? +(mn / MGDL).toFixed(1) : mn, dmax = mm ? +(mx / MGDL).toFixed(1) : mx, step = mm ? 0.1 : 1;
   const v = mm ? +(s[key] / MGDL).toFixed(1) : s[key], p = clamp((v - dmin) / (dmax - dmin) * 100, 0, 100);
@@ -1518,22 +2069,25 @@ function sliderHTML(key, label, kind, mn, mx) {
 }
 function renderSettings() {
   const prev = $('.sheet-body', sheetRoot), top = prev ? prev.scrollTop : 0;
-  const hasDemo = data.readings.concat(data.bps).some(r => r.demo);
+  const hasDemo = data.readings.concat(data.bps, data.weights).some(r => r.demo);
   sheetRoot.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">' + sheetBar('Réglages') +
     '<div class="sheet-body">' +
     (storageOK ? '' : '<p class="notice">Le stockage de ce navigateur est indisponible : vos mesures seront perdues à la fermeture. Exportez une sauvegarde.</p>') +
-    '<button class="nav-row white-card" data-action="open-schedule"><span class="tile-ic">' + ICON.bell + '</span><span class="grow">Planning et rappels<small>6 h, 12 h, 18 h 30, 22 h</small></span>' + ICON.chevron + '</button>' +
+    suiviPanelHTML() + profilePanelHTML() +
+    '<button class="nav-row white-card" data-action="open-badges"><span class="tile-ic">' + ICON.award + '</span><span class="grow">Mes badges<small>' + badgeCounts().got + ' obtenus sur ' + badgeCounts().total + '</small></span>' + ICON.chevron + '</button>' +
+    (tracked('glu') ? '<button class="nav-row white-card" data-action="open-schedule"><span class="tile-ic">' + ICON.bell + '</span><span class="grow">Planning et rappels<small>6 h, 12 h, 18 h 30, 22 h</small></span>' + ICON.chevron + '</button>' : '') +
     '<section class="panel"><h2>Application</h2>' +
     '<p id="updStatus" class="muted" style="font-size:15px">Version ' + APP_VERSION + (isStandalone() ? ', installée sur cet appareil.' : '.') + '</p>' +
     (!isStandalone() ? (deferredPrompt ? '<button class="btn btn-primary" data-action="install-app">' + ICON.download + 'Installer l’application</button>' : '<p class="muted" style="font-size:15px">' + (isIOS() ? 'Pour l’installer sur iPhone : touchez Partager, puis « Sur l’écran d’accueil ».' : 'Pour l’installer : menu ⋮ de Chrome, puis « Installer l’application ».') + '</p>') : '') +
     '<button class="btn" data-action="check-update">' + ICON.refresh + 'Rechercher une mise à jour</button></section>' +
-    '<section class="panel"><h2>Unité de glycémie</h2><div class="seg" role="group" aria-label="Unité"><button data-action="set-unit" data-unit="mgdl" aria-pressed="' + !isMmol() + '">mg/dL</button><button data-action="set-unit" data-unit="mmol" aria-pressed="' + isMmol() + '">mmol/L</button></div></section>' +
+    (tracked('glu') ? '<section class="panel"><h2>Unité de glycémie</h2><div class="seg" role="group" aria-label="Unité"><button data-action="set-unit" data-unit="mgdl" aria-pressed="' + !isMmol() + '">mg/dL</button><button data-action="set-unit" data-unit="mmol" aria-pressed="' + isMmol() + '">mmol/L</button></div></section>' +
     '<section class="panel"><h2>Cibles de glycémie</h2><p class="muted" style="font-size:15px">Valeurs de référence courantes pour un adulte diabétique. Votre médecin peut les adapter : réglez-les selon ses indications.</p>' +
-    sliderHTML('low', 'Seuil bas (hypoglycémie)', 'glu', 40, 100) + sliderHTML('fastMax', 'Maximum à jeun / avant repas', 'glu', 90, 200) + sliderHTML('bedMax', 'Maximum au coucher', 'glu', 90, 250) + sliderHTML('vhigh', 'Seuil très élevé', 'glu', 150, 400) + '</section>' +
-    '<section class="panel"><h2>Cibles de tension</h2><p class="muted" style="font-size:15px">Pression haute (systolique) et basse (diastolique) : de … à …</p>' +
+    sliderHTML('low', 'Seuil bas (hypoglycémie)', 'glu', 40, 100) + sliderHTML('fastMax', 'Maximum à jeun / avant repas', 'glu', 90, 200) + sliderHTML('bedMax', 'Maximum au coucher', 'glu', 90, 250) + sliderHTML('vhigh', 'Seuil très élevé', 'glu', 150, 400) + '</section>' : '') +
+    (tracked('bp') ? '<section class="panel"><h2>Cibles de tension</h2><p class="muted" style="font-size:15px">Pression haute (systolique) et basse (diastolique) : de … à …</p>' +
     sliderHTML('sysMin', 'Haute (systolique), minimum', 'bp', 90, 150) + sliderHTML('sysMax', 'Haute (systolique), maximum', 'bp', 100, 170) +
-    sliderHTML('diaMin', 'Basse (diastolique), minimum', 'bp', 50, 100) + sliderHTML('diaMax', 'Basse (diastolique), maximum', 'bp', 60, 110) + '</section>' +
-    '<section class="panel"><h2>Plage du pouls</h2>' + sliderHTML('pulseMin', 'Pouls, minimum', 'pulse', 40, 90) + sliderHTML('pulseMax', 'Pouls, maximum', 'pulse', 60, 130) + '</section>' +
+    sliderHTML('diaMin', 'Basse (diastolique), minimum', 'bp', 50, 100) + sliderHTML('diaMax', 'Basse (diastolique), maximum', 'bp', 60, 110) + '</section>' : '') +
+    (tracked('pulse') ? '<section class="panel"><h2>Plage du pouls</h2>' + sliderHTML('pulseMin', 'Pouls, minimum', 'pulse', 40, 90) + sliderHTML('pulseMax', 'Pouls, maximum', 'pulse', 60, 130) + '</section>' : '') +
+    weightPanelHTML() +
     '<button class="btn" data-action="reset-targets">Rétablir les cibles par défaut</button>' +
     '<section class="panel"><h2>Mes données</h2><div class="btn-row">' +
     '<button class="btn" data-action="load-demo">Ajouter des données d’exemple</button>' +
@@ -1554,12 +2108,14 @@ function commitSetting(input) {
   const key = input.dataset.setting, isG = input.dataset.kind === 'glu', s = data.settings;
   const n = parseNum(input.value);
   if (!isFinite(n)) { toast('Valeur non valide'); renderSettings(); return; }
-  const val = isG ? Math.round(fromDisp(n)) : Math.round(n);
+  const val = isG ? Math.round(fromDisp(n)) : input.dataset.kind === 'imc' ? Math.round(n * 2) / 2 : Math.round(n);
   const next = Object.assign({}, s, { [key]: val });
   let ok;
   if (isG) {
     const highs = [next.fastMax, next.bedMax];
     ok = next.low >= 40 && next.low <= 100 && highs.every(h => h > next.low + 5 && h <= 400) && next.vhigh > Math.max.apply(null, highs) && next.vhigh <= 600;
+  } else if (input.dataset.kind === 'imc') {
+    ok = next.imcMin >= 15 && next.imcMin <= next.imcMax - 2 && next.imcMax <= 29.5;
   } else if (input.dataset.kind === 'bp') {
     ok = next.sysMin >= 90 && next.sysMin < next.sysMax - 4 && next.sysMax <= 170 && next.diaMin >= 50 && next.diaMin < next.diaMax - 4 && next.diaMax <= 110;
   } else ok = next.pulseMin >= 40 && next.pulseMin < next.pulseMax - 4 && next.pulseMax <= 130;
@@ -1590,9 +2146,9 @@ async function saveFile(blob, name) {
   return true;
 }
 function exportData() {
-  const payload = { app: 'glycotens', version: 2, exportedAt: new Date().toISOString(), readings: data.readings, bps: data.bps, settings: data.settings, profile: data.profile, report: data.report, schedule: data.schedule };
+  const payload = { app: 'glycotens', version: 2, exportedAt: new Date().toISOString(), readings: data.readings, bps: data.bps, weights: data.weights, settings: data.settings, profile: data.profile, report: data.report, schedule: data.schedule, badges: data.badges, flags: data.flags };
   return saveFile(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }), 'glycotens-sauvegarde-' + new Date().toISOString().slice(0, 10) + '.json')
-    .then(ok => { if (ok) toast('Sauvegarde exportée'); });
+    .then(ok => { if (ok) { toast('Sauvegarde exportée'); markFlag('backup'); } });
 }
 function importData(file) {
   if (/\.xlsx?$/i.test(file.name)) return importXlsx(file);
@@ -1603,7 +2159,7 @@ function importData(file) {
       if (!j || !['glycotens', 'medizo', 'glycosuivi'].includes(j.app) || !Array.isArray(j.readings) || !Array.isArray(j.bps)) throw new Error('format');
       j.readings = j.readings.filter(r => r && isFinite(r.t) && isFinite(r.v) && typeof r.id === 'string');
       j.bps = j.bps.filter(r => r && isFinite(r.t) && isFinite(r.s) && isFinite(r.d) && typeof r.id === 'string');
-      data = normalizeData(j);
+      data = normalizeData(j); evalBadges();
       persist(); if (ui.sheet === 'settings') renderSettings(); render(); toast('Backup restauré (' + (data.readings.length + data.bps.length) + ' mesures)');
     } catch (e) { toast('Ce fichier n’est pas un backup GlycoTens'); }
   };
@@ -1628,14 +2184,14 @@ async function exportXlsx() {
   }));
   const bp = data.bps.slice().sort((a, b) => a.t - b.t).map(r => ({
     'ID': r.id, 'Horodatage': new Date(r.t).toISOString(), 'Date': dtFull.format(r.t), 'Moment': momentLabel(r.m),
-    'Haute (mmHg)': r.s, 'Basse (mmHg)': r.d, 'Pouls (bpm)': r.p || '', 'Statut tension': STATUS_LABEL.bp[bpStatus(r)],
+    'Haute (mmHg)': r.s == null ? '' : r.s, 'Basse (mmHg)': r.d == null ? '' : r.d, 'Pouls (bpm)': r.p || '', 'Statut tension': hasBP(r) ? STATUS_LABEL.bp[bpStatus(r)] : '',
     'Statut pouls': r.p ? STATUS_LABEL.pulse[pulseStatus(r.p)] : '', 'Note': r.note || ''
   }));
   const cfg = [['app', 'glycotens'], ['version', APP_VERSION], ['exporté le', new Date().toISOString()]];
-  Object.keys(data.settings).forEach(k => cfg.push(['settings.' + k, data.settings[k]]));
+  Object.keys(data.settings).forEach(k => cfg.push(['settings.' + k, (data.settings[k] && typeof data.settings[k] === 'object') ? JSON.stringify(data.settings[k]) : data.settings[k]]));
   Object.keys(data.profile).forEach(k => cfg.push(['profile.' + k, data.profile[k]]));
   Object.keys(data.report).forEach(k => cfg.push(['report.' + k, data.report[k]]));
-  cfg.push(['schedule', JSON.stringify(data.schedule)]);
+  cfg.push(['schedule', JSON.stringify(data.schedule)]); cfg.push(['badges', JSON.stringify(data.badges || {})]); cfg.push(['flags', JSON.stringify(data.flags || {})]);
   const wb = X.utils.book_new();
   const add = (rows, name, head, widths) => {
     const ws = rows.length ? X.utils.json_to_sheet(rows) : X.utils.aoa_to_sheet([head]);
@@ -1643,10 +2199,12 @@ async function exportXlsx() {
   };
   add(glu, 'Glycémies', ['ID', 'Horodatage', 'Date', 'Moment', gl, 'Glycémie (mg/dL)', 'Statut', 'Note'], [14, 26, 12, 20, 16, 16, 14, 30]);
   add(bp, 'Tension et pouls', ['ID', 'Horodatage', 'Date', 'Moment', 'Haute (mmHg)', 'Basse (mmHg)', 'Pouls (bpm)', 'Statut tension', 'Statut pouls', 'Note'], [14, 26, 12, 10, 14, 14, 12, 16, 20, 30]);
+  const wrows = data.weights.slice().sort((a, b) => a.t - b.t).map(r => { const b = bmiOf(r.kg); return { 'ID': r.id, 'Horodatage': new Date(r.t).toISOString(), 'Date': dtFull.format(r.t), 'Poids (kg)': r.kg, 'IMC': b != null ? Math.round(b * 10) / 10 : '', 'Statut': b != null ? STATUS_LABEL.weight[bmiStatus(r)] : '', 'Note': r.note || '' }; });
+  add(wrows, 'Poids', ['ID', 'Horodatage', 'Date', 'Poids (kg)', 'IMC', 'Statut', 'Note'], [14, 26, 12, 12, 8, 22, 30]);
   const wc = X.utils.aoa_to_sheet([['Clé', 'Valeur']].concat(cfg)); wc['!cols'] = [{ wch: 24 }, { wch: 60 }]; X.utils.book_append_sheet(wb, wc, 'Réglages');
   const out = X.write(wb, { bookType: 'xlsx', type: 'array' });
   const ok = await saveFile(new Blob([out], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), 'backup.xlsx');
-  if (ok) toast('backup.xlsx exporté');
+  if (ok) { toast('backup.xlsx exporté'); markFlag('backup'); }
 }
 async function importXlsx(file) {
   let X; try { X = await loadXlsx(); } catch (e) { toast('Le module Excel n’est pas chargé. Vérifiez votre connexion internet.'); return; }
@@ -1657,15 +2215,18 @@ async function importXlsx(file) {
     const readings = rows('Glycémies').map(r => ({ id: String(r['ID']), t: Date.parse(r['Horodatage']), v: parseFloat(r['Glycémie (mg/dL)']), m: mid(r['Moment']), note: String(r['Note'] || '') }))
       .filter(r => r.id && isFinite(r.t) && isFinite(r.v));
     const bps = rows('Tension et pouls').map(r => ({ id: String(r['ID']), t: Date.parse(r['Horodatage']), s: parseInt(r['Haute (mmHg)'], 10), d: parseInt(r['Basse (mmHg)'], 10), p: r['Pouls (bpm)'] === '' ? null : parseInt(r['Pouls (bpm)'], 10), m: mid(r['Moment']), note: String(r['Note'] || '') }))
-      .filter(r => r.id && isFinite(r.t) && isFinite(r.s) && isFinite(r.d));
-    if (!wb.Sheets['Glycémies'] && !wb.Sheets['Tension et pouls']) throw new Error('format');
-    const raw = { readings, bps, settings: {}, profile: {}, report: {} };
+      .filter(r => r.id && isFinite(r.t) && ((isFinite(r.s) && isFinite(r.d)) || r.p))
+      .map(r => isFinite(r.s) ? r : Object.assign(r, { s: null, d: null }));
+    if (!wb.Sheets['Glycémies'] && !wb.Sheets['Tension et pouls'] && !wb.Sheets['Poids']) throw new Error('format');
+    const weights = rows('Poids').map(r => ({ id: String(r['ID']), t: Date.parse(r['Horodatage']), kg: parseFloat(r['Poids (kg)']), note: String(r['Note'] || '') })).filter(r => r.id && isFinite(r.t) && isFinite(r.kg));
+    const raw = { readings, bps, weights, settings: {}, profile: {}, report: {} };
     rows('Réglages').forEach(r => {
       const k = String(r['Clé']), v = r['Valeur'], m = /^(settings|profile|report)\.(.+)$/.exec(k);
       if (m) raw[m[1]][m[2]] = (typeof v === 'string' && v === 'true') ? true : (typeof v === 'string' && v === 'false') ? false : v;
-      else if (k === 'schedule') { try { raw.schedule = JSON.parse(v); } catch (e) { /* ignoré */ } }
+      else if (k === 'schedule' || k === 'badges' || k === 'flags') { try { raw[k] = JSON.parse(v); } catch (e) { /* ignoré */ } }
     });
-    data = normalizeData(raw);
+    if (typeof raw.settings.track === 'string') { try { raw.settings.track = JSON.parse(raw.settings.track); } catch (e) { delete raw.settings.track; } }
+    data = normalizeData(raw); evalBadges();
     persist(); if (ui.sheet === 'settings') renderSettings(); render(); toast('Backup restauré (' + (readings.length + bps.length) + ' mesures)');
   } catch (e) { toast('Ce fichier n’est pas un backup GlycoTens'); }
 }
@@ -1737,7 +2298,11 @@ function loadDemo() {
       data.bps.push({ id: uid() + 'b' + day + i, t, s, d: Math.min(d, s - 25), p: Math.round(clamp(gauss(71, 6), 55, 95)), m: b[0], note: '', demo: true });
     });
   }
-  persist(); render(); if (ui.sheet === 'settings') renderSettings(); toast('Données d’exemple ajoutées');
+  if (!data.profile.height) data.profile.height = '172';
+  if (!data.profile.age && !data.profile.birth) data.profile.age = '58';
+  for (let w = 0; w < 5; w++) { const t = at(w * 7 + 1, 7, 30); if (t <= now) data.weights.push({ id: uid() + 'w' + w, t, kg: Math.round((77.8 + w * 0.5 + (rnd() - .5) * .6) * 10) / 10, note: '', demo: true }); }
+  syncProfileWeight();
+  evalBadges(); persist(); render(); if (ui.sheet === 'settings') renderSettings(); toast('Données d’exemple ajoutées');
 }
 
 /* =====================================================================
@@ -1750,8 +2315,8 @@ function buildPdf() {
   const W = 210, H = 297, M = 15, CW = W - 2 * M, BOTTOM = H - 18;
   const p = data.profile, rep = data.report, s = data.settings, u = unitLabel(), T = pdfText;
   const now = Date.now();
-  const glu = inWin(data.readings, rep.days), bp = rep.includeBp ? inWin(data.bps, rep.days) : [];
-  const from = rep.days ? now - rep.days * DAY : Math.min.apply(null, glu.concat(bp).map(r => r.t).concat([now])), to = now;
+  const RS = reportSets(), glu = RS.glu, bp = RS.bp, pul = RS.pul, wt = RS.wt;
+  const from = rep.days ? now - rep.days * DAY : Math.min.apply(null, glu.concat(bp, pul, wt).map(r => r.t).concat([now])), to = now;
   const C = { teal: [37, 128, 124], ink: [23, 58, 58], mute: [76, 104, 103], line: [214, 228, 225], soft: [239, 246, 244],
     mark: { ok: [30, 154, 106], high: [232, 160, 16], vhigh: [217, 72, 15], low: [194, 24, 91] },
     txt: { ok: [11, 105, 68], high: [127, 75, 0], vhigh: [156, 42, 11], low: [157, 16, 73] } };
@@ -1803,18 +2368,19 @@ function buildPdf() {
   };
 
   doc.setFillColor(C.teal[0], C.teal[1], C.teal[2]); doc.rect(0, 0, W, 34, 'F');
-  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.text(T('Rapport de suivi glycémique'), M, 16);
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.text(T('Diabète de type 2'), M, 24);
+  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.text(T(reportTitle()), M, 16);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.text(T(tracked('glu') ? 'Diabète de type 2' : ''), M, 24);
   doc.text(T('Généré le ' + dtFull.format(now)), W - M, 16, { align: 'right' });
   doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text('GlycoTens', W - M, 24, { align: 'right' }); doc.setFont('helvetica', 'normal');
   y = 44;
   const info = [['Patient', p.name || 'Non renseigné'], ['Date de naissance', fmtBirth(p.birth) || 'Non renseignée'], ['Médecin destinataire', p.doctor || 'Non renseigné'], ['Période du rapport', dtFull.format(from) + ' au ' + dtFull.format(to)]];
+  { const ag = userAge(), hh = parseFloat(p.height), wk = parseNum(p.weight); if (ag != null) info.push(['Âge', ag + ' ans']); if (hh > 0) info.push(['Taille', hh + ' cm']); if (isFinite(wk) && wk > 0) { const bi = heightM() ? wk / Math.pow(heightM(), 2) : null; info.push(['Poids', fmtNum(wk, 1) + ' kg' + (bi != null ? ' (IMC ' + fmtNum(bi, 1) + ')' : '')]); } }
   info.forEach((it, i) => {
     const x = M + (i % 2) * (CW / 2), yy = y + Math.floor(i / 2) * 13;
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); col(C.mute); doc.text(T(it[0]), x, yy);
     doc.setFont('helvetica', 'bold'); doc.setFontSize(11); col(C.ink); doc.text(T(fit(it[1], CW / 2 - 4)), x, yy + 5.5);
   });
-  y += 30;
+  y += Math.ceil(info.length / 2) * 13 + 4;
 
   const st = gluStats(glu);
   if (st) {
@@ -1841,11 +2407,11 @@ function buildPdf() {
     }
     const ins = gluInsights(glu);
     if (ins.length) { h2('Observations automatiques'); bullets(ins); }
-  } else {
+  } else if (tracked('glu')) {
     h2('Glycémie'); doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); col(C.mute); doc.text(T('Aucune glycémie enregistrée sur cette période.'), M, y + 3); y += 12;
   }
 
-  const sb = bpStats(bp), sp = pulseStats(bp), bpp = bp.filter(r => r.p);
+  const sb = bpStats(bp), sp = pulseStats(pul), bpp = pul;
   if (sb) {
     h2('Tension artérielle');
     boxes([['Mesures', sb.n], ['Moyenne', Math.round(sb.s) + '/' + Math.round(sb.d), null, 'mmHg'], ['Dans la cible', Math.round(sb.pct.ok) + ' %', 'ok', sb.cnt.ok + ' mesures'], ['Cible', s.sysMin + '-' + s.sysMax, null, '/ ' + s.diaMin + '-' + s.diaMax + ' mmHg']]);
@@ -1859,17 +2425,35 @@ function buildPdf() {
     const ip = pulseInsights(bpp); if (ip.length) bullets(ip);
   }
 
+  const sw = weightStats(wt);
+  if (sw) {
+    h2('Poids et IMC');
+    const b0 = bmiOf(sw.last.kg);
+    boxes([['Pesées', sw.n], ['Poids moyen', fmtNum(sw.mean, 1), null, 'kg'], ['IMC actuel', b0 != null ? fmtNum(b0, 1) : '-', b0 != null ? bmiStatus(sw.last) : null, b0 != null ? bmiCat(b0) : 'taille manquante'], ['Variation', (sw.delta > 0 ? '+' : '') + fmtNum(sw.delta, 1), null, 'kg sur la période']]);
+    chartImg('weight', wt, CW * 380 / 900);
+    const iw = weightInsights(wt); if (iw.length) bullets(iw);
+  }
+
   if (glu.length) {
     h2('Journal des glycémies');
     const colsG = [{ h: 'Date', w: 26 }, { h: 'Moment', w: 40 }, { h: 'Valeur (' + u + ')', w: 30, right: true }, { h: 'Statut', w: 34 }, { h: 'Note', w: CW - 130 }];
     table(colsG, glu.slice().reverse().map(r => { const k = gluStatus(r); return [dtFull.format(r.t), momentLabel(r.m), { t: fmtGlu(r.v), c: C.txt[k] }, { t: STATUS_LABEL.glu[k], c: C.txt[k] }, rep.includeNotes ? (r.note || '') : '']; }));
   }
-  if (bp.length) {
+  const jr = Array.from(new Set(bp.concat(pul))).sort((a, b) => a.t - b.t);
+  if (jr.length) {
     h2('Journal de la tension et du pouls');
     const colsB = [{ h: 'Date', w: 26 }, { h: 'Moment', w: 22 }, { h: 'Tension (mmHg)', w: 32, right: true }, { h: 'Statut', w: 30 }, { h: 'Pouls (bpm)', w: 24, right: true }, { h: 'Note', w: CW - 134 }];
-    table(colsB, bp.slice().reverse().map(r => { const k = bpStatus(r), kp = r.p ? pulseStatus(r.p) : null; return [dtFull.format(r.t), momentLabel(r.m), { t: r.s + '/' + r.d, c: C.txt[k] }, { t: STATUS_LABEL.bp[k], c: C.txt[k] }, r.p ? { t: String(r.p), c: C.txt[kp] } : '-', rep.includeNotes ? (r.note || '') : '']; }));
+    table(colsB, jr.slice().reverse().map(r => {
+      const hb = hasBP(r) && bp.indexOf(r) >= 0, k = hb ? bpStatus(r) : null, kp = (r.p && pul.indexOf(r) >= 0) ? pulseStatus(r.p) : null;
+      return [dtFull.format(r.t), momentLabel(r.m), hb ? { t: r.s + '/' + r.d, c: C.txt[k] } : '-', hb ? { t: STATUS_LABEL.bp[k], c: C.txt[k] } : '-', kp ? { t: String(r.p), c: C.txt[kp] } : '-', rep.includeNotes ? (r.note || '') : ''];
+    }));
   }
 
+  if (wt.length) {
+    h2('Journal du poids');
+    const colsW = [{ h: 'Date', w: 26 }, { h: 'Poids (kg)', w: 28, right: true }, { h: 'IMC', w: 22, right: true }, { h: 'Statut', w: 44 }, { h: 'Note', w: CW - 120 }];
+    table(colsW, wt.slice().reverse().map(r => { const b = bmiOf(r.kg), k = bmiStatus(r); return [dtFull.format(r.t), fmtNum(r.kg, 1), b != null ? { t: fmtNum(b, 1), c: C.txt[k] } : '-', b != null ? { t: STATUS_LABEL.weight[k], c: C.txt[k] } : '-', rep.includeNotes ? (r.note || '') : '']; }));
+  }
   const n = doc.getNumberOfPages();
   for (let i = 1; i <= n; i++) {
     doc.setPage(i); doc.setDrawColor(C.line[0], C.line[1], C.line[2]); doc.setLineWidth(.3); doc.line(M, H - 13, W - M, H - 13);
@@ -1879,8 +2463,8 @@ function buildPdf() {
   }
   return doc.output('blob');
 }
-const reportFilename = () => 'rapport-glycemie-' + new Date().toISOString().slice(0, 10) + '.pdf';
-function reportReady() { const r = data.report; return inWin(data.readings, r.days).length || (r.includeBp && inWin(data.bps, r.days).length); }
+const reportFilename = () => 'rapport-suivi-' + new Date().toISOString().slice(0, 10) + '.pdf';
+function reportReady() { const S = reportSets(); return S.glu.length || S.bp.length || S.pul.length || S.wt.length; }
 async function makePdfSafe() {
   try { return buildPdf(); }
   catch (e) {
@@ -1891,7 +2475,7 @@ async function makePdfSafe() {
 async function downloadReport() {
   if (!reportReady()) return;
   const blob = await makePdfSafe(); if (!blob) return;
-  const ok = await saveFile(blob, reportFilename()); if (ok) toast('PDF prêt');
+  const ok = await saveFile(blob, reportFilename()); if (ok) { toast('PDF prêt'); markFlag('report'); }
 }
 async function shareReport() {
   if (!reportReady()) return;
@@ -1903,13 +2487,14 @@ async function shareReport() {
   try {
     const file = new File([blob], name, { type: 'application/pdf' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: subject, text: body });
+      await navigator.share({ files: [file], title: subject, text: body }); markFlag('report');
       if (p.email) toast('Adresse du médecin copiée : collez-la dans le champ « À »');
       return;
     }
   } catch (e) { if (e && e.name === 'AbortError') return; }
   const saved = await saveFile(blob, name);
   if (saved) {
+    markFlag('report');
     toast('PDF enregistré. Joignez-le au message qui va s’ouvrir.');
     setTimeout(() => { location.href = 'mailto:' + encodeURIComponent(p.email || '') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }, 900);
   }
@@ -1920,7 +2505,7 @@ async function shareReport() {
    ===================================================================== */
 const handlers = {
   'tab': el => setTab(el.dataset.id),
-  'open-add': el => { if (ui.sheet) closeSheet(); openSheet('add', { type: el.dataset.type, moment: el.dataset.moment }); },
+  'open-add': el => { if (ui.sheet) closeSheet(); let ty = el.dataset.type; if (ty === 'pulse' && tracked('bp')) ty = 'bp'; if (!entryTypes().includes(ty)) ty = entryTypes()[0]; openSheet('add', { type: ty, moment: el.dataset.moment }); },
   'open-settings': () => openSheet('settings'),
   'open-schedule': () => { if (ui.sheet === 'settings') { ui.sheet = 'schedule'; renderSheet(); } else openSheet('schedule'); },
   'close-sheet': () => closeSheet(),
@@ -1932,8 +2517,8 @@ const handlers = {
   'date-toggle': () => { const f = $('#fDate'); if (f) { f.hidden = !f.hidden; if (!f.hidden) f.focus(); } },
   'save-item': () => saveDraft(),
   'delete-item': () => deleteDraft(),
-  'edit': el => { const k = el.dataset.kind, item = (k === 'glu' ? data.readings : data.bps).find(r => r.id === el.dataset.id); if (item) openSheet('add', { type: k, item }); },
-  'undo': () => { if (ui.undo) { (ui.undo.type === 'glu' ? data.readings : data.bps).push(ui.undo.rec); persist(); ui.undo = null; toastEl.classList.remove('show'); render(); } },
+  'edit': el => { const k = el.dataset.kind, item = storeFor(k).find(r => r.id === el.dataset.id); if (item) openSheet('add', { type: k, item }); },
+  'undo': () => { if (ui.undo) { storeFor(ui.undo.type).push(ui.undo.rec); if (ui.undo.type === 'weight') syncProfileWeight(); persist(); ui.undo = null; toastEl.classList.remove('show'); render(); } },
   'chart-type': el => { ui.chart = el.dataset.type; ui.selected = null; ui.banner = null; render(); },
   'period': el => { ui.days = parseInt(el.dataset.days, 10); ui.selected = null; render(); },
   'moment-filter': el => { ui.moment = el.dataset.id; ui.selected = null; render(); },
@@ -1952,9 +2537,17 @@ const handlers = {
   'set-unit': el => { data.settings.unit = el.dataset.unit; persist(); renderSettings(); },
   'reset-targets': () => { const u = data.settings.unit; data.settings = Object.assign({}, DEFAULT_SETTINGS, { unit: u }); persist(); renderSettings(); toast('Cibles rétablies'); },
   'load-demo': () => loadDemo(),
-  'clear-demo': () => { data.readings = data.readings.filter(r => !r.demo); data.bps = data.bps.filter(r => !r.demo); persist(); renderSettings(); render(); toast('Données d’exemple supprimées'); },
+  'clear-demo': () => { data.readings = data.readings.filter(r => !r.demo); data.bps = data.bps.filter(r => !r.demo); data.weights = data.weights.filter(r => !r.demo); persist(); renderSettings(); render(); toast('Données d’exemple supprimées'); },
   'export-data': () => exportData(),
   'export-xlsx': () => exportXlsx(),
+  'open-badges': () => { if (ui.sheet && ui.sheet !== 'badges') closeSheet(); if (ui.sheet !== 'badges') openSheet('badges'); },
+  'dismiss-badges': () => { ui.newBadges = null; render(); },
+  'imc-senior': () => { data.settings.imcMin = 22; data.settings.imcMax = 27; persist(); renderSettings(); toast('Cible d’IMC : 22 à 27'); },
+  'intro-setup': () => { data.settings.introSeen = true; persist(); openSheet('setup'); },
+  'intro-badges': () => { data.settings.introSeen = true; persist(); render(); openSheet('badges'); },
+  'intro-dismiss': () => { data.settings.introSeen = true; persist(); render(); },
+  'setup-done': () => closeSheet(),
+  'setup-preset': el => { const p = el.dataset.preset; data.settings.track = p === 'glu' ? { glu: true, bp: false, pulse: false, weight: false } : p === 'bp' ? { glu: false, bp: true, pulse: true, weight: false } : { glu: true, bp: true, pulse: true, weight: true }; persist(); toggleTrack('glu', data.settings.track.glu); },
   'install-app': () => installApp(),
   'install-dismiss': () => { ui.installDismissed = true; render(); },
   'check-update': () => checkUpdate(),
@@ -1974,7 +2567,7 @@ document.addEventListener('input', e => {
   if (t.type === 'range' && t.dataset && t.dataset.setting) {
     const mn = parseFloat(t.min), mx = parseFloat(t.max), v = parseFloat(t.value), lab = $('#rv-' + t.dataset.setting);
     t.style.setProperty('--p', clamp((v - mn) / (mx - mn) * 100, 0, 100).toFixed(1) + '%');
-    if (lab) lab.textContent = fmtNum(v, (t.dataset.kind === 'glu' && isMmol()) ? 1 : 0) + ' ' + kindUnit(t.dataset.kind);
+    if (lab) lab.textContent = fmtNum(v, (t.dataset.kind === 'imc' || (t.dataset.kind === 'glu' && isMmol())) ? 1 : 0) + ' ' + kindUnit(t.dataset.kind);
     return;
   }
   if (t.dataset && t.dataset.bind) {
@@ -1985,6 +2578,8 @@ document.addEventListener('input', e => {
   const d = ui.draft;
   if (t.id === 'fVal') { t.value = t.value.replace(/[^0-9.,]/g, ''); d.val = t.value; }
   else if (t.id === 'fSys' || t.id === 'fDia' || t.id === 'fPulse') { t.value = t.value.replace(/\D/g, '').slice(0, 3); d[t.id === 'fSys' ? 'sys' : t.id === 'fDia' ? 'dia' : 'pulse'] = t.value; }
+  else if (t.id === 'fKg') { t.value = t.value.replace(/[^0-9.,]/g, ''); d.kg = t.value; }
+  else if (t.id === 'fHeight') { t.value = t.value.replace(/\D/g, '').slice(0, 3); d.height = t.value; }
   else if (t.id === 'fNote') { d.note = t.value; return; }
   else if (t.id === 'fDate') {
     if (parseDateKey(t.value) == null) return;
@@ -1996,6 +2591,8 @@ document.addEventListener('input', e => {
 });
 document.addEventListener('change', async e => {
   const t = e.target, ds = t.dataset || {};
+  if (ds.pnum !== undefined) { commitProfileNum(t); return; }
+  if (ds.track !== undefined) { toggleTrack(ds.track, t.checked, t); return; }
   if (ds.setting) { commitSetting(t); return; }
   if (ds.slotTime !== undefined) { if (/^\d{2}:\d{2}$/.test(t.value)) { data.schedule.slots[ds.slotTime].time = t.value; data.schedule.fired = {}; persist(); } else renderSchedule(); return; }
   if (ds.slotOn !== undefined) { data.schedule.slots[ds.slotOn].on = t.checked; persist(); return; }
@@ -2018,12 +2615,14 @@ $('#importFile').addEventListener('change', e => { const f = e.target.files && e
 /* =====================================================================
    Démarrage
    ===================================================================== */
+evalBadges();
 render();
 try {
   const q = new URLSearchParams(location.search), add = q.get('add');
   if (add === 'glu' || add === 'bp') openSheet('add', { type: add, moment: q.get('moment') || undefined });
 } catch (e) { /* ignoré */ }
 setTimeout(checkReminders, 1500);
+setTimeout(() => { if (!data.settings.setupDone && !ui.sheet) openSheet('setup'); }, 350);
 /*PWA:START*/
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => { /* hors ligne non disponible */ }); });

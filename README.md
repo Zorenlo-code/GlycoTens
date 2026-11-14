@@ -23,6 +23,19 @@ backup Excel. Les données restent sur le téléphone. Aucune dépendance extern
 Ouvrez l'adresse dans **Chrome**. Un bouton **Installer** apparaît en haut de l'accueil (et dans Réglages, section
 « Application »). Sinon : menu ⋮, puis **Installer l'application**. L'application fonctionne ensuite hors ligne.
 
+## Poids et IMC
+
+- Suivi optionnel (réglages, « Mon suivi ») : poids en kg, IMC calculé avec la taille, cible d'IMC modifiable (18,5 à 25 par défaut, repère de l'OMS),
+  graphique avec la zone cible convertie en kilos, rapport PDF et backup Excel (feuille « Poids »).
+- Réglages, « Mon profil » : âge, taille, poids. L'âge et le poids figurent dans le rapport pour le médecin.
+
+## Suivi à la carte et badges
+
+- Au premier lancement, l'utilisateur choisit ce qu'il suit : glycémie, tension, pouls (réglable ensuite dans « Mon suivi »).
+  L'accueil, la saisie, les graphiques, les réglages et le rapport PDF s'adaptent. Les mesures masquées sont conservées.
+- Les badges (niveaux Bronze, Argent, Or, Platine par suivi, séries de jours, objectifs atteints, bonnes pratiques)
+  aident à se situer par rapport aux objectifs. Ils sont inclus dans le backup.
+
 ## Installation sur iPhone
 
 Apple ne permet pas de bouton « Installer » dans une page web. Ouvrez l'adresse dans **Safari**, touchez **Partager**
